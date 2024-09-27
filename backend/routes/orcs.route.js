@@ -3,17 +3,17 @@ const router = express.Router();
 const Orc = require("../models/orc.model");
 
 const {
- getProducts,
- getProductById,
- createProduct,
- updateProduct,
- deleteProduct,
-} = require("../controllers/product.controller.js");
+ getCards,
+ getCardById,
+ createCard,
+ updateCard,
+ deleteCard,
+} = require("../controllers/card.controller.js");
 
-router.get("/", getProducts(Orc));
-router.get("/:id", getProductById(Orc));
-router.post("/", createProduct(Orc));
-router.put("/:id", updateProduct(Orc));
-router.delete("/:id", deleteProduct(Orc));
+router.get("/", getCards(Orc));
+router.get("/:id", getCardById(Orc));
+router.post("/", createCard(Orc));
+router.put("/:id", updateCard(Orc));
+router.delete("/:id", deleteCard(Orc));
 
 module.exports = router;

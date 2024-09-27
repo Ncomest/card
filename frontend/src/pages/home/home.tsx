@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Table from "../../modules/table/table";
 import SelectPlayer from "../../components/select_player/select_player";
+import SelectDeck from "../../components/select_deck/select_deck";
 
 type IData = {
  name: string;
@@ -24,17 +25,17 @@ export default function Home() {
  const [fetchData2, setFetchData2] = useState<IData[]>([]);
  const [fetchTable, setFetchTable] = useState<ITable[]>([]);
 
- useEffect(() => {
-  fetch("http://localhost:4000/api/products")
-   .then((response) => response.json())
-   .then((data: IData[]) => setFetchData(data))
-   .catch((error) => console.log("error", error));
+//  useEffect(() => {
+//   fetch("http://localhost:4000/api/humans")
+//    .then((response) => response.json())
+//    .then((data: IData[]) => setFetchData(data))
+//    .catch((error) => console.log("error", error));
 
-  fetch("http://localhost:4000/api/orcs")
-   .then((response) => response.json())
-   .then((data: IData[]) => setFetchData2(data))
-   .catch((error) => console.log("error", error));
- }, []);
+//   fetch("http://localhost:4000/api/orcs")
+//    .then((response) => response.json())
+//    .then((data: IData[]) => setFetchData2(data))
+//    .catch((error) => console.log("error", error));
+//  }, []);
 
  //===============test==================//
  const handlePost = () => {
@@ -49,15 +50,12 @@ export default function Home() {
    .catch((err) => err);
  };
 
- //  console.log(fetchTable);
- useEffect(() => {
-  // handlePost();
- }, []);
  //===============test==============//
 
  return (
   <>
    <SelectPlayer />
+   <SelectDeck />
    <Table />
    {/* <button onClick={handlePost}>click</button> */}
    {/* {fetchTable.map((el) => (

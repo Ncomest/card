@@ -1,32 +1,48 @@
-const Orc = require("../../models/orc.model");
+const express = require("express");
+const app = express();
+const Orc = require("../../models/orc.model.js");
+const { default: axios } = require("axios");
 
-const handArrP1 = [];
-
-const handArrP2 = ["card2"];
+let handArrP1 = [];
+let handArrP2 = [];
 
 const isSelectDeckP1 = false;
 const isSelectDeckP2 = false;
 
 const getHandsCard = async (req, res) => {
+ const deck = await Orc.find({});
  try {
-  if(req.body.player === 'player1'){
-    isSelectDeckP1 = true;
-  }
-  if (isSelectDeckP1) {
-   const deck = await Orc.find({});
-   handArrP1.push(...deck);
-   res.status(200).json(handArrP1);
-  }
  } catch (error) {
   res.status(500).json({ message: error.message });
  }
 };
 
+async function api(args) {
+ try {
+  let res;
+  if (args.user === "player1") {
+   res = await axios.get(`http://localhost:4000/api/${args.deck}`);
+   handArrP1 = [];
+   handArrP1.push(res.data);
+   return handArrP1;
+  } else if (args.user === "player2") {
+   res = await axios.get(`http://localhost:4000/api/${args.deck}`);
+   handArrP2 = [];
+   handArrP2.push(res.data);
+   return handArrP2;
+  } else {
+   throw new Error("Undefined user");
+  }
+ } catch (error) {
+  throw new Error("Datas error: " + error.message);
+ }
+}
+
 const addHandsCard = async (req, res) => {
  try {
-  handArrP1.push(req.body.string);
-  res.status(200).json(handArrP1);
-  console.log(handArrP1);
+  const params = req.body;
+  let response = await api(params);
+  res.status(200).json(response);
  } catch (error) {
   res.status(500).json({ message: error.message });
  }

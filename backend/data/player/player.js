@@ -3,8 +3,6 @@ const players = {
  player2: false,
 };
 
-console.log(players);
-
 const player = async (req, res) => {
  try {
   res.status(200).json(players);

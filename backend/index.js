@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 
-const productRoutes = require("./routes/product.route.js");
+const humanRoutes = require("./routes/humans.route.js");
 const orcRoutes = require("./routes/orcs.route.js");
 const handRoute = require("./routes/hand.route.js");
 const selectPlayerRoute = require("./routes/select_player.route.js");
@@ -14,9 +14,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-app.use("/api/products", productRoutes);
-app.use("/api/orcs", orcRoutes);
 app.use("/api/hand", handRoute);
+app.use("/api/humans", humanRoutes);
+app.use("/api/orcs", orcRoutes);
 app.use("/api/select-player", selectPlayerRoute);
 app.use("/api/player", playerRoute);
 
