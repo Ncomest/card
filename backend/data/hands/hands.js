@@ -4,11 +4,19 @@ const handArrP1 = [];
 
 const handArrP2 = ["card2"];
 
+const isSelectDeckP1 = false;
+const isSelectDeckP2 = false;
+
 const getHandsCard = async (req, res) => {
  try {
-  const deck = await Orc.find({});
-  handArrP1.push(...deck);
-  res.status(200).json(handArrP1);
+  if(req.body.player === 'player1'){
+    isSelectDeckP1 = true;
+  }
+  if (isSelectDeckP1) {
+   const deck = await Orc.find({});
+   handArrP1.push(...deck);
+   res.status(200).json(handArrP1);
+  }
  } catch (error) {
   res.status(500).json({ message: error.message });
  }

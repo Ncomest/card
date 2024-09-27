@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "../../components/card/card";
 import Table from "../../modules/table/table";
+import SelectPlayer from "../../components/select_player/select_player";
 
 type IData = {
  name: string;
@@ -49,7 +50,7 @@ export default function Home() {
    .catch((err) => err);
  };
 
- console.log(fetchTable);
+//  console.log(fetchTable);
  useEffect(() => {
   // handlePost();
  }, []);
@@ -57,7 +58,8 @@ export default function Home() {
 
  return (
   <>
-   <button onClick={handlePost}>click</button>
+   <SelectPlayer />
+   {/* <button onClick={handlePost}>click</button> */}
    {/* {fetchTable.map((el) => (
     <Table key={el.id} data={el}/>
    ))} */}
