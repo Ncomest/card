@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
+import SideStatus from "./side_status/side_status";
 
 const Component = styled.div`
- width: 240px;
  height: 320px;
  position: relative;
  &:hover {
-  scale: 2;
+  /* scale: 1.2; */
  }
 `;
 
@@ -27,14 +27,15 @@ const Button = styled.button`
  justify-content: center;
 `;
 
-function Card({ data }: any) {
- const [isOpen, setIsOpen] = useState(true);
+function Card() {
+ const [isOpen, setIsOpen] = useState(false);
 
  return (
   <Component>
-   <Image src={data.url} alt={data.name} />
-   {isOpen && <DropMenu />}
+   <Image />
    <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
+   <SideStatus />
+   {isOpen && <DropMenu />}
   </Component>
  );
 }

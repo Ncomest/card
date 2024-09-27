@@ -3,9 +3,10 @@ import { ReactNode } from "react";
 import { GiBloodyStash } from "react-icons/gi";
 
 const Component = styled.div`
+ background-color: white;
  position: absolute;
  top: 25px;
- left: 125px;
+ right: -20px;
  border: 1px solid;
 `;
 
@@ -50,7 +51,8 @@ const Icon = styled.div`
 `;
 
 const Input = styled.input`
- width: 100px;
+ max-width: 100px;
+ width: 50px;
 `;
 const Button = styled.button`
  display: flex;
@@ -64,7 +66,7 @@ function List({ icon, title, number, inputs }: IList) {
  return (
   <Li>
    <Icon>{icon}</Icon>
-   <p>{title}</p>
+   <p>{title}:</p>
    <p>{number}</p>
    <Input />
    <Button>+</Button>
