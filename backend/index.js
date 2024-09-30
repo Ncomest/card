@@ -6,6 +6,7 @@ const orcRoutes = require("./routes/orcs.route.js");
 const handRoute = require("./routes/hand.route.js");
 const selectPlayerRoute = require("./routes/select_player.route.js");
 const playerRoute = require("./routes/player.route.js");
+const tableRoute = require('./routes/table.route.js')
 
 const app = express();
 const cors = require("cors");
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
+app.use("/api/table", tableRoute);
 app.use("/api/hand", handRoute);
 app.use("/api/humans", humanRoutes);
 app.use("/api/orcs", orcRoutes);

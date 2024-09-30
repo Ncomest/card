@@ -2,72 +2,59 @@ import { useEffect, useState } from "react";
 import Table from "../../modules/table/table";
 import SelectPlayer from "../../components/select_player/select_player";
 import SelectDeck from "../../components/select_deck/select_deck";
+import styled from "styled-components";
 
-type IData = {
- name: string;
- url: string;
- _id: string;
-};
+// type IData = {
+//  name: string;
+//  url: string;
+//  _id: string;
+// };
 
-type ITablePayload = {
- url: string;
- name: string;
- cardId: string;
-};
+// type ITableCard = {
+//  _id: string;
+//  url: string;
+//  name: string;
+// };
 
 type ITable = {
- id: number;
- payload: ITablePayload;
+ _id: number;
+ isEmpty: boolean;
+ __v: number;
+ //  card: ITableCard;
 };
 
+const Component = styled.div`
+ padding: 10px;
+ display: grid;
+ grid-template-columns: repeat(7, 1fr);
+ grid-template-rows: repeat(3, 1fr);
+ gap: 20px;
+`;
+
 export default function Home() {
- const [fetchData, setFetchData] = useState<IData[]>([]);
- const [fetchData2, setFetchData2] = useState<IData[]>([]);
- const [fetchTable, setFetchTable] = useState<ITable[]>([]);
+ const [table, setTable] = useState<ITable[]>([]);
 
-//  useEffect(() => {
-//   fetch("http://localhost:4000/api/humans")
-//    .then((response) => response.json())
-//    .then((data: IData[]) => setFetchData(data))
-//    .catch((error) => console.log("error", error));
-
-//   fetch("http://localhost:4000/api/orcs")
-//    .then((response) => response.json())
-//    .then((data: IData[]) => setFetchData2(data))
-//    .catch((error) => console.log("error", error));
-//  }, []);
-
- //===============test==================//
- const handlePost = () => {
+ useEffect(() => {
   fetch("http://localhost:4000/api/table", {
    method: "GET",
    headers: { "Content-Type": "application/json" },
-   //  body: JSON.stringify({ value: 5 }),
   })
    .then((res) => res.json())
-   .then((res) => setFetchTable(res))
-   //  .then((res) => console.log(res))
-   .catch((err) => err);
- };
-
- //===============test==============//
+   .then((res) => setTable(res))
+   .catch((err) => console.log(err));
+ }, []);
 
  return (
   <>
    <SelectPlayer />
    <SelectDeck />
-   <Table />
-   {/* <button onClick={handlePost}>click</button> */}
-   {/* {fetchTable.map((el) => (
-    <Table key={el.id} data={el}/>
-   ))} */}
-   {/* {fetchData.map((el) => (
-    <Card key={el._id} data={el} />
-   ))} */}
-
-   {/* {fetchData2.map((el) => (
-    <Card key={el._id} data={el} />
-   ))} */}
+   <Component>
+    {table
+     .sort((a, b) => a._id - b._id)
+     .map((item) => (
+      <Table key={item._id} item={item} />
+     ))}
+   </Component>
   </>
  );
 }
