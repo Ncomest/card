@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
-const { getHandsCard, addHandsCard } = require("../data/hands/hands.js");
+const { getHandsCard, addHandsCard, updateHandsCard } = require("../data/hands/hands.js");
 
-router.get("/", getHandsCard);
+router.post("/update", getHandsCard);
 router.post("/", addHandsCard);
+router.put("/", updateHandsCard);
 
 module.exports = router;

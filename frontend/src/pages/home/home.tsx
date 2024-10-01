@@ -23,7 +23,7 @@ type ITable = {
  //  card: ITableCard;
 };
 
-const Component = styled.div`
+const TableContainer = styled.div`
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(7, 1fr);
@@ -31,7 +31,7 @@ const Component = styled.div`
  gap: 20px;
 `;
 
-export default function Home() {
+function Home() {
  const [table, setTable] = useState<ITable[]>([]);
 
  useEffect(() => {
@@ -47,14 +47,16 @@ export default function Home() {
  return (
   <>
    <SelectPlayer />
-   <SelectDeck />
-   <Component>
+   <TableContainer>
     {table
      .sort((a, b) => a._id - b._id)
      .map((item) => (
       <Table key={item._id} item={item} />
      ))}
-   </Component>
+   </TableContainer>
+   <SelectDeck />
   </>
  );
 }
+
+export default Home;
