@@ -1,4 +1,6 @@
 const Table = require("../models/table.model.js");
+// const { arrTable } = require("../data/table/table.js");
+
 
 const getTableBoxes = async (req, res) => {
  try {

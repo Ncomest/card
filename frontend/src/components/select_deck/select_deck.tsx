@@ -74,29 +74,8 @@ const SelectDeck: React.FC = () => {
    .catch((err) => console.error("Ошибка при получении данных:", err));
  };
 
- const handleDragStart = (e: any, cardId: any) => {
-  e.dataTransfer.setData("cardId", cardId);
- };
- const handleDragOver = (e: any) => {
-  e.preventDefault();
- };
- const handleDrop = (e: any, targetCardId: any) => {
-  e.preventDefault();
-  const sourceCardId = e.dataTransfer.getData("cardId");
 
-  const newCards = [...cards];
-  const sourceCardIndex = newCards.findIndex(
-   (card) => card.id === parseInt(sourceCardId)
-  );
-  const targetCardIndex = newCards.findIndex(
-   (card) => card.id === targetCardId
-  );
 
-  const temp = newCards[sourceCardIndex].text;
-  newCards[sourceCardIndex].text = newCards[targetCardIndex].text;
-  newCards[targetCardIndex].text = temp;
-  setCards(newCards);
- };
 
  return (
   <>
@@ -104,9 +83,9 @@ const SelectDeck: React.FC = () => {
     <P
      key={card.id}
      draggable
-     onDragStart={(e) => handleDragStart(e, card.id)}
-     onDragOver={handleDragOver}
-     onDrop={(e) => handleDrop(e, card.id)}
+    //  onDragStart={(e) => handleDragStart(e, card.id)}
+    //  onDragOver={handleDragOver}
+    //  onDrop={(e) => handleDrop(e, card.id)}
     >
      {card.text}
     </P>

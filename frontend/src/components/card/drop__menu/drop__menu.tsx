@@ -1,75 +1,32 @@
 import styled from "styled-components";
-import { ReactNode } from "react";
-import { GiBloodyStash } from "react-icons/gi";
+import { MdHeartBroken } from "react-icons/md";
+import { GiBlood } from "react-icons/gi";
+import { GiPoisonBottle } from "react-icons/gi";
+import { GiChestArmor } from "react-icons/gi";
+import { BsLightningChargeFill } from "react-icons/bs";
+import { SideStatusState } from "../side_status/side_status_state/side_status_state";
+import { LineStatusState } from "./line_status_state/line_status_state";
 
 const Component = styled.div`
  background-color: white;
  position: absolute;
- top: 25px;
- right: -20px;
+ top: 30px;
+ right: -15px;
  border: 1px solid;
+ border-radius: 3px;
 `;
 
-const Ul = styled.ul`
- padding: 5px 10px;
-`;
-
-function DropMenu() {
+const DropMenu = ({ item }: any) => {
+ const { blood, have_damaged, poison, armor, stack } = item.card_state;
  return (
   <Component>
-   <Ul>
-    <List icon={<GiBloodyStash />} title="Blood" number={5} inputs="null" />
-    {/* <Li>Броня</Li> */}
-   </Ul>
+   {have_damaged && <LineStatusState item={item} icon={<MdHeartBroken />} text={have_damaged} />}
+   {blood && <LineStatusState item={item} icon={<GiBlood />} text={blood} />}
+   {poison && <LineStatusState item={item} icon={<GiPoisonBottle />} text={poison} />}
+   {armor && <LineStatusState item={item} icon={<GiChestArmor />} text={armor} />}
+   {stack && <LineStatusState item={item} icon={<BsLightningChargeFill />} text={stack} />}
   </Component>
  );
-}
+};
 
 export default DropMenu;
-
-interface IList {
- icon: ReactNode;
- title: string;
- number: number;
- inputs: number | string;
-}
-
-const Li = styled.li`
- list-style: none;
- display: flex;
- align-items: center;
- justify-content: center;
- gap: 5px;
-`;
-
-const Icon = styled.div`
- display: flex;
- align-items: center;
- justify-content: center;
- width: 15px;
- height: 15px;
-`;
-
-const Input = styled.input`
- max-width: 100px;
- width: 50px;
-`;
-const Button = styled.button`
- display: flex;
- align-items: center;
- justify-content: center;
- width: 20px;
- height: 20px;
-`;
-
-function List({ icon, title, number, inputs }: IList) {
- return (
-  <Li>
-   <Icon>{icon}</Icon>
-   <p>{title}:</p>
-   <p>{number}</p>
-   <Input />
-   <Button>+</Button>
-  </Li>
- );
-}

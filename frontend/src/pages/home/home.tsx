@@ -3,25 +3,7 @@ import Table from "../../modules/table/table";
 import SelectPlayer from "../../components/select_player/select_player";
 import SelectDeck from "../../components/select_deck/select_deck";
 import styled from "styled-components";
-
-// type IData = {
-//  name: string;
-//  url: string;
-//  _id: string;
-// };
-
-// type ITableCard = {
-//  _id: string;
-//  url: string;
-//  name: string;
-// };
-
-type ITable = {
- _id: number;
- isEmpty: boolean;
- __v: number;
- //  card: ITableCard;
-};
+import Card from "../../components/card/card";
 
 const TableContainer = styled.div`
  padding: 10px;
@@ -31,8 +13,38 @@ const TableContainer = styled.div`
  gap: 20px;
 `;
 
+type ITable = {
+ _id: number;
+ isEmpty: boolean;
+};
+
+interface ICard {
+ _id: string;
+ url: string;
+ name: string;
+}
+
+interface ICardState {
+ haveDamaged: Number;
+ poison: Number;
+ blood: Number;
+ armor: Number;
+ stack: Number;
+ stepOver: Boolean;
+ stepSkip: Boolean;
+}
+
+interface ICardTable {
+ _id: number;
+ isEmpty: boolean;
+ card: ICard;
+ cardState: ICardState;
+}
+
 function Home() {
  const [table, setTable] = useState<ITable[]>([]);
+ const [cardTable, setCardTable] = useState<ICardTable[]>([]);
+ const [cardHand, setCardHand] = useState<ICardTable[]>([]);
 
  useEffect(() => {
   fetch("http://localhost:4000/api/table", {
@@ -44,6 +56,16 @@ function Home() {
    .catch((err) => console.log(err));
  }, []);
 
+ const handleDragStart = (e: any, cardId: any) => {
+  e.dataTransfer.setData("cardId", cardId);
+ };
+ const handleDragOver = (e: any) => {
+  e.preventDefault();
+ };
+ const handleDrop = (e: any, targetCardId: any) => {
+  e.preventDefault();
+ };
+
  return (
   <>
    <SelectPlayer />
@@ -51,7 +73,8 @@ function Home() {
     {table
      .sort((a, b) => a._id - b._id)
      .map((item) => (
-      <Table key={item._id} item={item} />
+      <Card key={item._id} item={item} />
+      // <Table key={item._id} item={item} />
      ))}
    </TableContainer>
    <SelectDeck />

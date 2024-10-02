@@ -27,17 +27,23 @@ const Button = styled.button`
  justify-content: center;
 `;
 
-function Card() {
+const Card = ({ item }: any) => {
  const [isOpen, setIsOpen] = useState(false);
-
  return (
-  <Component>
-   <Image />
-   <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
-   <SideStatus />
-   {isOpen && <DropMenu />}
+  <Component id={item._id}>
+   <p>{item._id}</p>
+   {item.isEmpty ? (
+    <p>Yes</p>
+   ) : (
+    <>
+     <Image src={item.card.url} alt={item.card.name} />
+     <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
+     <SideStatus item={item}/>
+     {isOpen && <DropMenu  item={item}/>}
+    </>
+   )}
   </Component>
  );
-}
+};
 
 export default Card;
