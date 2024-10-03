@@ -1,20 +1,15 @@
 const mongoose = require("mongoose");
 
-const OrcSchema = mongoose.Schema(
- {
-  name: {
-   type: String,
-   required: true,
-  },
-  url: {
-   type: String,
-   required: true,
-  },
+const OrcSchema = mongoose.Schema({
+ name: {
+  type: String,
+  required: true,
  },
- {
-  timestamps: true,
- }
-);
+ url: {
+  type: String,
+  required: true,
+ },
+});
 
 const Orc = mongoose.model("Orc", OrcSchema);
 

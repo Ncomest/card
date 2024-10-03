@@ -19,6 +19,11 @@ const getHandsCard = async (req, res) => {
  }
 };
 
+const randomCard = (arr) => {
+ let shuffledArray = arr.sort(() => Math.random() - 0.5);
+ return shuffledArray.slice(0, 20);
+};
+
 //helper for addHandsCard
 async function api(args) {
  try {
@@ -27,12 +32,12 @@ async function api(args) {
    res = await axios.get(`http://localhost:4000/api/${args.deck}`);
    handArrP1 = [];
    handArrP1.push(...res.data);
-   return handArrP1;
+   return randomCard(handArrP1);
   } else if (args.user === "player2") {
    res = await axios.get(`http://localhost:4000/api/${args.deck}`);
    handArrP2 = [];
    handArrP2.push(...res.data);
-   return handArrP2;
+   return randomCard(handArrP2);
   } else {
    throw new Error("Undefined user");
   }
