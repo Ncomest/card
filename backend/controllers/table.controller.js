@@ -1,7 +1,6 @@
 const Table = require("../models/table.model.js");
 // const { arrTable } = require("../data/table/table.js");
 
-
 const getTableBoxes = async (req, res) => {
  try {
   const table = await Table.find({});
@@ -32,12 +31,34 @@ const createTableBox = async (req, res) => {
 
 const updateTableBox = async (req, res) => {
  try {
-  const { id } = req.params;
-  const table = await Table.findByIdAndUpdate(id, req.body);
-  if (!table) {
+  const { id: targetId } = req.params;
+  // const updatedData = req.body;
+  const { card, card_state, isEmpty, sourceId } = req.body;
+  console.log("targetId",targetId, 'sourceId',sourceId)
+  const updatedTable = await Table.findByIdAndUpdate(
+   targetId,
+   { card, card_state, isEmpty: false },
+   {
+    new: true,
+    runValidators: true,
+   }
+  );
+
+  if (!updatedTable) {
    return res.status(404).json({ message: "Table case not found" });
   }
-  const updatedTable = await Table.findById(id);
+
+  if (sourceId) {
+   await Table.findByIdAndUpdate(
+    sourceId,
+    { card: null, card_state: null, isEmpty: true },
+    {
+     new: true,
+     runValidators: true,
+    }
+   );
+  }
+
   res.status(200).json(updatedTable);
  } catch (error) {
   res.status(500).json({ message: error.message });

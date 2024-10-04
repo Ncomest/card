@@ -12,28 +12,14 @@ const Hand = styled.div`
  border: 1px solid;
 `;
 
-const P = styled.p`
- height: 100px;
- width: 100px;
- border: 1px solid;
-`;
-
 export interface IDeck {
  _id: string;
  name: string;
  url: string;
 }
 
-const SelectDeck: React.FC = () => {
+const SelectDeck: React.FC = ({handCards}:any) => {
  const [decks, setDecks] = useState<IDeck[]>([]);
-
- //===========test=========//
- const [cards, setCards] = useState([
-  { id: 1, text: "Card 1" },
-  { id: 2, text: "Card 2" },
-  { id: 3, text: "Card 3" },
- ]);
- //===========test=========//
 
  //POST select deck
  const handleSelectDeck = (name: string) => {
@@ -74,22 +60,8 @@ const SelectDeck: React.FC = () => {
    .catch((err) => console.error("Ошибка при получении данных:", err));
  };
 
-
-
-
  return (
   <>
-   {cards.map((card) => (
-    <P
-     key={card.id}
-     draggable
-    //  onDragStart={(e) => handleDragStart(e, card.id)}
-    //  onDragOver={handleDragOver}
-    //  onDrop={(e) => handleDrop(e, card.id)}
-    >
-     {card.text}
-    </P>
-   ))}
    <button onClick={() => handleSelectDeck("orcs")}>orcs</button>
    <button onClick={() => handleSelectDeck("humans")}>humans</button>
    <button className="btn btn-primary" onClick={handleUpdateDeck}>

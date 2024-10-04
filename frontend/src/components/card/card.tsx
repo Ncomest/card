@@ -30,7 +30,7 @@ const Button = styled.button`
 const Card = ({ item }: any) => {
  const [isOpen, setIsOpen] = useState(false);
  return (
-  <Component id={item._id}>
+  <Component id={item._id}  >
    <p>{item._id}</p>
    {item.isEmpty ? (
     <p>Yes</p>
@@ -38,8 +38,8 @@ const Card = ({ item }: any) => {
     <>
      <Image src={item.card.url} alt={item.card.name} />
      <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
-     <SideStatus item={item}/>
-     {isOpen && <DropMenu  item={item}/>}
+     <SideStatus item={item} />
+     {isOpen && <DropMenu item={item} />}
     </>
    )}
   </Component>
