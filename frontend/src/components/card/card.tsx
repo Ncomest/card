@@ -30,7 +30,7 @@ const Button = styled.button`
 const Card = ({ item }: any) => {
  const [isOpen, setIsOpen] = useState(false);
  return (
-  <Component id={item._id}  >
+  <Component id={item._id}>
    <p>{item._id}</p>
    {item.isEmpty ? (
     <p>Yes</p>

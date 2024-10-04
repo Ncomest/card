@@ -41,13 +41,13 @@ function Home() {
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
   const interval = setInterval(() => {
-   fetch("http://localhost:4000/api/table", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-   })
-    .then((res) => res.json())
-    .then((res) => setTable(res))
-    .catch((err) => console.log(err));
+  fetch("http://localhost:4000/api/table", {
+   method: "GET",
+   headers: { "Content-Type": "application/json" },
+  })
+   .then((res) => res.json())
+   .then((res) => setTable(res))
+   .catch((err) => console.log(err));
   }, 9000);
 
   return () => clearInterval(interval);
@@ -67,6 +67,7 @@ function Home() {
   targetCardId: number
  ) => {
   try {
+    
    const res = await fetch(`http://localhost:4000/api/table/${startDragId}`, {
     method: "GET",
     headers: { "Content-Type": "application/json" },
@@ -132,10 +133,10 @@ function Home() {
    <TableContainer>
     {table
      .sort((a, b) => a._id - b._id)
-     .map((item, index) => (
+     .map((item) => (
       <div
        key={item._id}
-       draggable="true"
+       draggable={!item.isEmpty}
        onDragStart={(e) => handleDragStart(e, item._id)}
        onDragOver={handleDragOver}
        onDrop={(e) => handleDrop(e, item._id)}

@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
 
-
 const Hand = styled.div`
  padding: 10px;
  display: grid;
@@ -18,7 +17,7 @@ export interface IDeck {
  url: string;
 }
 
-const SelectDeck: React.FC = ({handCards}:any) => {
+const SelectDeck: React.FC = ({ handCards }: any) => {
  const [decks, setDecks] = useState<IDeck[]>([]);
 
  //POST select deck
