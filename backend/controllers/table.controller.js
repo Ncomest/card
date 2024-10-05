@@ -31,35 +31,37 @@ const createTableBox = async (req, res) => {
 
 const updateTableBox = async (req, res) => {
  try {
-  const { id: targetId } = req.params;
-  // const updatedData = req.body;
-  const { card, card_state, isEmpty, sourceId } = req.body;
-  console.log("targetId",targetId, 'sourceId',sourceId)
-  const updatedTable = await Table.findByIdAndUpdate(
-   targetId,
-   { card, card_state, isEmpty: false },
-   {
-    new: true,
-    runValidators: true,
-   }
-  );
+  const { id } = req.params;
+  const updatedData = req.body;
+  
 
-  if (!updatedTable) {
-   return res.status(404).json({ message: "Table case not found" });
-  }
 
-  if (sourceId) {
-   await Table.findByIdAndUpdate(
-    sourceId,
-    { card: null, card_state: null, isEmpty: true },
-    {
-     new: true,
-     runValidators: true,
-    }
-   );
-  }
+  console.log('id',id,"updateDate", updatedData);
+  // const updatedTable = await Table.findByIdAndUpdate(
+  //  targetId,
+  //  { card, card_state, isEmpty: false },
+  //  {
+  //   new: true,
+  //   runValidators: true,
+  //  }
+  // );
 
-  res.status(200).json(updatedTable);
+  // if (!updatedTable) {
+  //  return res.status(404).json({ message: "Table case not found" });
+  // }
+
+  // if (sourceId) {
+  //  await Table.findByIdAndUpdate(
+  //   sourceId,
+  //   { card: null, card_state: null, isEmpty: true },
+  //   {
+  //    new: true,
+  //    runValidators: true,
+  //   }
+  //  );
+  // }
+
+  res.status(200).json('succes');
  } catch (error) {
   res.status(500).json({ message: error.message });
  }

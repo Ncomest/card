@@ -1,6 +1,3 @@
-const express = require("express");
-const app = express();
-const Orc = require("../../models/orc.model.js");
 const { default: axios } = require("axios");
 
 let handArrP1 = [];
@@ -20,8 +17,8 @@ const getHandsCard = async (req, res) => {
 };
 
 const randomCard = (arr) => {
- let shuffledArray = arr.sort(() => Math.random() - 0.5);
- return shuffledArray.slice(0, 20);
+ arr = arr.sort(() => Math.random() - 0.5);
+ return arr.slice(0, 20);
 };
 
 //helper for addHandsCard
@@ -31,13 +28,13 @@ async function api(args) {
   if (args.user === "player1") {
    res = await axios.get(`http://localhost:4000/api/${args.deck}`);
    handArrP1 = [];
-   handArrP1.push(...res.data);
-   return randomCard(handArrP1);
+   handArrP1.push(...randomCard(res.data));
+   return handArrP1;
   } else if (args.user === "player2") {
    res = await axios.get(`http://localhost:4000/api/${args.deck}`);
    handArrP2 = [];
-   handArrP2.push(...res.data);
-   return randomCard(handArrP2);
+   handArrP2.push(...randomCard(res.data));
+   return handArrP2;
   } else {
    throw new Error("Undefined user");
   }
@@ -49,6 +46,7 @@ async function api(args) {
 const addHandsCard = async (req, res) => {
  try {
   const params = req.body;
+  console.log(params);
   let response = await api(params);
   res.status(200).json(response);
  } catch (error) {
