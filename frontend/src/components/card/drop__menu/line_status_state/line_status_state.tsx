@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { SideStatusState } from "../../side_status/side_status_state/side_status_state";
+import { TbRefresh } from "react-icons/tb";
 
 const StateLine = styled.div`
  display: flex;
@@ -24,10 +25,12 @@ const Input = styled.input`
 
 export const LineStatusState = ({ item, icon, text }: any) => {
  return (
-   <StateLine>
-    <SideStatusState icon={icon} text={text} />
-    <Input />
-    <Button>+</Button>
-   </StateLine>
+  <StateLine>
+   <SideStatusState icon={icon} text={text} />
+   <Input />
+   <Button>
+    <TbRefresh />
+   </Button>
+  </StateLine>
  );
 };

@@ -4,10 +4,14 @@ import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
 
 const Component = styled.div`
- height: 320px;
+ height: 160px;
  position: relative;
+ border: 1px solid #fff;
+ border-radius: 5px;
+ transition: transform 0.3s ease;
  &:hover {
-  /* scale: 1.2; */
+  z-index: 10;
+  transform: scale(2.2);
  }
 `;
 
@@ -27,21 +31,31 @@ const Button = styled.button`
  justify-content: center;
 `;
 
+const Background = styled.div`
+ background-image: url("/image/bg_t_shirt.png");
+ background-repeat: no-repeat;
+ background-position: center;
+ width: 100%;
+ height: 100%;
+ filter: brightness(0.1) blur(2px) sepia(60%);
+`;
+
 const Card = ({ item }: any) => {
  const [isOpen, setIsOpen] = useState(false);
  return (
   <Component id={item._id}>
-   <p>{item._id}</p>
-   {item.isEmpty ? (
-    <p>Yes</p>
-   ) : (
+   {/* <p>{item._id}</p> */}
+   {!item.isEmpty && (
+    // <p>Yes</p>
+    //  ) : (
     <>
-     <Image src={item.card.url} alt={item.card.name} />
+     <Image src={item.card.url} alt={item.card.name} loading="lazy"/>
      <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
      <SideStatus item={item} />
      {isOpen && <DropMenu item={item} />}
     </>
    )}
+   {item.isEmpty && <Background />}
   </Component>
  );
 };

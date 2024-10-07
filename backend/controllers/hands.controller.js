@@ -43,10 +43,9 @@ async function api(args) {
  }
 }
 
-const addHandsCard = async (req, res) => {
+const randomHandsCard = async (req, res) => {
  try {
   const params = req.body;
-  console.log(params);
   let response = await api(params);
   res.status(200).json(response);
  } catch (error) {
@@ -56,12 +55,12 @@ const addHandsCard = async (req, res) => {
 
 const updateHandsCard = async (req, res) => {
  try {
-  const user = req.body.user;
-  if (user === "player1") {
-   handArrP1 = [];
+  const data = req.body;
+  if (data.user === "player1") {
+   handArrP1.unshift(data.card)
    return res.status(200).json(handArrP1);
-  } else if (user === "player2") {
-   handArrP2 = [];
+  } else if (data.user === "player2") {
+    handArrP2.unshift(data.card)
    return res.status(200).json(handArrP2);
   }
  } catch (error) {
@@ -69,10 +68,27 @@ const updateHandsCard = async (req, res) => {
  }
 };
 
+const refreshHandsCard = async (req, res) => {
+  try {
+    const user = req.body.user;
+    if (user === "player1") {
+     handArrP1 = [];
+     return res.status(200).json(handArrP1);
+    } else if (user === "player2") {
+     handArrP2 = [];
+     return res.status(200).json(handArrP2);
+    }
+   } catch (error) {
+    res.status(500).json({ message: error.message });
+   }
+};
+
 module.exports = {
  handArrP1,
  handArrP2,
  getHandsCard,
- addHandsCard,
+ randomHandsCard,
+ //  addHandsCard,
  updateHandsCard,
+ refreshHandsCard,
 };

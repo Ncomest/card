@@ -6,10 +6,11 @@ import React from "react";
 const Hand = styled.div`
  padding: 10px;
  display: grid;
- grid-template-columns: repeat(5, 1fr);
- grid-template-rows: repeat(4, 1fr);
- gap: 20px;
+ grid-template-columns: repeat(10, 1fr);
+ grid-template-rows: repeat(2, 1fr);
+ gap: 10px;
  border: 1px solid;
+ background: linear-gradient(to top right, green 45%, blue 55%);
 `;
 
 const Button = styled.button`
@@ -44,6 +45,7 @@ export interface IDrag {
  cardId?: string | null;
  placePickCard?: string;
  placePutCard?: string;
+ cardIndex?: number;
 }
 
 interface SelectDeckProps {
@@ -52,6 +54,7 @@ interface SelectDeckProps {
   casePickTableId,
   cardId,
   placePickCard,
+  cardIndex,
  }: IDrag) => void;
  handleDragOver: (e: any) => void;
  handleDrop: ({ e, casePutTableId }: IDrag) => void;
@@ -67,7 +70,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  //POST select deck
  const handleSelectDeck = (name: string) => {
   sessionStorage.setItem("race", name);
-  fetch("http://localhost:4000/api/hand", {
+  fetch("http://localhost:4000/api/hand/random", {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ deck: name, user: sessionStorage.getItem("player") }),
@@ -79,7 +82,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 
  //Auto-fetch hand cards
  useEffect(() => {
-  fetch("http://localhost:4000/api/hand/update", {
+  fetch("http://localhost:4000/api/hand", {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({
@@ -93,7 +96,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 
  //PUT clear hand
  const handleUpdateDeck = () => {
-  fetch("http://localhost:4000/api/hand", {
+  fetch("http://localhost:4000/api/hand/refresh", {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ user: sessionStorage.getItem("player") }),
@@ -112,9 +115,9 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
    </Button>
    {/* <button onClick={(e) => handleHandDragStart(e, 42)}>log</button> */}
    <Hand>
-    {decks.map((card) => (
+    {decks.map((card, index) => (
      <div
-      key={card._id}
+      key={index}
       draggable={true}
       onDragStart={(e) =>
        handleDragStart({
@@ -122,11 +125,16 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
         cardId: card._id,
         placePickCard: "hand",
         casePickTableId: -1,
+        cardIndex: index,
        })
       }
       onDragOver={handleDragOver}
       onDrop={(e) =>
-       handleDrop({ e, placePutCard: "hand", casePutTableId: -1 })
+       handleDrop({
+        e,
+        placePutCard: "hand",
+        casePutTableId: -1,
+       })
       }
      >
       <HandCard card={card} />

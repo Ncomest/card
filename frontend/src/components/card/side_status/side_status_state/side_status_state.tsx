@@ -6,10 +6,10 @@ const Component = styled.div`
 `;
 
 const Icon = styled.div`
-  display:flex;
-  align-items: center;
-  justify-content: center;
-`
+ display: flex;
+ align-items: center;
+ justify-content: center;
+`;
 
 export const SideStatusState = ({ icon, text }: any) => {
  return (
