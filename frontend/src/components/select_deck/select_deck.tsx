@@ -48,6 +48,12 @@ export interface IDrag {
  cardIndex?: number;
 }
 
+interface ICard {
+ _id: string;
+ url: string;
+ name: string;
+}
+
 interface SelectDeckProps {
  handleDragStart: ({
   e,
@@ -58,14 +64,17 @@ interface SelectDeckProps {
  }: IDrag) => void;
  handleDragOver: (e: any) => void;
  handleDrop: ({ e, casePutTableId }: IDrag) => void;
+ hand: ICard[];
+ setHand: React.Dispatch<React.SetStateAction<ICard[]>>;
 }
 
 const SelectDeck: React.FC<SelectDeckProps> = ({
+ hand,
+ setHand,
  handleDragStart,
  handleDragOver,
  handleDrop,
 }) => {
- const [decks, setDecks] = useState<IDeck[]>([]);
 
  //POST select deck
  const handleSelectDeck = (name: string) => {
@@ -76,23 +85,9 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
    body: JSON.stringify({ deck: name, user: sessionStorage.getItem("player") }),
   })
    .then((res) => res.json())
-   .then((data: IDeck[]) => setDecks(data))
+   .then((data: ICard[]) => setHand(data))
    .catch((err) => console.error("Ошибка при получении данных:", err));
  };
-
- //Auto-fetch hand cards
- useEffect(() => {
-  fetch("http://localhost:4000/api/hand", {
-   method: "POST",
-   headers: { "Content-Type": "application/json" },
-   body: JSON.stringify({
-    user: sessionStorage.getItem("player"),
-   }),
-  })
-   .then((res) => res.json())
-   .then((data: IDeck[]) => setDecks(data))
-   .catch((err) => console.log(err));
- }, []);
 
  //PUT clear hand
  const handleUpdateDeck = () => {
@@ -102,20 +97,18 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
    body: JSON.stringify({ user: sessionStorage.getItem("player") }),
   })
    .then((res) => res.json())
-   .then((data: IDeck[]) => setDecks(data))
+   .then((data: IDeck[]) => setHand(data))
    .catch((err) => console.error("Ошибка при получении данных:", err));
  };
 
  return (
   <>
    <Button onClick={() => handleSelectDeck("orcs")}>Random</Button>
-   {/* <Button onClick={() => handleSelectDeck("humans")}>humans</Button> */}
    <Button className="btn btn-primary" onClick={handleUpdateDeck}>
     Очистить руку P1 и P2
    </Button>
-   {/* <button onClick={(e) => handleHandDragStart(e, 42)}>log</button> */}
    <Hand>
-    {decks.map((card, index) => (
+    {hand.map((card, index) => (
      <div
       key={index}
       draggable={true}

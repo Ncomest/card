@@ -34,7 +34,6 @@ const updateTableBox = async (req, res) => {
  try {
   const { id } = req.params;
   const data = req.body;
-  console.log("id", id, "data", data);
 
   if (data.placePickCard === "table") {
    if (data.placePutCard === "table") {
@@ -66,11 +65,28 @@ const updateTableBox = async (req, res) => {
      );
     }
 
-    return res.status(200).json(updateCaseTable);
+    const updatedTable = await Table.find({})
+    return res.status(200).json(updatedTable);
+   } else if (data.placePutCard === "hand") {
+    const updateCaseTable = await Table.findByIdAndUpdate(
+     data.casePickTableId,
+     {
+      card: null,
+      card_state: null,
+      isEmpty: true,
+      user: null,
+     },
+     { new: true, runValidators: true }
+    );
+
+    if (!updateCaseTable) {
+     return res.status(400).json({ message: error.message });
+    }
+    const updatedTable = await Table.find({});
+    return res.status(200).json(updatedTable);
    }
   } else if (data.placePickCard === "hand") {
    if (data.placePutCard === "table") {
-    console.log("сработал pick hand and put table");
 
     const updateCaseTable = await Table.findByIdAndUpdate(
      id,
@@ -82,20 +98,18 @@ const updateTableBox = async (req, res) => {
      { new: true, runValidators: true }
     );
 
-    // console.log("upd1", updateCaseTable);
     if (!updateCaseTable) {
      return res.status(404).json({ message: "Case of table not found" });
     }
 
     const updatedTable = await Table.find({});
-    console.log(updatedTable, "upd2");
-    return res(200).json(updatedTable);
+    return res.status(200).json(updatedTable);
    }
   }
 
   res.status(400).json({ message: "Invalid request" });
  } catch (error) {
-  res.status(500).json({ message: error.message });
+  res.status(500).json({ message: `проверка ошибка ${error.message}` });
  }
 };
 

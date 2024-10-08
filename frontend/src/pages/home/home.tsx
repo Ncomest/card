@@ -51,6 +51,7 @@ interface IDrag {
 
 const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
+ const [hand, setHand] = useState<ICard[]>([]);
 
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
@@ -65,6 +66,20 @@ const Home: React.FC = () => {
   // }, 9000);
 
   // return () => clearInterval(interval);
+ }, []);
+
+ //Auto-fetch hand cards
+ useEffect(() => {
+  fetch("http://localhost:4000/api/hand", {
+   method: "POST",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify({
+    user: sessionStorage.getItem("player"),
+   }),
+  })
+   .then((res) => res.json())
+   .then((data: ICard[]) => setHand(data))
+   .catch((err) => console.log(err));
  }, []);
 
  //================Drag==============//
@@ -151,13 +166,12 @@ const Home: React.FC = () => {
      }
 
      const updatedCardOnTable = await resUpdCardOnTable.json();
+     setTable(updatedCardOnTable);
      console.log(
       `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
       updatedCardOnTable
      );
     } else if (placePutCard === "hand") {
-     console.log("сработал if положить со стола в руку");
-
      const resUpdCardOnHand = await fetch(
       "http://localhost:4000/api/hand/update",
       {
@@ -175,7 +189,32 @@ const Home: React.FC = () => {
      }
 
      const resCardFromHand = await resUpdCardOnHand.json();
-     console.log(resCardFromHand);
+     setHand(resCardFromHand);
+     console.log("resCardFromHand", resCardFromHand);
+
+     const resUpdCardOnTable = await fetch(
+      `http://localhost:4000/api/table/${casePickTableId}`,
+      {
+       method: "PUT",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({
+        placePickCard: placePickCard, // место откуда берем карту стол или рука
+        placePutCard: placePutCard, // место куда кладем карту стол или рука
+        casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+        casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+        // card: resCardFromHand[cardIndex],
+        isEmpty: true,
+        // user: sessionStorage.getItem("player"),
+       }),
+      }
+     );
+
+     if (!resUpdCardOnTable.ok) {
+      throw new Error("Не удалось обновить стол, очистить ячейку от карты");
+     }
+
+     const updatedCardOnTable = await resUpdCardOnTable.json();
+     setTable(updatedCardOnTable);
     }
    } else if (placePickCard === "hand") {
     console.log("взяли карту с руки");
@@ -193,7 +232,7 @@ const Home: React.FC = () => {
     }
 
     const resCardFromHand = await resCardOnHand.json();
-    console.log(resCardFromHand[cardIndex]);
+    console.log("resCardFromHand[cardindex]", resCardFromHand[cardIndex]);
 
     if (placePutCard === "hand") {
      console.log("сработал if взяли с руки и положили в руку");
@@ -222,10 +261,29 @@ const Home: React.FC = () => {
      }
 
      const resUpdCardFromTable = await resUpdCardOnTable.json();
-     console.log(resUpdCardFromTable);
+     setTable(resUpdCardFromTable);
+
+     //=============== запрос на обновление данных в руке
+     const resUpdCardOnHand = await fetch(
+      "http://localhost:4000/api/hand/filter",
+      {
+       method: "PUT",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify({
+        user: sessionStorage.getItem("player"),
+        cardIndex: Number(cardIndex),
+       }),
+      }
+     );
+
+     if (!resUpdCardOnHand.ok) {
+      throw new Error("не получилось обновить данные в руке");
+     }
+
+     const updatedCardFromHand = await resUpdCardOnHand.json();
+     setHand(updatedCardFromHand);
     }
    }
-
   } catch (error) {
    console.error("Error:", error);
   }
@@ -260,6 +318,8 @@ const Home: React.FC = () => {
      ))}
    </TableContainer>
    <SelectDeck
+    hand={hand}
+    setHand={setHand}
     handleDragStart={handleDragStart}
     handleDragOver={handleDragOver}
     handleDrop={handleDrop}

@@ -57,10 +57,10 @@ const updateHandsCard = async (req, res) => {
  try {
   const data = req.body;
   if (data.user === "player1") {
-   handArrP1.unshift(data.card)
+   handArrP1.unshift(data.card);
    return res.status(200).json(handArrP1);
   } else if (data.user === "player2") {
-    handArrP2.unshift(data.card)
+   handArrP2.unshift(data.card);
    return res.status(200).json(handArrP2);
   }
  } catch (error) {
@@ -69,18 +69,32 @@ const updateHandsCard = async (req, res) => {
 };
 
 const refreshHandsCard = async (req, res) => {
-  try {
-    const user = req.body.user;
-    if (user === "player1") {
-     handArrP1 = [];
-     return res.status(200).json(handArrP1);
-    } else if (user === "player2") {
-     handArrP2 = [];
-     return res.status(200).json(handArrP2);
-    }
-   } catch (error) {
-    res.status(500).json({ message: error.message });
-   }
+ try {
+  const user = req.body.user;
+  if (user === "player1") {
+   handArrP1 = [];
+   return res.status(200).json(handArrP1);
+  } else if (user === "player2") {
+   handArrP2 = [];
+   return res.status(200).json(handArrP2);
+  }
+ } catch (error) {
+  res.status(500).json({ message: error.message });
+ }
+};
+
+const filterHandsCard = async (req, res) => {
+ try {
+  const data = req.body;
+  console.log("данные которые получил сервер data", data);
+  if (data.user === "player1") {
+   handArrP1 = handArrP1.filter((_, index) => index !== Number(data.cardIndex));
+   return res.status(200).json(handArrP1);
+  } else if (data.user === "player2") {
+  }
+ } catch (error) {
+  res.status(500).json({ message: error.message });
+ }
 };
 
 module.exports = {
@@ -91,4 +105,5 @@ module.exports = {
  //  addHandsCard,
  updateHandsCard,
  refreshHandsCard,
+ filterHandsCard,
 };
