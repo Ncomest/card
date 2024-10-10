@@ -3,6 +3,7 @@ import SelectPlayer from "../../components/select_player/select_player";
 import SelectDeck from "../../components/select_deck/select_deck";
 import styled from "styled-components";
 import Card from "../../components/card/card";
+import DiceRoll from "../../components/dice_roll/dice_roll";
 
 const TableContainer = styled.div`
  width: 60%;
@@ -53,10 +54,13 @@ const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
  const [hand, setHand] = useState<ICard[]>([]);
 
+ const apiUrl = process.env.REACT_APP_API_URL;
+
+
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
   // const interval = setInterval(() => {
-  fetch("http://localhost:4000/api/table", {
+  fetch(apiUrl + "/api/table", {
    method: "GET",
    headers: { "Content-Type": "application/json" },
   })
@@ -70,7 +74,7 @@ const Home: React.FC = () => {
 
  //Auto-fetch hand cards
  useEffect(() => {
-  fetch("http://localhost:4000/api/hand", {
+  fetch(apiUrl + "/api/hand", {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({
@@ -126,7 +130,7 @@ const Home: React.FC = () => {
    if (placePickCard === "table") {
     // отправим запрос на получение данных
     const resCardPickOnTableId = await fetch(
-     `http://localhost:4000/api/table/${casePickTableId}`
+     apiUrl + `/api/table/${casePickTableId}`
     );
 
     if (!resCardPickOnTableId.ok) {
@@ -143,7 +147,7 @@ const Home: React.FC = () => {
      console.log("сработал if положить со стола на стол");
      // отправим запрос на обновление данных
      const resUpdCardOnTable = await fetch(
-      `http://localhost:4000/api/table/${casePutTableId}`,
+      apiUrl + `/api/table/${casePutTableId}`,
       {
        method: "PUT",
        headers: { "Content-Type": "application/json" },
@@ -172,17 +176,14 @@ const Home: React.FC = () => {
       updatedCardOnTable
      );
     } else if (placePutCard === "hand") {
-     const resUpdCardOnHand = await fetch(
-      "http://localhost:4000/api/hand/update",
-      {
-       method: "PUT",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-        user: sessionStorage.getItem("player"),
-        card: resCardFromTableId.card,
-       }),
-      }
-     );
+     const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+       user: sessionStorage.getItem("player"),
+       card: resCardFromTableId.card,
+      }),
+     });
 
      if (!resUpdCardOnHand.ok) {
       throw new Error("Не получилось обновить данные руки на сервере");
@@ -193,7 +194,7 @@ const Home: React.FC = () => {
      console.log("resCardFromHand", resCardFromHand);
 
      const resUpdCardOnTable = await fetch(
-      `http://localhost:4000/api/table/${casePickTableId}`,
+      apiUrl + `/api/table/${casePickTableId}`,
       {
        method: "PUT",
        headers: { "Content-Type": "application/json" },
@@ -219,7 +220,7 @@ const Home: React.FC = () => {
    } else if (placePickCard === "hand") {
     console.log("взяли карту с руки");
 
-    const resCardOnHand = await fetch("http://localhost:4000/api/hand/", {
+    const resCardOnHand = await fetch(apiUrl + "/api/hand/", {
      method: "POST",
      headers: { "Content-Type": "application/json" },
      body: JSON.stringify({
@@ -240,7 +241,7 @@ const Home: React.FC = () => {
      console.log("сработал if взяли карту с руки и положили на стол");
 
      const resUpdCardOnTable = await fetch(
-      `http://localhost:4000/api/table/${casePutTableId}`,
+      apiUrl + `/api/table/${casePutTableId}`,
       {
        method: "PUT",
        headers: { "Content-Type": "application/json" },
@@ -264,17 +265,14 @@ const Home: React.FC = () => {
      setTable(resUpdCardFromTable);
 
      //=============== запрос на обновление данных в руке
-     const resUpdCardOnHand = await fetch(
-      "http://localhost:4000/api/hand/filter",
-      {
-       method: "PUT",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-        user: sessionStorage.getItem("player"),
-        cardIndex: Number(cardIndex),
-       }),
-      }
-     );
+     const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/filter", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+       user: sessionStorage.getItem("player"),
+       cardIndex: Number(cardIndex),
+      }),
+     });
 
      if (!resUpdCardOnHand.ok) {
       throw new Error("не получилось обновить данные в руке");
@@ -293,6 +291,7 @@ const Home: React.FC = () => {
  return (
   <>
    <SelectPlayer />
+   <DiceRoll />
    <TableContainer>
     {table
      .sort((a, b) => a._id - b._id)

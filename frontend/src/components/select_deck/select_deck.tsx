@@ -75,11 +75,12 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  handleDragOver,
  handleDrop,
 }) => {
+ const apiUrl = process.env.REACT_APP_API_URL;
 
  //POST select deck
  const handleSelectDeck = (name: string) => {
   sessionStorage.setItem("race", name);
-  fetch("http://localhost:4000/api/hand/random", {
+  fetch(apiUrl + "/api/hand/random", {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ deck: name, user: sessionStorage.getItem("player") }),
@@ -91,7 +92,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 
  //PUT clear hand
  const handleUpdateDeck = () => {
-  fetch("http://localhost:4000/api/hand/refresh", {
+  fetch(apiUrl + "/api/hand/refresh", {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ user: sessionStorage.getItem("player") }),

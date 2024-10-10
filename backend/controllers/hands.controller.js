@@ -91,6 +91,8 @@ const filterHandsCard = async (req, res) => {
    handArrP1 = handArrP1.filter((_, index) => index !== Number(data.cardIndex));
    return res.status(200).json(handArrP1);
   } else if (data.user === "player2") {
+    handArrP2 = handArrP2.filter((_, index) => index !== Number(data.cardIndex));
+   return res.status(200).json(handArrP2);
   }
  } catch (error) {
   res.status(500).json({ message: error.message });
