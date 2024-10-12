@@ -10,7 +10,7 @@ const DiceRoll = () => {
 
  const [roll, setRoll] = useState<IRoll | null>(null);
  //отправляем запрос на сервер, передаем данные user: player1 or player2
- //принимаем и устанавливаем значение кубика
+ //принимаем и устанавливаем значение кубикаnee
 
  useEffect(() => {
   fetch(apiUrl + "/api/dice")
