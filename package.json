@@ -1,11 +1,11 @@
 {
-  "scripts": {
-    "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
-  },
-  "devDependencies": {
-    "concurrently": "^9.0.1"
-  },
-  "dependencies": {
-    "axios": "^1.7.7"
-  }
+ "scripts": {
+  "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
+ },
+ "devDependencies": {
+  "concurrently": "^9.0.1"
+ },
+ "dependencies": {
+  "axios": "^1.7.7"
+ }
 }
