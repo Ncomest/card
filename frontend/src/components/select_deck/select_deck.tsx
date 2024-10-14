@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
 import React from "react";
+import {site} from '../../site_state.js'
 
 const Hand = styled.div`
  padding: 10px;
@@ -75,7 +76,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  handleDragOver,
  handleDrop,
 }) => {
- const apiUrl = process.env.REACT_APP_API_URL;
+ const apiUrl = site;
 
  //POST select deck
  const handleSelectDeck = (name: string) => {

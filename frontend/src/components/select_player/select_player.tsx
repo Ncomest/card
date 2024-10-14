@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
+import { site } from "../../site_state";
 
 const Button = styled.button`
  padding: 10px 20px;
@@ -26,10 +27,12 @@ function SelectPlayer() {
  );
  const [isPlayer, setIsPlayer] = useState({ player1: false, player2: false });
 
+ const apiUrl = site;
+
  //POST select player
  const handleSelectPlayer = (e: any) => {
   const selectPlayer = e.target.value;
-  fetch("http://localhost:4000/api/select-player", {
+  fetch(apiUrl + "/api/select-player", {
    method: "POST",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ player: selectPlayer }),
@@ -43,7 +46,7 @@ function SelectPlayer() {
 
  //Refresh players status
  const handleRefresh = () => {
-  fetch("http://localhost:4000/api/select-player", {
+  fetch(apiUrl + "/api/select-player", {
    method: "PUT",
   })
    .then((res) => res.json())
@@ -55,7 +58,7 @@ function SelectPlayer() {
 
  //Get players status
  useEffect(() => {
-  fetch("http://localhost:4000/api/player")
+  fetch(apiUrl +"/api/player")
    .then((res) => res.json())
    .then((res) => setIsPlayer(res))
    .catch((error) => console.log(error));

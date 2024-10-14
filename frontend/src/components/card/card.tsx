@@ -11,7 +11,7 @@ const Component = styled.div`
  transition: transform 0.3s ease;
  &:hover {
   z-index: 10;
-  transform: scale(2.2);
+  transform: scale(2.4);
  }
 `;
 

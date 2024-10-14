@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 
+import { site } from "../../site_state.js";
+
 interface IRoll {
  diceWhite: number;
  diceBlack: number;
 }
 
 const DiceRoll = () => {
- const apiUrl = process.env.REACT_APP_API_URL;
+ const apiUrl = site;
 
  const [roll, setRoll] = useState<IRoll | null>(null);
  //отправляем запрос на сервер, передаем данные user: player1 or player2
@@ -20,14 +22,14 @@ const DiceRoll = () => {
  }, []);
 
  const handleDiceRoll = () => {
-  fetch("http://localhost:4000/api/dice", {
+  fetch(apiUrl + "/api/dice", {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ user: sessionStorage.getItem("player") }),
   })
    .then((res) => res.json())
    .then((res) => {
-    //начать анимацию броска 
+    //начать анимацию броска
     setTimeout(() => {
      setRoll(res);
     }, 3000);

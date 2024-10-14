@@ -4,9 +4,11 @@ import SelectDeck from "../../components/select_deck/select_deck";
 import styled from "styled-components";
 import Card from "../../components/card/card";
 import DiceRoll from "../../components/dice_roll/dice_roll";
+import { site } from "../../site_state.js";
 
 const TableContainer = styled.div`
  width: 60%;
+ max-width: 1000px;
  margin: auto;
  padding: 10px;
  display: grid;
@@ -54,13 +56,14 @@ const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
  const [hand, setHand] = useState<ICard[]>([]);
 
- const apiUrl = process.env.REACT_APP_API_URL;
-
+ //  const apiUrl = process.env.REACT_APP_API_URL;
+ const apiUrl = site;
 
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
   // const interval = setInterval(() => {
-  fetch(apiUrl + "/api/table", {
+  fetch(`${apiUrl}/api/table`, {
+   // fetch("http://87.228.10.233:4000/api/table", {
    method: "GET",
    headers: { "Content-Type": "application/json" },
   })
