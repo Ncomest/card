@@ -25,6 +25,7 @@ function SelectPlayer() {
  const [isSelectPlayer, setIsSelectPlayer] = useState(
   sessionStorage.getItem("player")
  );
+
  const [isPlayer, setIsPlayer] = useState({ player1: false, player2: false });
 
  const apiUrl = site;
@@ -40,7 +41,7 @@ function SelectPlayer() {
    .then((res) => res.json())
    .then((res) => setIsPlayer(res))
    .then(() => sessionStorage.setItem("player", selectPlayer))
-   .then(() => setIsSelectPlayer(selectPlayer))
+  //  .then(() => setIsSelectPlayer(selectPlayer))
    .catch((err) => console.log("error", err));
  };
 
@@ -62,7 +63,7 @@ function SelectPlayer() {
    .then((res) => res.json())
    .then((res) => setIsPlayer(res))
    .catch((error) => console.log(error));
- }, []);
+ }, [apiUrl]);
 
  return (
   <>

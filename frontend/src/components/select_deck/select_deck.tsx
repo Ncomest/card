@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
 import React from "react";

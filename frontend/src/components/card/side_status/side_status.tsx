@@ -21,14 +21,33 @@ const Component = styled.div`
 `;
 
 function SideStatus({ item }: any) {
-//  const { blood, have_damaged, poison, armor, stack } = item?.card_state;
+
  return (
   <Component>
-   {item?.card_state?.have_damaged && <SideStatusState icon={<MdHeartBroken />} text={item?.card_state?.have_damaged} />}
-   {/* {blood && <SideStatusState icon={<GiBlood />} text={blood} />}
-   {poison &&<SideStatusState icon={<GiPoisonBottle />} text={poison} />}
-   {armor && <SideStatusState icon={<GiChestArmor />} text={armor} />}
-   {stack && <SideStatusState icon={<BsLightningChargeFill />} text={stack} />} */}
+   {item?.card_state?.have_damaged && (
+    <SideStatusState
+     icon={<MdHeartBroken />}
+     text={item?.card_state?.have_damaged}
+    />
+   )}
+   {item?.card_state?.blood && (
+    <SideStatusState icon={<GiBlood />} text={item?.card_state?.blood} />
+   )}
+   {item?.card_state?.poison && (
+    <SideStatusState
+     icon={<GiPoisonBottle />}
+     text={item?.card_state?.poison}
+    />
+   )}
+   {item?.card_state?.armor && (
+    <SideStatusState icon={<GiChestArmor />} text={item?.card_state?.armor} />
+   )}
+   {item?.card_state?.stack && (
+    <SideStatusState
+     icon={<BsLightningChargeFill />}
+     text={item?.card_state?.stack}
+    />
+   )}
   </Component>
  );
 }

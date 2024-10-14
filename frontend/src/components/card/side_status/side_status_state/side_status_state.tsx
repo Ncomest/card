@@ -12,6 +12,7 @@ const Icon = styled.div`
 `;
 
 export const SideStatusState = ({ icon, text }: any) => {
+  
  return (
   <Component>
    <Icon>{icon}</Icon>

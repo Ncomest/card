@@ -1,6 +1,4 @@
 const Table = require("../models/table.model.js");
-// const { arrTable } = require("../data/table/table.js");
-// const { handArrP1, handArrP2 } = require("./hands.controller.js");
 
 const getTableBoxes = async (req, res) => {
  try {
@@ -34,7 +32,7 @@ const updateTableBox = async (req, res) => {
  try {
   const { id } = req.params;
   const data = req.body;
-
+  console.log(data);
   if (data.placePickCard === "table") {
    if (data.placePutCard === "table") {
     const updateCaseTable = await Table.findByIdAndUpdate(
@@ -65,7 +63,7 @@ const updateTableBox = async (req, res) => {
      );
     }
 
-    const updatedTable = await Table.find({})
+    const updatedTable = await Table.find({});
     return res.status(200).json(updatedTable);
    } else if (data.placePutCard === "hand") {
     const updateCaseTable = await Table.findByIdAndUpdate(
@@ -87,7 +85,6 @@ const updateTableBox = async (req, res) => {
    }
   } else if (data.placePickCard === "hand") {
    if (data.placePutCard === "table") {
-
     const updateCaseTable = await Table.findByIdAndUpdate(
      id,
      {
@@ -105,6 +102,24 @@ const updateTableBox = async (req, res) => {
     const updatedTable = await Table.find({});
     return res.status(200).json(updatedTable);
    }
+  }
+
+  if (data.set_state === "setstate" && data) {
+   const currCardState = data.currCardState;
+   const value = data.value;
+
+   const updateCaseTable = await Table.findByIdAndUpdate(id, {
+    $set: {
+     [`card_state.${currCardState}`]: value,
+    },
+   });
+
+   if (!updateCaseTable) {
+    return res.status(404).json({ message: "Case of table not found" });
+   }
+
+   //  const updatedTable = await Table.find({});
+   return res.status(200).json({ message: "success" });
   }
 
   res.status(400).json({ message: "Invalid request" });

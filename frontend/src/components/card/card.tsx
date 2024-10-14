@@ -3,15 +3,15 @@ import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
 
-const Component = styled.div`
+const Component = styled.div<{ $empty?: boolean }>`
  height: 160px;
  position: relative;
  border: 1px solid #fff;
  border-radius: 5px;
  transition: transform 0.3s ease;
  &:hover {
-  z-index: 10;
-  transform: scale(2.4);
+  scale: ${(prop) => prop.$empty && 2.2};
+  z-index: ${(prop) => prop.$empty && 1};
  }
 `;
 
@@ -42,16 +42,15 @@ const Background = styled.div`
 
 const Card = ({ item }: any) => {
  const [isOpen, setIsOpen] = useState(false);
+
  return (
-  <Component id={item._id}>
-   {/* <p>{item._id}</p> */}
+  <Component $empty={!item.isEmpty} id={item._id}>
    {!item.isEmpty && (
-    // <p>Yes</p>
-    //  ) : (
     <>
-     <Image src={item.card.url} alt={item.card.name} loading="lazy"/>
+     {/* <p>{item.card_state.blood}</p> */}
+     <Image src={item.card.url} alt={item.card.name} loading="lazy" />
      <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
-     <SideStatus item={item} />
+     {!item.isEpmty && <SideStatus item={item} />}
      {isOpen && <DropMenu item={item} />}
     </>
    )}

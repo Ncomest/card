@@ -56,24 +56,22 @@ const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
  const [hand, setHand] = useState<ICard[]>([]);
 
- //  const apiUrl = process.env.REACT_APP_API_URL;
  const apiUrl = site;
 
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
-  // const interval = setInterval(() => {
+  const interval = setInterval(() => {
   fetch(`${apiUrl}/api/table`, {
-   // fetch("http://87.228.10.233:4000/api/table", {
    method: "GET",
    headers: { "Content-Type": "application/json" },
   })
    .then((res) => res.json())
    .then((res) => setTable(res))
    .catch((err) => console.log(err));
-  // }, 9000);
+  }, 9000);
 
-  // return () => clearInterval(interval);
- }, []);
+  return () => clearInterval(interval);
+ }, [apiUrl]);
 
  //Auto-fetch hand cards
  useEffect(() => {
@@ -87,7 +85,7 @@ const Home: React.FC = () => {
    .then((res) => res.json())
    .then((data: ICard[]) => setHand(data))
    .catch((err) => console.log(err));
- }, []);
+ }, [apiUrl]);
 
  //================Drag==============//
  const handleDragStart = ({
@@ -118,16 +116,7 @@ const Home: React.FC = () => {
    const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));
    const placePickCard = e.dataTransfer.getData("placePickCard");
    const cardIndex = e.dataTransfer.getData("cardIndex");
-   //  console.log("Место откуда берем карту", placePickCard);
-   //  console.log("Место куда кладем карту", placePutCard);
-   //  console.log(
-   //   "id ячейки стола откуда взяли карту casePickTableId",
-   //   casePickTableId
-   //  );
-   //  console.log(
-   //   "id ячейки стола куда кладем карту casePutTableId",
-   //   casePutTableId
-   //  );
+  
    console.log("index ячейки в руке cardIndex", cardIndex);
 
    if (placePickCard === "table") {
@@ -159,7 +148,6 @@ const Home: React.FC = () => {
         placePutCard: placePutCard, // место куда кладем карту стол или рука
         casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
         casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-        // cardOfHandIndex: cardOfHandIndex,
         card: resCardFromTableId.card,
         card_state: resCardFromTableId.card_state,
         isEmpty: false,
@@ -206,9 +194,7 @@ const Home: React.FC = () => {
         placePutCard: placePutCard, // место куда кладем карту стол или рука
         casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
         casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-        // card: resCardFromHand[cardIndex],
         isEmpty: true,
-        // user: sessionStorage.getItem("player"),
        }),
       }
      );
@@ -297,7 +283,7 @@ const Home: React.FC = () => {
    <DiceRoll />
    <TableContainer>
     {table
-     .sort((a, b) => a._id - b._id)
+     ?.sort((a, b) => a._id - b._id)
      .map((item, index) => (
       <div
        key={index}

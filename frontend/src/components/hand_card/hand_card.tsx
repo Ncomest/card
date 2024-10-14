@@ -28,7 +28,7 @@ const HandCard: React.FC<IHandCard> = ({ card }) => {
  return (
   <Component draggable="true">
    {/* <ImgContainer> */}
-   <Image src={card.url} alt={card.name} loading="lazy" />
+   <Image src={card?.url} alt={card?.name} loading="lazy" />
    {/* </ImgContainer> */}
   </Component>
  );
