@@ -32,7 +32,7 @@ const updateTableBox = async (req, res) => {
  try {
   const { id } = req.params;
   const data = req.body;
-  console.log(data);
+
   if (data.placePickCard === "table") {
    if (data.placePutCard === "table") {
     const updateCaseTable = await Table.findByIdAndUpdate(
@@ -91,6 +91,16 @@ const updateTableBox = async (req, res) => {
       card: data.card,
       isEmpty: false,
       user: data.user,
+      card_state: {
+       have_damaged: null,
+       poison: null,
+       blood: null,
+       armor: null,
+       stack: null,
+       closed: true,
+       step_over: false,
+       step_skip: false,
+      },
      },
      { new: true, runValidators: true }
     );
@@ -104,22 +114,72 @@ const updateTableBox = async (req, res) => {
    }
   }
 
-  if (data.set_state === "setstate" && data) {
+  if (data.set_state == "setstate") {
+   console.log(data, "setstate");
    const currCardState = data.currCardState;
    const value = data.value;
 
-   const updateCaseTable = await Table.findByIdAndUpdate(id, {
-    $set: {
-     [`card_state.${currCardState}`]: value,
-    },
-   });
-
-   if (!updateCaseTable) {
-    return res.status(404).json({ message: "Case of table not found" });
+   const knowData = await Table.findById(id);
+   if (knowData.card_state === null) {
+    currData.card_state = {};
    }
 
-   //  const updatedTable = await Table.find({});
-   return res.status(200).json({ message: "success" });
+   await Table.findByIdAndUpdate(id, {
+    $set: { [`card_state.${currCardState}`]: value },
+   });
+
+   const currData = await Table.find({});
+   return res.status(200).json(currData);
+   //  const currData = await Table.findById(id);
+   //  if (!currData) {
+   //   return res.status(404).json({ message: "Case of table not found" });
+   //  }
+
+   //  if (currData.card_state === null || !currData.card_state) {
+   //   console.log("card_state === null");
+   //  } else if (currData.card_state !== null) {
+   //   console.log("card_state !== null");
+
+   //   const updateCaseTable = await Table.findByIdAndUpdate(
+   //    id,
+   //    {
+   //     $set: { [`card_state.${currCardState}`]: value },
+   //    },
+   //    { new: true, runValidators: true }
+   //   );
+   //   console.log("updateCaseTable", updateCaseTable);
+   //   const updatedCaseTable = await updateCaseTable.Table.find({});
+   //   return res.status(200).json(updatedCaseTable);
+   //  }
+
+   //  if (currData.card_state !== null && currData.card_state) {
+   //   console.log("state != null");
+
+   //   const updateCaseTable = await Table.findByIdAndUpdate(
+   //    id,
+   //    {
+   //     $set: {
+   //      [`card_state.${currCardState}`]: value,
+   //     },
+   //    },
+   //    { new: true, runValidators: true }
+   //   );
+
+   //   if (!updateCaseTable) {
+   //    return res.status(404).json({ message: "Case of table not found" });
+   //   }
+
+   //   const updatedTable = await Table.find({});
+   //   return res.status(200).json({ message: "success" });
+   //  } else if (currData.card_state === null || !currData.card_state) {
+   //   currData.card_state = {};
+
+   //   currData.card_state[currCardState] = value;
+
+   //   const updateCardState = await currData.save();
+   //   res.status(200).json(updateCardState);
+   //  }
+   //  res.status(400).json({ message: "ошибка в data.set_state" });
   }
 
   res.status(400).json({ message: "Invalid request" });

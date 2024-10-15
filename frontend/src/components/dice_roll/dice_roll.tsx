@@ -82,8 +82,8 @@ const DiceRoll = () => {
  return (
   <Component>
    <Button onClick={handleDiceRoll}>roll</Button>
-   <P>Игрок 1 "белый кубик": {roll?.diceWhite}</P>
-   <P>Игрок 2 "черный кубик": {roll?.diceBlack}</P>
+   <P>Игрок 1: {roll?.diceWhite}</P>
+   <P>Игрок 2: {roll?.diceBlack}</P>
   </Component>
  );
 };

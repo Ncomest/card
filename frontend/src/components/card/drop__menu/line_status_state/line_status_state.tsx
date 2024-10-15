@@ -3,6 +3,7 @@ import { SideStatusState } from "../../side_status/side_status_state/side_status
 
 import { site } from "../../../../site_state";
 
+
 const StateLine = styled.div`
  display: flex;
  padding: 2px;
@@ -11,38 +12,41 @@ const StateLine = styled.div`
  justify-content: center;
 `;
 
-
-
 const Input = styled.input`
  max-width: 100px;
  width: 50px;
 `;
 
 export const LineStatusState = ({ item, icon, text }: any) => {
+ const apiUrl = site;
 
+ const handleFetchCardState = async (e: any) => {
+  try {
+   const res = await fetch(`${apiUrl}/api/table/${item._id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+     currCardState: text,
+     value: Number(e.target.value),
+     set_state: "setstate",
+    }),
+   });
 
-  const apiUrl = site;
+   if (!res.ok) {
+    throw new Error("Ошибка resok");
+   }
 
- const handleFetchCardState = (e: any) => {
-
-  fetch(apiUrl + `/api/table/${item._id}`, {
-   method: "PUT",
-   headers: { "Content-Type": "application/json" },
-   body: JSON.stringify({
-    currCardState: text,
-    value: e.target.value,
-    set_state: "setstate",
-   }),
-  })
-   .then((res) => res.json())
-   .then((res) => console.log(res))
-   .catch((err) => console.log(err));
+   const data = await res.json();
+   console.log(data);
+  } catch (error) {
+   console.error(error, "ошибка сработал catch");
+  }
  };
 
  return (
   <StateLine>
    <SideStatusState icon={icon} />
-   <Input onChange={handleFetchCardState} />
+   <Input onBlur={handleFetchCardState} />
   </StateLine>
  );
 };

@@ -3,12 +3,20 @@ import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
 
-const Component = styled.div<{ $empty?: boolean }>`
+const Component = styled.div<{ $empty?: boolean; $user: string }>`
  height: 160px;
  position: relative;
- border: 1px solid #fff;
- border-radius: 5px;
+ border: 5px solid
+  ${(prop) =>
+   prop.$user === "player1"
+    ? "#5bbed2"
+    : prop.$user === "player2"
+    ? "#ff00f3"
+    : "transparent"};
+ border-radius: 10px;
  transition: transform 0.3s ease;
+ outline: 1px solid black;
+
  &:hover {
   scale: ${(prop) => prop.$empty && 2.2};
   z-index: ${(prop) => prop.$empty && 1};
@@ -44,11 +52,10 @@ const Card = ({ item }: any) => {
  const [isOpen, setIsOpen] = useState(false);
 
  return (
-  <Component $empty={!item.isEmpty} id={item._id}>
+  <Component $empty={!item.isEmpty} $user={item.user} id={item._id}>
    {!item.isEmpty && (
     <>
-     {/* <p>{item.card_state.blood}</p> */}
-     <Image src={item.card.url} alt={item.card.name} loading="lazy" />
+     <Image src={item?.card?.url} alt={item?.card?.name} loading="lazy" />
      <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
      {!item.isEpmty && <SideStatus item={item} />}
      {isOpen && <DropMenu item={item} />}

@@ -7,7 +7,7 @@ import DiceRoll from "../../components/dice_roll/dice_roll";
 import { site } from "../../site_state.js";
 
 const TableContainer = styled.div`
- width: 60%;
+ width: 70%;
  max-width: 1000px;
  margin: auto;
  padding: 10px;
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
  const [hand, setHand] = useState<ICard[]>([]);
 
- const apiUrl = site;
+  const apiUrl = site;
 
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
@@ -116,7 +116,7 @@ const Home: React.FC = () => {
    const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));
    const placePickCard = e.dataTransfer.getData("placePickCard");
    const cardIndex = e.dataTransfer.getData("cardIndex");
-  
+
    console.log("index ячейки в руке cardIndex", cardIndex);
 
    if (placePickCard === "table") {

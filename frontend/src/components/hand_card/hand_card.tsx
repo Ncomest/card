@@ -7,7 +7,7 @@ interface IHandCard {
 
 const Component = styled.div`
  width: 100%;
- height: 220px;
+ height: 240px;
  border: 1px solid #fff;
  border-radius: 5px;
  transition: transform 0.3s ease;
