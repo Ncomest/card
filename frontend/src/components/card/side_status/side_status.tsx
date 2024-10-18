@@ -21,7 +21,6 @@ const Component = styled.div`
 `;
 
 function SideStatus({ item }: any) {
-
  return (
   <Component>
    {item?.card_state?.have_damaged && (

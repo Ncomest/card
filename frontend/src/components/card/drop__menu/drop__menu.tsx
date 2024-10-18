@@ -5,6 +5,7 @@ import { GiPoisonBottle } from "react-icons/gi";
 import { GiChestArmor } from "react-icons/gi";
 import { BsLightningChargeFill } from "react-icons/bs";
 import { LineStatusState } from "./line_status_state/line_status_state";
+import { site } from "../../../site_state";
 
 const Component = styled.div`
  background-color: white;
@@ -15,7 +16,55 @@ const Component = styled.div`
  border-radius: 3px;
 `;
 
-const DropMenu = ({ item }: any) => {
+interface ICard {
+ _id: string;
+ url: string;
+ name: string;
+}
+
+interface ICardState {
+ haveDamaged: number | null;
+ poison: number | null;
+ blood: number | null;
+ armor: number | null;
+ stack: number | null;
+ closed: boolean | string;
+ stepOver: boolean;
+ stepSkip: boolean;
+}
+
+interface ICardTable {
+ _id: number;
+ isEmpty: boolean;
+ user: string;
+ card?: ICard | null;
+ card_state?: ICardState | null;
+}
+
+interface ICardProps {
+ item: ICardTable;
+}
+
+const DropMenu: React.FC<ICardProps> = ({ item }) => {
+ const apiUrl = site;
+
+ const handleCardToggle = () => {
+  console.log("item in drop menu", item);
+
+  fetch(apiUrl + `/api/table/${item._id}`, {
+   method: "PUT",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify({
+    tshirt: "tshirt",
+    userCardFront: sessionStorage.getItem("player"),
+    user: item.user,
+   }),
+  })
+   .then((res) => res.json())
+   .then((res) => console.log(res))
+   .catch((err) => console.log(err));
+ };
+
  return (
   <Component>
    <LineStatusState
@@ -31,6 +80,13 @@ const DropMenu = ({ item }: any) => {
     icon={<BsLightningChargeFill />}
     text={"stack"}
    />
+   {item.user === sessionStorage.getItem("player") &&
+   item.card_state?.closed ? (
+    <button type="button" onClick={handleCardToggle}>
+     открыть
+    </button>
+   ) : null}
+   {/* <button type="button" onClick={}>конец хода</button> */}
   </Component>
  );
 };

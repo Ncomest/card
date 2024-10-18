@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
+import { GoEyeClosed } from "react-icons/go";
 
 const Component = styled.div<{ $empty?: boolean; $user: string }>`
  height: 160px;
@@ -23,9 +24,10 @@ const Component = styled.div<{ $empty?: boolean; $user: string }>`
  }
 `;
 
-const Image = styled.img`
+const Image = styled.img<{ $step_over?: boolean }>`
  width: 100%;
  height: 100%;
+ filter: ${(prop) => prop.$step_over && "brightness(50%)"};
 `;
 
 const Button = styled.button`
@@ -48,17 +50,71 @@ const Background = styled.div`
  filter: brightness(0.1) blur(2px) sepia(60%);
 `;
 
-const Card = ({ item }: any) => {
+const TshirtShow = styled.div`
+ position: absolute;
+ bottom: -10px;
+ left: 0;
+ color: red;
+ font-size: 25px;
+`;
+
+interface ICard {
+ _id: string;
+ url: string;
+ name: string;
+}
+
+interface ICardState {
+ haveDamaged: number | null;
+ poison: number | null;
+ blood: number | null;
+ armor: number | null;
+ stack: number | null;
+ closed: boolean | string;
+ stepOver: boolean;
+ stepSkip: boolean;
+}
+
+interface ICardTable {
+ _id: number;
+ isEmpty: boolean;
+ user: string;
+ card?: ICard | null;
+ card_state?: ICardState | null;
+}
+
+interface ICardProps {
+ item: ICardTable;
+}
+
+const Card: React.FC<ICardProps> = ({ item }) => {
  const [isOpen, setIsOpen] = useState(false);
 
  return (
-  <Component $empty={!item.isEmpty} $user={item.user} id={item._id}>
+  <Component $empty={!item.isEmpty} $user={item.user} id={item._id.toString()}>
    {!item.isEmpty && (
     <>
-     <Image src={item?.card?.url} alt={item?.card?.name} loading="lazy" />
+     {item.user === sessionStorage.getItem("player") ||
+     !item.card_state?.closed ? (
+      <>
+       <Image
+        src={item?.card?.url}
+        alt={item?.card?.name}
+        $step_over={item.card_state?.stepOver}
+        loading="lazy"
+       />
+       {!item.isEmpty && <SideStatus item={item} />}
+      </>
+     ) : (
+      <Image src="/image/t_shirt.jpg" />
+     )}
      <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
-     {!item.isEpmty && <SideStatus item={item} />}
      {isOpen && <DropMenu item={item} />}
+     {item.card_state?.closed && (
+      <TshirtShow>
+       <GoEyeClosed />
+      </TshirtShow>
+     )}
     </>
    )}
    {item.isEmpty && <Background />}

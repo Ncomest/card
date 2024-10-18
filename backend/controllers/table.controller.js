@@ -182,6 +182,16 @@ const updateTableBox = async (req, res) => {
    //  res.status(400).json({ message: "ошибка в data.set_state" });
   }
 
+  if (data.tshirt === "tshirt") {
+   if (data.userCardFront === data.user) {
+    await Table.findByIdAndUpdate(id, {
+     $set: { [`card_state.closed`]: Boolean(false) },
+    },{new: true, runValidators: true});
+    const updatedCard = await Table.findById(id);
+    return res.status(200).json(updatedCard);
+   }
+  }
+
   res.status(400).json({ message: "Invalid request" });
  } catch (error) {
   res.status(500).json({ message: `проверка ошибка ${error.message}` });

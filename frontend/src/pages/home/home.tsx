@@ -31,6 +31,7 @@ interface ICardState {
  blood: number | null;
  armor: number | null;
  stack: number | null;
+ closed: boolean;
  stepOver: boolean;
  stepSkip: boolean;
 }
@@ -38,6 +39,7 @@ interface ICardState {
 interface ICardTable {
  _id: number;
  isEmpty: boolean;
+ user: string;
  card?: ICard | null;
  cardState?: ICardState | null;
 }
@@ -56,11 +58,11 @@ const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
  const [hand, setHand] = useState<ICard[]>([]);
 
-  const apiUrl = site;
+ const apiUrl = site;
 
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
-  const interval = setInterval(() => {
+  // const interval = setInterval(() => {
   fetch(`${apiUrl}/api/table`, {
    method: "GET",
    headers: { "Content-Type": "application/json" },
@@ -68,9 +70,9 @@ const Home: React.FC = () => {
    .then((res) => res.json())
    .then((res) => setTable(res))
    .catch((err) => console.log(err));
-  }, 9000);
+  // }, 9000);
 
-  return () => clearInterval(interval);
+  // return () => clearInterval(interval);
  }, [apiUrl]);
 
  //Auto-fetch hand cards
@@ -111,6 +113,12 @@ const Home: React.FC = () => {
 
  const handleDrop = async ({ e, casePutTableId, placePutCard }: IDrag) => {
   e.preventDefault();
+
+  if (Number(e.dataTransfer.getData("casePickTableId")) === Number(casePutTableId)) {
+   console.log("так не получиться");
+   return;
+  }
+
   try {
    // Извлекаем данные из dataTransfer
    const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));

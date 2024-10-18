@@ -3,7 +3,6 @@ import { SideStatusState } from "../../side_status/side_status_state/side_status
 
 import { site } from "../../../../site_state";
 
-
 const StateLine = styled.div`
  display: flex;
  padding: 2px;
