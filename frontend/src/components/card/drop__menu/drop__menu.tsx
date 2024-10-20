@@ -23,14 +23,14 @@ interface ICard {
 }
 
 interface ICardState {
- haveDamaged: number | null;
+ have_damaged: number | null;
  poison: number | null;
  blood: number | null;
  armor: number | null;
  stack: number | null;
  closed: boolean | string;
- stepOver: boolean;
- stepSkip: boolean;
+ step_over: boolean;
+ step_skip: boolean;
 }
 
 interface ICardTable {
@@ -65,6 +65,24 @@ const DropMenu: React.FC<ICardProps> = ({ item }) => {
    .catch((err) => console.log(err));
  };
 
+ const handleCardStepOver = () => {
+  console.log("handleCardStepOver", item);
+
+  fetch(apiUrl + `/api/table/${item._id}`, {
+   method: "PUT",
+   headers: { "Content-Type": "application/json" },
+   body: JSON.stringify({
+    stepOver: "stepover",
+    step_over: true,
+    userCardFront: sessionStorage.getItem("player"),
+    user: item.user,
+   }),
+  })
+   .then((res) => res.json())
+   .then((data) => console.log(data))
+   .catch((err) => console.log(err));
+ };
+
  return (
   <Component>
    <LineStatusState
@@ -86,7 +104,9 @@ const DropMenu: React.FC<ICardProps> = ({ item }) => {
      открыть
     </button>
    ) : null}
-   {/* <button type="button" onClick={}>конец хода</button> */}
+   <button type="button" onClick={handleCardStepOver}>
+    конец хода
+   </button>
   </Component>
  );
 };

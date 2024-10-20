@@ -114,6 +114,7 @@ const updateTableBox = async (req, res) => {
    }
   }
 
+  //======установить-состояние-для-карты======>//
   if (data.set_state == "setstate") {
    console.log(data, "setstate");
    const currCardState = data.currCardState;
@@ -181,20 +182,73 @@ const updateTableBox = async (req, res) => {
    //  }
    //  res.status(400).json({ message: "ошибка в data.set_state" });
   }
+  //>======установить-состояние-для-карты======//
 
+  //======перевернуть-рубашку======>//
   if (data.tshirt === "tshirt") {
    if (data.userCardFront === data.user) {
-    await Table.findByIdAndUpdate(id, {
-     $set: { [`card_state.closed`]: Boolean(false) },
-    },{new: true, runValidators: true});
+    await Table.findByIdAndUpdate(
+     id,
+     {
+      $set: { [`card_state.closed`]: Boolean(false) },
+     },
+     { new: true, runValidators: true }
+    );
     const updatedCard = await Table.findById(id);
     return res.status(200).json(updatedCard);
    }
   }
+  //>======перевернуть-рубашку======//
+
+  //======конец-хода======>//
+  if (data.stepOver === "stepover") {
+   await Table.findByIdAndUpdate(
+    id,
+    {
+     $set: { [`card_state.step_over`]: Boolean(true) },
+    },
+    { new: true, runValidators: true }
+   );
+   const updatedCard = await Table.findById(id);
+   return res.status(200).json(updatedCard);
+  }
+  //>======конец-хода======//
 
   res.status(400).json({ message: "Invalid request" });
  } catch (error) {
   res.status(500).json({ message: `проверка ошибка ${error.message}` });
+ }
+};
+
+const updateAllTableBox = async (req, res) => {
+ try {
+  const data = req.body;
+  const tableData = await Table.find({});
+  const tableDataObject = tableData.map((doc) => doc.toObject());
+
+  const updatedTableData = await tableDataObject.map((card) => {
+   if (card.user === data.user) {
+    return {
+     ...card,
+     card_state: {
+      ...card.card_state,
+      step_over: false,
+     },
+    };
+   }
+
+   return card;
+  });
+
+  await Promise.all(
+   updatedTableData.map((card) =>
+    Table.updateOne({_id: card._id},card)
+   )
+  );
+
+  res.status(200).json(updatedTableData);
+ } catch (error) {
+  res.status(500).json({ message: `invalid request ${error.message}` });
  }
 };
 
@@ -214,5 +268,6 @@ module.exports = {
  getTableBox,
  createTableBox,
  updateTableBox,
+ updateAllTableBox,
  deleteTableBox,
 };

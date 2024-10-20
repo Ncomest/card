@@ -1,6 +1,6 @@
 let diceRoll = {
- diceWhite: 1,
- diceBlack: 3,
+ diceWhite: 0,
+ diceBlack: 0,
 };
 
 const getDiceRoll = async (req, res) => {

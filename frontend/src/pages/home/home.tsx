@@ -7,9 +7,12 @@ import DiceRoll from "../../components/dice_roll/dice_roll";
 import { site } from "../../site_state.js";
 
 const TableContainer = styled.div`
+ border-radius: 10px;
+ border: 5px solid #000000;
+ outline: 1px wheat;
  width: 70%;
  max-width: 1000px;
- margin: auto;
+ margin: 10px auto;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(7, 1fr);
@@ -62,17 +65,17 @@ const Home: React.FC = () => {
 
  //получение стола каждые 9с (пока нет вебсокета)
  useEffect(() => {
-  // const interval = setInterval(() => {
-  fetch(`${apiUrl}/api/table`, {
-   method: "GET",
-   headers: { "Content-Type": "application/json" },
-  })
-   .then((res) => res.json())
-   .then((res) => setTable(res))
-   .catch((err) => console.log(err));
-  // }, 9000);
+  const interval = setInterval(() => {
+   fetch(`${apiUrl}/api/table`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+   })
+    .then((res) => res.json())
+    .then((res) => setTable(res))
+    .catch((err) => console.log(err));
+  }, 9000);
 
-  // return () => clearInterval(interval);
+  return () => clearInterval(interval);
  }, [apiUrl]);
 
  //Auto-fetch hand cards
@@ -114,7 +117,9 @@ const Home: React.FC = () => {
  const handleDrop = async ({ e, casePutTableId, placePutCard }: IDrag) => {
   e.preventDefault();
 
-  if (Number(e.dataTransfer.getData("casePickTableId")) === Number(casePutTableId)) {
+  if (
+   Number(e.dataTransfer.getData("casePickTableId")) === Number(casePutTableId)
+  ) {
    console.log("так не получиться");
    return;
   }

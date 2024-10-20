@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { site } from "../../site_state";
 
+const Component = styled.div`
+ text-align: center;
+ padding: 10px 0;
+ background-color: #100a2b;
+ color: #ffeecd;
+`;
+
 const Button = styled.button`
+ margin: 10px;
  padding: 10px 20px;
  text-align: center;
  transition: 0.5s;
@@ -41,7 +49,7 @@ function SelectPlayer() {
    .then((res) => res.json())
    .then((res) => setIsPlayer(res))
    .then(() => sessionStorage.setItem("player", selectPlayer))
-  //  .then(() => setIsSelectPlayer(selectPlayer))
+   //  .then(() => setIsSelectPlayer(selectPlayer))
    .catch((err) => console.log("error", err));
  };
 
@@ -59,14 +67,14 @@ function SelectPlayer() {
 
  //Get players status
  useEffect(() => {
-  fetch(apiUrl +"/api/player")
+  fetch(apiUrl + "/api/player")
    .then((res) => res.json())
    .then((res) => setIsPlayer(res))
    .catch((error) => console.log(error));
  }, [apiUrl]);
 
  return (
-  <>
+  <Component>
    {isPlayer.player1 === false ? (
     <p>Player 1 свободен</p>
    ) : (
@@ -91,7 +99,7 @@ function SelectPlayer() {
    )}
 
    <Button onClick={handleRefresh}>Refresh</Button>
-  </>
+  </Component>
  );
 }
 

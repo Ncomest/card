@@ -75,7 +75,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  handleDragOver,
  handleDrop,
 }) => {
-  const apiUrl = site;
+ const apiUrl = site;
 
  //POST select deck
  const handleSelectDeck = (name: string) => {
@@ -103,7 +103,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  };
 
  return (
-  <>
+  <div>
    <Button onClick={() => handleSelectDeck("orcs")}>Random</Button>
    <Button className="btn btn-primary" onClick={handleUpdateDeck}>
     Очистить руку P1 и P2
@@ -135,7 +135,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
      </div>
     ))}
    </Hand>
-  </>
+  </div>
  );
 };
 

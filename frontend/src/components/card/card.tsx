@@ -65,14 +65,14 @@ interface ICard {
 }
 
 interface ICardState {
- haveDamaged: number | null;
+ have_damaged: number | null;
  poison: number | null;
  blood: number | null;
  armor: number | null;
  stack: number | null;
  closed: boolean | string;
- stepOver: boolean;
- stepSkip: boolean;
+ step_over: boolean;
+ step_skip: boolean;
 }
 
 interface ICardTable {
@@ -100,7 +100,7 @@ const Card: React.FC<ICardProps> = ({ item }) => {
        <Image
         src={item?.card?.url}
         alt={item?.card?.name}
-        $step_over={item.card_state?.stepOver}
+        $step_over={item.card_state?.step_over}
         loading="lazy"
        />
        {!item.isEmpty && <SideStatus item={item} />}
