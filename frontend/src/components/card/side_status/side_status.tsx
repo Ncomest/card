@@ -5,6 +5,8 @@ import { GiBlood } from "react-icons/gi";
 import { GiPoisonBottle } from "react-icons/gi";
 import { GiChestArmor } from "react-icons/gi";
 import { BsLightningChargeFill } from "react-icons/bs";
+import { BsFire } from "react-icons/bs";
+
 
 const Component = styled.div`
  padding: 2px;
@@ -49,7 +51,7 @@ function SideStatus({ item }: any) {
    ) : null}
    {item?.card_state?.fire ? (
     <SideStatusState
-     icon={<BsLightningChargeFill />}
+     icon={<BsFire />}
      text={item?.card_state?.fire}
     />
    ) : null}
