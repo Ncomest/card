@@ -97,6 +97,7 @@ const updateTableBox = async (req, res) => {
        blood: null,
        armor: null,
        stack: null,
+       fire: null,
        closed: true,
        step_over: false,
        step_skip: false,
@@ -131,56 +132,6 @@ const updateTableBox = async (req, res) => {
 
    const currData = await Table.find({});
    return res.status(200).json(currData);
-   //  const currData = await Table.findById(id);
-   //  if (!currData) {
-   //   return res.status(404).json({ message: "Case of table not found" });
-   //  }
-
-   //  if (currData.card_state === null || !currData.card_state) {
-   //   console.log("card_state === null");
-   //  } else if (currData.card_state !== null) {
-   //   console.log("card_state !== null");
-
-   //   const updateCaseTable = await Table.findByIdAndUpdate(
-   //    id,
-   //    {
-   //     $set: { [`card_state.${currCardState}`]: value },
-   //    },
-   //    { new: true, runValidators: true }
-   //   );
-   //   console.log("updateCaseTable", updateCaseTable);
-   //   const updatedCaseTable = await updateCaseTable.Table.find({});
-   //   return res.status(200).json(updatedCaseTable);
-   //  }
-
-   //  if (currData.card_state !== null && currData.card_state) {
-   //   console.log("state != null");
-
-   //   const updateCaseTable = await Table.findByIdAndUpdate(
-   //    id,
-   //    {
-   //     $set: {
-   //      [`card_state.${currCardState}`]: value,
-   //     },
-   //    },
-   //    { new: true, runValidators: true }
-   //   );
-
-   //   if (!updateCaseTable) {
-   //    return res.status(404).json({ message: "Case of table not found" });
-   //   }
-
-   //   const updatedTable = await Table.find({});
-   //   return res.status(200).json({ message: "success" });
-   //  } else if (currData.card_state === null || !currData.card_state) {
-   //   currData.card_state = {};
-
-   //   currData.card_state[currCardState] = value;
-
-   //   const updateCardState = await currData.save();
-   //   res.status(200).json(updateCardState);
-   //  }
-   //  res.status(400).json({ message: "ошибка в data.set_state" });
   }
   //>======установить-состояние-для-карты======//
 
@@ -241,9 +192,7 @@ const updateAllTableBox = async (req, res) => {
   });
 
   await Promise.all(
-   updatedTableData.map((card) =>
-    Table.updateOne({_id: card._id},card)
-   )
+   updatedTableData.map((card) => Table.updateOne({ _id: card._id }, card))
   );
 
   res.status(200).json(updatedTableData);
