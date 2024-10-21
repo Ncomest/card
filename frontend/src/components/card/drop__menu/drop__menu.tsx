@@ -115,7 +115,7 @@ const DropMenu: React.FC<ICardProps> = ({ item }) => {
  };
 
  return (
-  <Component>
+  <Component onClick={(e:any) => e.stopPropagation()}>
    <LineStatusState item={item} icon={<MdHeartBroken />} text={"have_damaged"}/>
    <LineStatusState item={item} icon={<GiChestArmor />} text={"armor"} />
    <LineStatusState item={item} icon={<GiBlood />} text={"blood"} />
