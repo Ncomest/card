@@ -12,8 +12,7 @@ const StateLine = styled.div`
 `;
 
 const Input = styled.input`
- max-width: 100px;
- width: 50px;
+ width: 40px;
 `;
 
 export const LineStatusState = ({ item, icon, text }: any) => {
@@ -45,7 +44,7 @@ export const LineStatusState = ({ item, icon, text }: any) => {
  return (
   <StateLine>
    <SideStatusState icon={icon} />
-   <Input onBlur={handleFetchCardState} />
+   <Input type="number" onBlur={handleFetchCardState} />
   </StateLine>
  );
 };

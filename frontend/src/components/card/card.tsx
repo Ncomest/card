@@ -1,10 +1,14 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
 import { GoEyeClosed } from "react-icons/go";
 
-const Component = styled.div<{ $empty?: boolean; $user: string }>`
+const Component = styled.div<{
+ $empty?: boolean;
+ $user: string;
+ $isZoom: boolean;
+}>`
  height: 160px;
  position: relative;
  border: 5px solid
@@ -18,10 +22,8 @@ const Component = styled.div<{ $empty?: boolean; $user: string }>`
  transition: transform 0.3s ease;
  outline: 1px solid black;
 
- &:hover {
-  scale: ${(prop) => prop.$empty && 2.2};
-  z-index: ${(prop) => prop.$empty && 1};
- }
+ transform: ${(isZoom) => isZoom.$isZoom && "scale(2.4)"};
+ z-index: ${(isZoom) => isZoom.$isZoom && 1};
 `;
 
 const Image = styled.img<{ $step_over?: boolean }>`
@@ -70,6 +72,7 @@ interface ICardState {
  blood: number | null;
  armor: number | null;
  stack: number | null;
+ fire: number | null;
  closed: boolean | string;
  step_over: boolean;
  step_skip: boolean;
@@ -89,9 +92,22 @@ interface ICardProps {
 
 const Card: React.FC<ICardProps> = ({ item }) => {
  const [isOpen, setIsOpen] = useState(false);
+ const [isZoom, setIsZoom] = useState<boolean>(false);
+
+ const handleIsZoom = () => {
+  if (!item.isEmpty) {
+   setIsZoom(!isZoom);
+  }
+ };
 
  return (
-  <Component $empty={!item.isEmpty} $user={item.user} id={item._id.toString()}>
+  <Component
+   $empty={!item.isEmpty}
+   $user={item.user}
+   id={item._id.toString()}
+   $isZoom={!item.isEmpty && isZoom}
+   onClick={handleIsZoom}
+  >
    {!item.isEmpty && (
     <>
      {item.user === sessionStorage.getItem("player") ||
@@ -108,7 +124,14 @@ const Card: React.FC<ICardProps> = ({ item }) => {
      ) : (
       <Image src="/image/t_shirt.jpg" />
      )}
-     <Button onClick={() => setIsOpen(!isOpen)}>+</Button>
+     <Button
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+       e.stopPropagation();
+       setIsOpen(!isOpen);
+      }}
+     >
+      +
+     </Button>
      {isOpen && <DropMenu item={item} />}
      {item.card_state?.closed && (
       <TshirtShow>

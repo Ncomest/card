@@ -3,6 +3,10 @@ import styled from "styled-components";
 import React from "react";
 import { site } from "../../site_state.js";
 
+const Component = styled.div`
+padding: 20px 0 100px 0;
+`
+
 const Hand = styled.div`
  padding: 10px;
  display: grid;
@@ -103,7 +107,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  };
 
  return (
-  <div>
+  <Component>
    <Button onClick={() => handleSelectDeck("orcs")}>Random</Button>
    <Button className="btn btn-primary" onClick={handleUpdateDeck}>
     Очистить руку P1 и P2
@@ -135,7 +139,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
      </div>
     ))}
    </Hand>
-  </div>
+  </Component>
  );
 };
 

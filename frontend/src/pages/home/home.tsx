@@ -34,6 +34,7 @@ interface ICardState {
  blood: number | null;
  armor: number | null;
  stack: number | null;
+ fire: number | null;
  closed: boolean;
  stepOver: boolean;
  stepSkip: boolean;

@@ -47,6 +47,12 @@ function SideStatus({ item }: any) {
      text={item?.card_state?.stack}
     />
    ) : null}
+   {item?.card_state?.fire ? (
+    <SideStatusState
+     icon={<BsLightningChargeFill />}
+     text={item?.card_state?.fire}
+    />
+   ) : null}
   </Component>
  );
 }

@@ -13,6 +13,7 @@ const CardState = new mongoose.Schema(
   blood: { type: Number },
   armor: { type: Number },
   stack: { type: Number },
+  fire: {type: Number},
   closed: { type: Boolean },
   step_over: { type: Boolean },
   step_skip: { type: Boolean },
