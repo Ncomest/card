@@ -23,30 +23,30 @@ const Component = styled.div`
 function SideStatus({ item }: any) {
  return (
   <Component>
-   {item?.card_state?.have_damaged && (
+   {item?.card_state?.have_damaged ? (
     <SideStatusState
      icon={<MdHeartBroken />}
      text={item?.card_state?.have_damaged}
     />
-   )}
-   {item?.card_state?.blood && (
+   ) : null}
+   {item?.card_state?.blood ? (
     <SideStatusState icon={<GiBlood />} text={item?.card_state?.blood} />
-   )}
-   {item?.card_state?.poison && (
+   ) : null}
+   {item?.card_state?.poison ? (
     <SideStatusState
      icon={<GiPoisonBottle />}
      text={item?.card_state?.poison}
     />
-   )}
-   {item?.card_state?.armor && (
+   ) : null}
+   {item?.card_state?.armor ? (
     <SideStatusState icon={<GiChestArmor />} text={item?.card_state?.armor} />
-   )}
-   {item?.card_state?.stack && (
+   ) : null}
+   {item?.card_state?.stack ? (
     <SideStatusState
      icon={<BsLightningChargeFill />}
      text={item?.card_state?.stack}
     />
-   )}
+   ) : null}
   </Component>
  );
 }

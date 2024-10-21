@@ -106,7 +106,7 @@ const DiceRoll: React.FC = () => {
  };
 
  const handleRefreshStep = () => {
-  fetch("http://localhost:4000/api/table/refstep", {
+  fetch(apiUrl+"/api/table/refstep", {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ user: sessionStorage.getItem("player") }),
