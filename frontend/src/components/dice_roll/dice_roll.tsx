@@ -19,10 +19,10 @@ import { BsDice5Fill } from "react-icons/bs";
 import { BsDice6Fill } from "react-icons/bs";
 
 const Component = styled.div`
- text-align: center;
+ /* text-align: center;
  position: absolute;
  top: 50%;
- left: 5px;
+ left: 90%; */
  display: flex;
  flex-direction: column;
  gap: 10px;
@@ -106,7 +106,7 @@ const DiceRoll: React.FC = () => {
  };
 
  const handleRefreshStep = () => {
-  fetch(apiUrl+"/api/table/refstep", {
+  fetch(apiUrl + "/api/table/refstep", {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
    body: JSON.stringify({ user: sessionStorage.getItem("player") }),

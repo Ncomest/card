@@ -5,14 +5,17 @@ import styled from "styled-components";
 import Card from "../../components/card/card";
 import DiceRoll from "../../components/dice_roll/dice_roll";
 import { site } from "../../site_state.js";
+import Chat from "../../components/chat/chat";
 
 const TableContainer = styled.div`
  border-radius: 10px;
  border: 5px solid #000000;
  outline: 1px wheat;
- width: 70%;
+ /* width: 70%; */
+ flex: 75%;
+ min-height: 100vh;
  max-width: 1000px;
- margin: 10px auto;
+ margin: 10px right;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(7, 1fr);
@@ -294,31 +297,37 @@ const Home: React.FC = () => {
  return (
   <>
    <SelectPlayer />
-   <DiceRoll />
-   <TableContainer>
-    {table
-     ?.sort((a, b) => a._id - b._id)
-     .map((item, index) => (
-      <div
-       key={index}
-       draggable={!item.isEmpty}
-       onDragStart={(e) =>
-        handleDragStart({
-         e,
-         casePickTableId: item._id,
-         cardId: item.card?._id ?? null,
-         placePickCard: "table",
-        })
-       }
-       onDragOver={handleDragOver}
-       onDrop={(e) =>
-        handleDrop({ e, casePutTableId: item._id, placePutCard: "table" })
-       }
-      >
-       <Card item={item} />
-      </div>
-     ))}
-   </TableContainer>
+   <div style={{ display: "flex" }}>
+    <TableContainer>
+     {table
+      ?.sort((a, b) => a._id - b._id)
+      .map((item, index) => (
+       <div
+        key={index}
+        draggable={!item.isEmpty}
+        onDragStart={(e) =>
+         handleDragStart({
+          e,
+          casePickTableId: item._id,
+          cardId: item.card?._id ?? null,
+          placePickCard: "table",
+         })
+        }
+        onDragOver={handleDragOver}
+        onDrop={(e) =>
+         handleDrop({ e, casePutTableId: item._id, placePutCard: "table" })
+        }
+       >
+        <Card item={item} />
+       </div>
+      ))}
+    </TableContainer>
+    <div style={{ display: "flex", flexDirection: "column", flex: "25%" }}>
+     <DiceRoll />
+     <Chat />
+    </div>
+   </div>
+
    <SelectDeck
     hand={hand}
     setHand={setHand}
