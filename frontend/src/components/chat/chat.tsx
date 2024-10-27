@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { site } from "../../site_state";
 
@@ -35,50 +35,64 @@ const Button = styled.button`
 
 const Messages = styled.div``;
 
-const Message = styled.p`
+const Message = styled.div`
  padding: 10px;
  border: 1px solid;
  margin: 5px 0;
 `;
 
+interface IMessage {
+ event: string;
+ message: string;
+ username: string;
+ id: number;
+}
+
 const Chat = () => {
  const [messages, setMessages] = useState<any>([]);
  const [value, setValue] = useState("");
- const socket = useRef<any>();
+ const socket = useRef<WebSocket | null>(null);
  const [connected, setConnected] = useState(false);
  const [username, setUsername] = useState("");
 
-
-
-
- function connect(e: any) {
+ const connect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   e.preventDefault();
-  socket.current = new WebSocket("ws://87.228.10.233:4001");
+
+  socket.current = new WebSocket("ws://localhost:4001");
 
   socket.current.onopen = () => {
    setConnected(true);
+
    const message = {
     event: "connection",
     username,
     id: Date.now(),
    };
-   socket.current.send(JSON.stringify(message));
-   console.log("подключание установлено");
+
+   socket.current?.send(JSON.stringify(message));
+   console.log("Подключение установлено");
   };
-  socket.current.onmessage = (event: any) => {
-   const message = JSON.parse(event.data);
-   setMessages((prev: any) => [message, ...prev]);
+
+  socket.current.onmessage = (event: MessageEvent) => {
+   console.log(event.data, "event data");
+   const message: IMessage = JSON.parse(event.data);
+   setMessages((prev: string) => [message, ...prev]);
   };
+
   socket.current.onclose = () => {
    console.log(`socket closed`);
+   setConnected(false);
   };
+
   socket.current.onerror = () => {
    console.log(`socket closed an error`);
+   setConnected(false);
   };
+
  }
 
- const sendMessage = (e: any) => {
-  e.preventDefault();
+ const sendMessage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  event.preventDefault();
 
   const message = {
    event: "message",
@@ -87,7 +101,7 @@ const Chat = () => {
    id: Date.now(),
   };
 
-  socket.current.send(JSON.stringify(message));
+  socket.current?.send(JSON.stringify(message));
   setValue("");
  };
 
@@ -97,7 +111,7 @@ const Chat = () => {
     <Form>
      <Input
       value={username}
-      onChange={(e) => setUsername(e.target.value)}
+      onChange={(event) => setUsername(event.target.value)}
       type="text"
       placeholder="Введите ваше имя"
      />
@@ -121,7 +135,7 @@ const Chat = () => {
      <Button onClick={sendMessage}>send</Button>
     </Form>
     <Messages>
-     {messages.map((msg: any) => (
+     {messages.map((msg: IMessage) => (
       <Message key={msg.id}>
        {msg.event === "connection" ? (
         <div style={{ background: "green" }}>
