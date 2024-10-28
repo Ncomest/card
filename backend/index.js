@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-addMoreDeck();
+addMoreDeck(app);
 
 app.use("/api/table", tableRoute);
 app.use("/api/hand", handRoute);
