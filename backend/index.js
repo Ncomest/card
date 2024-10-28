@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const PORT = process.env.PORT || 4000;
+const addMoreDeck = require("./data/add_deck/add_deck.js");
 
 const humanRoutes = require("./routes/humans.route.js");
 const orcRoutes = require("./routes/orcs.route.js");
@@ -16,6 +17,8 @@ const cors = require("cors");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
+
+addMoreDeck();
 
 app.use("/api/table", tableRoute);
 app.use("/api/hand", handRoute);

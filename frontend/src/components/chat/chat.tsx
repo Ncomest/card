@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { site } from "../../site_state";
 
 const Component = styled.div`
  height: 300px;
