@@ -1,11 +1,11 @@
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { site } from "../../site_state.js";
 
 const Component = styled.div`
-padding: 20px 0 100px 0;
-`
+ padding: 20px 0 100px 0;
+`;
 
 const Hand = styled.div`
  padding: 10px;
@@ -79,7 +79,15 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
  handleDragOver,
  handleDrop,
 }) => {
+ const [decks, setDecks] = useState<[string]>([""]);
  const apiUrl = site;
+
+ useEffect(() => {
+  fetch(apiUrl + "/api/decks")
+   .then((res) => res.json())
+   .then((data: [string]) => setDecks(data))
+   .catch((err) => console.log(err));
+ }, [apiUrl]);
 
  //POST select deck
  const handleSelectDeck = (name: string) => {
@@ -108,7 +116,11 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 
  return (
   <Component>
-   <Button onClick={() => handleSelectDeck("orcs")}>Random</Button>
+   {decks.map((deck, i) => (
+    <Button key={i} onClick={() => handleSelectDeck(`${deck}`)}>
+     {deck}
+    </Button>
+   ))}
    <Button className="btn btn-primary" onClick={handleUpdateDeck}>
     Очистить руку P1 и P2
    </Button>

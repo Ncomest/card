@@ -10,6 +10,7 @@ const selectPlayerRoute = require("./routes/select_player.route.js");
 const playerRoute = require("./routes/player.route.js");
 const tableRoute = require("./routes/table.route.js");
 const diceRoute = require("./routes/dice_roll.route.js");
+const decksRoute = require("./routes/decks.route.js");
 
 const app = express();
 const cors = require("cors");
@@ -22,6 +23,7 @@ addMoreDeck(app);
 
 app.use("/api/table", tableRoute);
 app.use("/api/hand", handRoute);
+app.use("/api/decks", decksRoute);
 app.use("/api/humans", humanRoutes);
 app.use("/api/orcs", orcRoutes);
 app.use("/api/select-player", selectPlayerRoute);
