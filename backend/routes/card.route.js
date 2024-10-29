@@ -12,7 +12,7 @@ const {
 const cardRoutes = (DeckModel) => {
  router.get("/", getCards(DeckModel));
  router.get("/:id", getCardById(DeckModel));
- router.post("/:id", createCard(DeckModel));
+ router.post("/", createCard(DeckModel));
  router.put("/:id", updateCard(DeckModel));
  router.delete("/:id", deleteCard(DeckModel));
  return router;
