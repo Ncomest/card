@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 
 const {
  getCards,
@@ -10,11 +9,14 @@ const {
 } = require("../controllers/card.controller.js");
 
 const cardRoutes = (DeckModel) => {
+ const router = express.Router();
+
  router.get("/", getCards(DeckModel));
  router.get("/:id", getCardById(DeckModel));
  router.post("/", createCard(DeckModel));
  router.put("/:id", updateCard(DeckModel));
  router.delete("/:id", deleteCard(DeckModel));
+ 
  return router;
 };
 

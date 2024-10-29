@@ -1,14 +1,8 @@
 const mongoose = require("mongoose");
 
 const CardSchema = mongoose.Schema({
- name: {
-  type: String,
-  required: true,
- },
- url: {
-  type: String,
-  required: true,
- },
+ name: {type: String, required: true},
+ url: {type: String, required: true}
 });
 
 const createDeckModel = (deckName) => {
