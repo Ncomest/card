@@ -80,12 +80,12 @@ const Chat = () => {
 
   socket.current.onclose = () => {
    console.log(`socket closed`);
-   setConnected(false);
+  //  setConnected(false);
   };
 
   socket.current.onerror = () => {
    console.log(`socket closed an error`);
-   setConnected(false);
+  //  setConnected(false);
   };
 
  }
