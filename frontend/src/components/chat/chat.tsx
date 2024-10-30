@@ -2,12 +2,16 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 
 const Component = styled.div`
+ position: fixed;
+ bottom: 0;
+ right: 0;
+ width: 400px;
  height: 300px;
  margin: 20px;
  padding: 20px;
  border-radius: 5px;
  border: 3px solid pink;
- background-color: wheat;
+ background-color: rgba(0, 0, 0, 0.5);
  overflow-y: scroll;
  scrollbar-width: 5px;
 `;
@@ -80,17 +84,18 @@ const Chat = () => {
 
   socket.current.onclose = () => {
    console.log(`socket closed`);
-  //  setConnected(false);
+   //  setConnected(false);
   };
 
   socket.current.onerror = () => {
    console.log(`socket closed an error`);
-  //  setConnected(false);
+   //  setConnected(false);
   };
+ };
 
- }
-
- const sendMessage = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+ const sendMessage = (
+  event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+ ) => {
   event.preventDefault();
 
   const message = {
@@ -141,7 +146,7 @@ const Chat = () => {
          Пользователь {msg.username} подключился
         </div>
        ) : (
-        <div>
+        <div style={{ color: "white" }}>
          {msg.username}: {msg.message}
         </div>
        )}

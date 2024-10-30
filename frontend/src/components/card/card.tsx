@@ -44,7 +44,7 @@ const Button = styled.button`
 `;
 
 const Background = styled.div`
- background-image: url("/image/bg_t_shirt.png");
+ /* background-image: url("/image/bg_t_shirt.png"); */
  background-repeat: no-repeat;
  background-position: center;
  width: 100%;

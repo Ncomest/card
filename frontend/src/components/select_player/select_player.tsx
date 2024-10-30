@@ -1,33 +1,15 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { site } from "../../site_state";
+import ButtonDarkStone from "../button/button_dark_stone";
 
 const Component = styled.div`
  text-align: center;
  padding: 10px 0;
- background-color: #100a2b;
+ background-color: #0b0b0b;
  color: #ffeecd;
 `;
 
-const Button = styled.button`
- margin: 10px;
- padding: 10px 20px;
- text-align: center;
- transition: 0.5s;
- background-size: 200% auto;
- color: white;
- box-shadow: 0 0 20px #2c2370;
- border-radius: 5px;
- background-image: linear-gradient(
-  to right,
-  #003cc5 0%,
-  #0b63f6 51%,
-  #003cc5 100%
- );
- &:hover {
-  background-position: right center;
- }
-`;
 
 function SelectPlayer() {
  const [isSelectPlayer, setIsSelectPlayer] = useState(
@@ -87,18 +69,25 @@ function SelectPlayer() {
    )}
 
    {!isSelectPlayer && isPlayer.player1 === false && (
-    <Button onClick={handleSelectPlayer} value={"player1"}>
-     SelectP1
-    </Button>
+     <ButtonDarkStone
+     onClick={handleSelectPlayer}
+     value={"player1"}
+     text="Стас"
+    />
    )}
 
    {!isSelectPlayer && isPlayer.player2 === false && (
-    <Button onClick={handleSelectPlayer} value={"player2"}>
-     SelectP2
-    </Button>
+    <ButtonDarkStone
+     onClick={handleSelectPlayer}
+     value={"player2"}
+     text="Игорь"
+    />
    )}
 
-   <Button onClick={handleRefresh}>Refresh</Button>
+<ButtonDarkStone
+     onClick={handleRefresh}
+     text="Обнулить Игроков"
+    />
   </Component>
  );
 }

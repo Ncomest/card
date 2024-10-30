@@ -3,7 +3,8 @@ import "./App.css";
 import Home from "./pages/home/home";
 
 const Component = styled.div`
- background: linear-gradient(25deg, #100a2b 40%, #060380);
+ /* display: inline-block; */
+ 
 `;
 
 function App() {

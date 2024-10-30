@@ -22,7 +22,27 @@ const TableContainer = styled.div`
  grid-template-rows: repeat(3, 1fr);
  gap: 10px 20px;
  margin-bottom: 20px;
- background: linear-gradient(to top, red 45%, blue 55%);
+ background: rgba(0, 0, 0, 0.537);
+ /* background: linear-gradient(to top, red 45%, blue 55%); */
+`;
+
+const Background = styled.div`
+ background: none;
+ position: relative;
+ &::before {
+  background-image: url("/image/misc/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  filter: brightness(35%) blur(1px);
+  z-index: -1;
+  content: "";
+  top: 80px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+ }
 `;
 
 interface ICard {
@@ -295,7 +315,7 @@ const Home: React.FC = () => {
  //================Drag==============//
 
  return (
-  <>
+  <Background>
    <SelectPlayer />
    <div style={{ display: "flex" }}>
     <TableContainer>
@@ -335,7 +355,7 @@ const Home: React.FC = () => {
     handleDragOver={handleDragOver}
     handleDrop={handleDrop}
    />
-  </>
+  </Background>
  );
 };
 
