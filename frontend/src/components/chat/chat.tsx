@@ -57,7 +57,7 @@ const Chat = () => {
  const connect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   e.preventDefault();
 
-  socket.current = new WebSocket("ws://localhost:4001");
+  socket.current = new WebSocket("ws://87.228.10.233/websocket/");
 
   socket.current.onopen = () => {
    setConnected(true);
