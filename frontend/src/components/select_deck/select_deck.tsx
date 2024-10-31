@@ -2,39 +2,25 @@ import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
 import { site } from "../../site_state.js";
+import { StyledButton } from "../../style/global.style";
 
 const Component = styled.div`
  padding: 20px 0 100px 0;
 `;
 
 const Hand = styled.div`
+ margin: 0 auto;
+ width: 70%;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(10, 1fr);
  grid-template-rows: repeat(2, 1fr);
  gap: 10px;
  border: 1px solid;
- background: linear-gradient(to top right, green 45%, blue 55%);
+ background: rgba(0, 0, 0, 0.434);
 `;
 
-const Button = styled.button`
- padding: 10px 20px;
- text-align: center;
- transition: 0.5s;
- background-size: 200% auto;
- color: white;
- box-shadow: 0 0 20px #2c2370;
- border-radius: 5px;
- background-image: linear-gradient(
-  to right,
-  #003cc5 0%,
-  #0b63f6 51%,
-  #003cc5 100%
- );
- &:hover {
-  background-position: right center;
- }
-`;
+const Button = styled(StyledButton)``;
 
 export interface IDeck {
  _id: string;
@@ -118,11 +104,11 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
   <Component>
    {decks.map((deck, i) => (
     <Button key={i} onClick={() => handleSelectDeck(`${deck}`)}>
-     {deck}
+     <span>{deck}</span>
     </Button>
    ))}
    <Button className="btn btn-primary" onClick={handleUpdateDeck}>
-    Очистить руку P1 и P2
+    <span>Удалить карты из руки</span>
    </Button>
    <Hand>
     {hand.map((card, index) => (

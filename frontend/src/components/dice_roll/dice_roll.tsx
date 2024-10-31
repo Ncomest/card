@@ -17,6 +17,8 @@ import { BsDice3Fill } from "react-icons/bs";
 import { BsDice4Fill } from "react-icons/bs";
 import { BsDice5Fill } from "react-icons/bs";
 import { BsDice6Fill } from "react-icons/bs";
+// import ButtonDarkStone from "../button/button_dark_stone.js";
+import { StyledButton } from "../../style/global.style.js";
 
 const Component = styled.div`
  /* text-align: center;
@@ -29,24 +31,8 @@ const Component = styled.div`
  margin: 0 auto;
  color: wheat;
 `;
-const Button = styled.button`
- padding: 10px 20px;
- text-align: center;
- transition: 0.5s;
- background-size: 200% auto;
- color: white;
- box-shadow: 0 0 20px #2c2370;
- border-radius: 5px;
- background-image: linear-gradient(
-  to right,
-  #003cc5 0%,
-  #0b63f6 51%,
-  #003cc5 100%
- );
- &:hover {
-  background-position: right center;
- }
-`;
+
+const Button = styled(StyledButton)``;
 
 const P = styled.p`
  display: flex;
@@ -123,9 +109,15 @@ const DiceRoll: React.FC = () => {
 
  return (
   <Component>
-   {isRolling ? <Spinner /> : <Button onClick={handleDiceRoll}>roll</Button>}
+   {isRolling ? (
+    <Spinner />
+   ) : (
+    <Button onClick={handleDiceRoll}>
+     <span>Кинуть кости</span>
+    </Button>
+   )}
    <P>
-    Игрок 1:
+    Стас:
     {roll?.diceWhite === 1 && <BsDice1 />}
     {roll?.diceWhite === 2 && <BsDice2 />}
     {roll?.diceWhite === 3 && <BsDice3 />}
@@ -134,7 +126,7 @@ const DiceRoll: React.FC = () => {
     {roll?.diceWhite === 6 && <BsDice6 />}
    </P>
    <P>
-    Игрок 2:
+    Игорь:
     {roll?.diceBlack === 1 && <BsDice1Fill />}
     {roll?.diceBlack === 2 && <BsDice2Fill />}
     {roll?.diceBlack === 3 && <BsDice3Fill />}
@@ -143,7 +135,7 @@ const DiceRoll: React.FC = () => {
     {roll?.diceBlack === 6 && <BsDice6Fill />}
    </P>
    <Button onClick={handleRefreshStep}>
-    Обновить ход {sessionStorage.getItem("player")}
+    <span>Снова атаковать</span>
    </Button>
   </Component>
  );

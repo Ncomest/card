@@ -21,11 +21,13 @@ const Form = styled.form``;
 const Input = styled.input`
  padding: 5px 10px;
  margin-right: 5px;
+ background: rgba(77, 77, 77, 0.584);
 `;
 
 const Button = styled.button`
  border: 1px solid;
- background-color: transparent;
+ background-color: #4f4f4f;
+ color: #bebebe;
  padding: 5px 10px;
  &:hover {
   background-color: #9a7f7f;
@@ -146,7 +148,7 @@ const Chat = () => {
          Пользователь {msg.username} подключился
         </div>
        ) : (
-        <div style={{ color: "white" }}>
+        <div style={{ color: "#bebebe" }}>
          {msg.username}: {msg.message}
         </div>
        )}

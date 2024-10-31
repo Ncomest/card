@@ -14,9 +14,9 @@ const Component = styled.div<{
  border: 5px solid
   ${(prop) =>
    prop.$user === "player1"
-    ? "#5bbed2"
+    ? "#705601"
     : prop.$user === "player2"
-    ? "#ff00f3"
+    ? "#5c0911"
     : "transparent"};
  border-radius: 10px;
  transition: transform 0.3s ease;
@@ -44,7 +44,7 @@ const Button = styled.button`
 `;
 
 const Background = styled.div`
- /* background-image: url("/image/bg_t_shirt.png"); */
+ background: rgba(0, 0, 0, 0.605);
  background-repeat: no-repeat;
  background-position: center;
  width: 100%;
