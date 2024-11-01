@@ -10,7 +10,7 @@ const Component = styled.div`
 
 const Hand = styled.div`
  margin: 0 auto;
- width: 70%;
+ width: 85%;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(10, 1fr);

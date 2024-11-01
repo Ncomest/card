@@ -1,27 +1,36 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
+import { StyledButton } from "../../style/global.style";
 
 const Component = styled.div`
  position: fixed;
- bottom: 0;
- right: 0;
+ bottom: 36px;
+ right: -8px;
  width: 400px;
  height: 300px;
  margin: 20px;
  padding: 20px;
  border-radius: 5px;
- border: 3px solid pink;
+ border: 3px solid #bebebe;
  background-color: rgba(0, 0, 0, 0.5);
  overflow-y: scroll;
- scrollbar-width: 5px;
+ scrollbar-color: #bebebe #000;
+ scrollbar-width: thin;
 `;
 
 const Form = styled.form``;
 
 const Input = styled.input`
+ color: #bebebe;
  padding: 5px 10px;
  margin-right: 5px;
  background: rgba(77, 77, 77, 0.584);
+`;
+
+const BtnShow = styled(StyledButton)`
+ position: fixed;
+ bottom: 0;
+ right: 0;
 `;
 
 const Button = styled.button`
@@ -42,7 +51,7 @@ const Messages = styled.div``;
 
 const Message = styled.div`
  padding: 10px;
- border: 1px solid;
+ border: 1px solid #bebebe;
  margin: 5px 0;
 `;
 
@@ -59,6 +68,11 @@ const Chat = () => {
  const socket = useRef<WebSocket | null>(null);
  const [connected, setConnected] = useState(false);
  const [username, setUsername] = useState("");
+ const [chatHide, setChatHide] = useState(false);
+
+ const handleChatHide = (): void => {
+  setChatHide(!chatHide);
+ };
 
  const connect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
   e.preventDefault();
@@ -114,6 +128,15 @@ const Chat = () => {
  if (!connected) {
   return (
    <Component>
+    {chatHide ? (
+     <BtnShow onClick={handleChatHide}>
+      <span>Показать</span>
+     </BtnShow>
+    ) : (
+     <BtnShow onClick={handleChatHide}>
+      <span>Скрыть</span>
+     </BtnShow>
+    )}
     <Form>
      <Input
       value={username}
@@ -130,6 +153,16 @@ const Chat = () => {
  return (
   <Component>
    <div>
+    {chatHide ? (
+     <BtnShow onClick={handleChatHide}>
+      <span>Показать</span>
+     </BtnShow>
+    ) : (
+     <BtnShow onClick={handleChatHide}>
+      <span>Скрыть</span>
+     </BtnShow>
+    )}
+
     <Form>
      <Input
       type="text"
@@ -138,13 +171,13 @@ const Chat = () => {
        setValue(e.target.value)
       }
      />
-     <Button onClick={sendMessage}>send</Button>
+     <Button onClick={sendMessage}>Отправить</Button>
     </Form>
     <Messages>
      {messages.map((msg: IMessage) => (
       <Message key={msg.id}>
        {msg.event === "connection" ? (
-        <div style={{ background: "green" }}>
+        <div style={{ background: "#bebebe" }}>
          Пользователь {msg.username} подключился
         </div>
        ) : (

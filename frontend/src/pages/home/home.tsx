@@ -11,19 +11,17 @@ const TableContainer = styled.div`
  border-radius: 10px;
  border: 5px solid #000000;
  outline: 1px wheat;
- /* width: 70%; */
  flex: 75%;
  min-height: 100vh;
  max-width: 1000px;
- margin: 10px right;
+ margin: 10px;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(7, 1fr);
  grid-template-rows: repeat(3, 1fr);
  gap: 10px 20px;
  margin-bottom: 20px;
- background: rgba(0, 0, 0, 0.537);
- /* background: linear-gradient(to top, red 45%, blue 55%); */
+ background: rgba(0, 0, 0, 0.25);
 `;
 
 const Background = styled.div`
@@ -34,7 +32,7 @@ const Background = styled.div`
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-  filter: brightness(35%) blur(1px);
+  filter: brightness(45%) blur(1px);
   z-index: -1;
   content: "";
   top: 80px;

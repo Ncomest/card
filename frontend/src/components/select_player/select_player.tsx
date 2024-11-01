@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { site } from "../../site_state";
-import ButtonDarkStone from "../button/button_dark_stone";
 import { StyledButton } from "../../style/global.style";
 
 const Component = styled.div`
