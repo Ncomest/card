@@ -10,6 +10,7 @@ import { FaEye } from "react-icons/fa";
 
 import { LineStatusState } from "./line_status_state/line_status_state";
 import { site } from "../../../site_state";
+import { forwardRef } from "react";
 
 const Component = styled.div`
  background-color: white;
@@ -19,6 +20,7 @@ const Component = styled.div`
  border: 1px solid;
  border-radius: 3px;
  padding: 5px;
+ z-index: 1;
 `;
 
 const InlineBtn = styled.button`
@@ -76,7 +78,7 @@ interface ICardProps {
  item: ICardTable;
 }
 
-const DropMenu: React.FC<ICardProps> = ({ item }) => {
+const DropMenu = forwardRef<HTMLDivElement, ICardProps>(({ item }, ref) => {
  const apiUrl = site;
 
  const handleCardToggle = () => {
@@ -115,13 +117,21 @@ const DropMenu: React.FC<ICardProps> = ({ item }) => {
  };
 
  return (
-  <Component onClick={(e:any) => e.stopPropagation()}>
-   <LineStatusState item={item} icon={<MdHeartBroken />} text={"have_damaged"}/>
+  <Component onClick={(e: any) => e.stopPropagation()} ref={ref}>
+   <LineStatusState
+    item={item}
+    icon={<MdHeartBroken />}
+    text={"have_damaged"}
+   />
    <LineStatusState item={item} icon={<GiChestArmor />} text={"armor"} />
    <LineStatusState item={item} icon={<GiBlood />} text={"blood"} />
    <LineStatusState item={item} icon={<GiPoisonBottle />} text={"poison"} />
    <LineStatusState item={item} icon={<BsFire />} text={"fire"} />
-   <LineStatusState item={item} icon={<BsLightningChargeFill />} text={"stack"}/>
+   <LineStatusState
+    item={item}
+    icon={<BsLightningChargeFill />}
+    text={"stack"}
+   />
    <LineItems>
     {item.user === sessionStorage.getItem("player") &&
      item.card_state?.closed && (
@@ -135,6 +145,6 @@ const DropMenu: React.FC<ICardProps> = ({ item }) => {
    </LineItems>
   </Component>
  );
-};
+});
 
 export default DropMenu;

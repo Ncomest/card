@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { StyledButton } from "../../style/global.style";
 
 const Component = styled.div`
+ z-index: 1;
  position: fixed;
  bottom: 36px;
  right: -8px;
@@ -16,6 +17,7 @@ const Component = styled.div`
  overflow-y: scroll;
  scrollbar-color: #bebebe #000;
  scrollbar-width: thin;
+ display: ${({ hidden }) => (hidden ? "none" : "block")};
 `;
 
 const Form = styled.form``;
@@ -28,9 +30,11 @@ const Input = styled.input`
 `;
 
 const BtnShow = styled(StyledButton)`
+ width: 160px;
  position: fixed;
  bottom: 0;
  right: 0;
+ z-index: 1;
 `;
 
 const Button = styled.button`
@@ -63,133 +67,99 @@ interface IMessage {
 }
 
 const Chat = () => {
- const [messages, setMessages] = useState<any>([]);
+ const [messages, setMessages] = useState<IMessage[]>([]);
  const [value, setValue] = useState("");
  const socket = useRef<WebSocket | null>(null);
  const [connected, setConnected] = useState(false);
  const [username, setUsername] = useState("");
  const [chatHide, setChatHide] = useState(false);
 
- const handleChatHide = (): void => {
-  setChatHide(!chatHide);
- };
+ const handleChatHide = () => setChatHide(!chatHide);
 
- const connect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+ const connect = (e: React.MouseEvent<HTMLButtonElement>) => {
   e.preventDefault();
-
   socket.current = new WebSocket("ws://87.228.10.233/websocket/");
 
   socket.current.onopen = () => {
    setConnected(true);
-
-   const message = {
-    event: "connection",
-    username,
-    id: Date.now(),
-   };
-
+   const message = { event: "connection", username, id: Date.now() };
    socket.current?.send(JSON.stringify(message));
    console.log("Подключение установлено");
   };
 
   socket.current.onmessage = (event: MessageEvent) => {
-   console.log(event.data, "event data");
    const message: IMessage = JSON.parse(event.data);
-   setMessages((prev: string) => [message, ...prev]);
+   setMessages((prev) => [message, ...prev]);
   };
 
   socket.current.onclose = () => {
-   console.log(`socket closed`);
-   //  setConnected(false);
+   console.log("socket closed");
+   setConnected(false);
   };
 
   socket.current.onerror = () => {
-   console.log(`socket closed an error`);
-   //  setConnected(false);
+   console.log("Socket closed due to an error");
   };
  };
 
- const sendMessage = (
-  event: React.MouseEvent<HTMLButtonElement, MouseEvent>
- ) => {
-  event.preventDefault();
-
+ const sendMessage = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.preventDefault();
   const message = {
    event: "message",
    message: value,
    username,
    id: Date.now(),
   };
-
   socket.current?.send(JSON.stringify(message));
   setValue("");
  };
 
- if (!connected) {
-  return (
-   <Component>
-    {chatHide ? (
-     <BtnShow onClick={handleChatHide}>
-      <span>Показать</span>
-     </BtnShow>
-    ) : (
-     <BtnShow onClick={handleChatHide}>
-      <span>Скрыть</span>
-     </BtnShow>
-    )}
-    <Form>
-     <Input
-      value={username}
-      onChange={(event) => setUsername(event.target.value)}
-      type="text"
-      placeholder="Введите ваше имя"
-     />
-     <Button onClick={connect}>Войти</Button>
-    </Form>
-   </Component>
-  );
- }
-
  return (
-  <Component>
-   <div>
-    {chatHide ? (
-     <BtnShow onClick={handleChatHide}>
-      <span>Показать</span>
-     </BtnShow>
+  <>
+   <BtnShow onClick={handleChatHide}>
+    <span>{chatHide ? "Показать" : "Скрыть"}</span>
+   </BtnShow>
+   <Component hidden={chatHide}>
+    {!connected ? (
+     <Form>
+      <Input
+       value={username}
+       onChange={(e) => setUsername(e.target.value)}
+       type="text"
+       placeholder="Введите ваше имя"
+      />
+      <Button onClick={connect}>Войти</Button>
+     </Form>
     ) : (
-     <BtnShow onClick={handleChatHide}>
-      <span>Скрыть</span>
-     </BtnShow>
+     <>
+      <Form>
+       <Input
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="Введите сообщение"
+       />
+       <Button onClick={sendMessage}>Отправить</Button>
+      </Form>
+      <Messages>
+       {messages.map((msg) => (
+        <Message key={msg.id}>
+         {msg.event === "connection" ? (
+          <div style={{ background: "#bebebe" }}>
+           Пользователь {msg.username} подключился
+          </div>
+         ) : (
+          <div style={{ color: "#bebebe" }}>
+           {msg.username}: {msg.message}
+          </div>
+         )}
+        </Message>
+       ))}
+      </Messages>
+     </>
     )}
-
-    <Form>
-     <Input
-      type="text"
-      value={value}
-      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-       setValue(e.target.value)
-      }
-     />
-     <Button onClick={sendMessage}>Отправить</Button>
-    </Form>
-    <Messages>
-     {messages.map((msg: IMessage) => (
-      <Message key={msg.id}>
-       {msg.event === "connection" ? (
-        <div style={{ background: "#bebebe" }}>
-         Пользователь {msg.username} подключился
-        </div>
-       ) : (
-        <div style={{ color: "#bebebe" }}>
-         {msg.username}: {msg.message}
-        </div>
-       )}
-      </Message>
-     ))}
-    </Messages>
-   </div>
-  </Component>
+   </Component>
+  </>
  );
 };
 

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
-import { GoEyeClosed } from "react-icons/go";
 
 const Component = styled.div<{
  $empty?: boolean;
@@ -32,6 +31,16 @@ const Image = styled.img<{ $step_over?: boolean }>`
  filter: ${(prop) => prop.$step_over && "brightness(50%)"};
 `;
 
+const ImageEye = styled.img`
+ width: 30px;
+ height: 30px;
+ border-radius: 50%;
+ border: 1px solid #ece9ce;
+ position: absolute;
+ bottom: -10px;
+ left: 0;
+`;
+
 const Button = styled.button`
  position: absolute;
  top: 5px;
@@ -45,19 +54,8 @@ const Button = styled.button`
 
 const Background = styled.div`
  background: rgba(0, 0, 0, 0.605);
- background-repeat: no-repeat;
- background-position: center;
  width: 100%;
  height: 100%;
- filter: brightness(0.1) blur(2px) sepia(60%);
-`;
-
-const TshirtShow = styled.div`
- position: absolute;
- bottom: -10px;
- left: 0;
- color: red;
- font-size: 25px;
 `;
 
 interface ICard {
@@ -92,21 +90,65 @@ interface ICardProps {
 
 const Card: React.FC<ICardProps> = ({ item }) => {
  const [isOpen, setIsOpen] = useState(false);
- const [isZoom, setIsZoom] = useState<boolean>(false);
+ const [isZoom, setIsZoom] = useState(false);
+ const dropdownRef = useRef<HTMLDivElement>(null);
+ const cardRef = useRef<HTMLDivElement>(null);
 
+ // Переключаем состояние Zoom
  const handleIsZoom = () => {
-  if (!item.isEmpty) {
-   setIsZoom(!isZoom);
-  }
+  if (!item.isEmpty) setIsZoom((prevZoom) => !prevZoom);
  };
+
+ // Открытие/закрытие меню
+ const toggleDropDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+  e.stopPropagation();
+  setIsOpen((prev) => !prev);
+ };
+
+ useEffect(() => {
+  const handleClickCard = (e: MouseEvent) => {
+   if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+    setIsZoom(false);
+   }
+  };
+
+  if (isZoom) {
+   document.addEventListener("mousedown", handleClickCard);
+  } else {
+   document.removeEventListener("mousedown", handleClickCard);
+  }
+
+  return () => {
+   document.removeEventListener("mousedown", handleClickCard);
+  };
+ }, [isZoom]);
+
+ useEffect(() => {
+  const handleClickOutside = (e: MouseEvent) => {
+   if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+    setIsOpen(false);
+   }
+  };
+
+  if (isOpen) {
+   document.addEventListener("mousedown", handleClickOutside);
+  } else {
+   document.removeEventListener("mousedown", handleClickOutside);
+  }
+
+  return () => {
+   document.removeEventListener("mousedown", handleClickOutside);
+  };
+ }, [isOpen]);
 
  return (
   <Component
-   $empty={!item.isEmpty}
+   $empty={item.isEmpty}
    $user={item.user}
    id={item._id.toString()}
    $isZoom={!item.isEmpty && isZoom}
    onClick={handleIsZoom}
+   ref={cardRef}
   >
    {!item.isEmpty && (
     <>
@@ -114,29 +156,21 @@ const Card: React.FC<ICardProps> = ({ item }) => {
      !item.card_state?.closed ? (
       <>
        <Image
-        src={item?.card?.url}
-        alt={item?.card?.name}
+        src={item.card?.url}
+        alt={item.card?.name}
         $step_over={item.card_state?.step_over}
         loading="lazy"
        />
-       {!item.isEmpty && <SideStatus item={item} />}
+       <SideStatus item={item} />
       </>
      ) : (
-      <Image src="/image/t_shirt.jpg" />
+      <Image src="/image/t_shirt.jpg" alt="Closed card" />
      )}
-     <Button
-      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-       e.stopPropagation();
-       setIsOpen(!isOpen);
-      }}
-     >
-      +
-     </Button>
-     {isOpen && <DropMenu item={item} />}
+     {!isOpen && <Button onClick={toggleDropDown}>+</Button>}
+     {isOpen && <Button onClick={() => setIsOpen(false)}>+</Button>}
+     {isOpen && <DropMenu item={item} ref={dropdownRef} />}
      {item.card_state?.closed && (
-      <TshirtShow>
-       <GoEyeClosed />
-      </TshirtShow>
+      <ImageEye src="/image/misc/eye.jpg" alt="eye" />
      )}
     </>
    )}

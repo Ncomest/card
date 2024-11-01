@@ -44,7 +44,6 @@ export const StyledButton = styled.button`
   height: 100%;
  }
  span {
-  z-index: 2;
   position: relative;
  }
 `;
