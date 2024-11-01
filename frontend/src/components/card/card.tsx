@@ -23,6 +23,8 @@ const Component = styled.div<{
 
  transform: ${(isZoom) => isZoom.$isZoom && "scale(2.4)"};
  z-index: ${(isZoom) => isZoom.$isZoom && 1};
+
+ cursor: pointer;
 `;
 
 const Image = styled.img<{ $step_over?: boolean }>`
@@ -37,8 +39,14 @@ const ImageEye = styled.img`
  border-radius: 50%;
  border: 1px solid #ece9ce;
  position: absolute;
- bottom: -10px;
- left: 0;
+ bottom: 3px;
+ left: 3px;
+`;
+
+const ImageCross = styled.img`
+ width: 100%;
+ height: 100%;
+ border-radius: 5px;
 `;
 
 const Button = styled.button`
@@ -47,9 +55,12 @@ const Button = styled.button`
  right: -10px;
  width: 20px;
  height: 20px;
- display: flex;
- align-items: center;
- justify-content: center;
+ border: 1px solid #bebebe;
+ border-radius: 6px;
+ cursor: pointer;
+ &:hover {
+  border: 1px solid red;
+ }
 `;
 
 const Background = styled.div`
@@ -166,8 +177,16 @@ const Card: React.FC<ICardProps> = ({ item }) => {
      ) : (
       <Image src="/image/t_shirt.jpg" alt="Closed card" />
      )}
-     {!isOpen && <Button onClick={toggleDropDown}>+</Button>}
-     {isOpen && <Button onClick={() => setIsOpen(false)}>+</Button>}
+     {!isOpen && (
+      <Button onClick={toggleDropDown}>
+       <ImageCross src="/image/misc/cross.jpg" />
+      </Button>
+     )}
+     {isOpen && (
+      <Button onClick={() => setIsOpen(false)}>
+       <ImageCross src="/image/misc/cross.jpg" />
+      </Button>
+     )}
      {isOpen && <DropMenu item={item} ref={dropdownRef} />}
      {item.card_state?.closed && (
       <ImageEye src="/image/misc/eye.jpg" alt="eye" />
