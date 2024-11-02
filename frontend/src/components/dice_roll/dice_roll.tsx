@@ -3,6 +3,9 @@ import { site } from "../../site_state.js";
 import styled, { keyframes } from "styled-components";
 
 import { FaDiceD20 } from "react-icons/fa";
+import { FaDice } from "react-icons/fa6";
+import { IoRefreshCircleOutline } from "react-icons/io5";
+
 //white
 import { BsDice1 } from "react-icons/bs";
 import { BsDice2 } from "react-icons/bs";
@@ -21,23 +24,26 @@ import { BsDice6Fill } from "react-icons/bs";
 import { StyledButton } from "../../style/global.style.js";
 
 const Component = styled.div`
- /* text-align: center;
  position: absolute;
- top: 50%;
- left: 90%; */
- display: flex;
- flex-direction: column;
- gap: 10px;
- margin: 0 auto;
+ bottom: calc(100%);
+ left: 0;
+
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
  color: wheat;
 `;
 
-const Button = styled(StyledButton)``;
+const Button = styled(StyledButton)`
+ height: 40px;
+ font-size: 16px;
+ margin: 5px 0;
+`;
 
 const P = styled.p`
+ align-items: center;
+ gap: 4px;
  display: flex;
- gap: 5px;
- font-size: 24px;
 `;
 
 const spin = keyframes`
@@ -48,7 +54,6 @@ const spin = keyframes`
 const Spinner = styled(FaDiceD20)`
  margin: auto;
  animation: ${spin} 2s linear infinite;
- font-size: 40px;
 `;
 
 interface IRoll {
@@ -109,33 +114,46 @@ const DiceRoll: React.FC = () => {
 
  return (
   <Component>
-   {isRolling ? (
-    <Spinner />
-   ) : (
-    <Button onClick={handleDiceRoll}>
-     <span>Кинуть кости</span>
-    </Button>
-   )}
+   <Button onClick={handleDiceRoll}>
+    <span>
+     <FaDice />
+    </span>
+   </Button>
+
    <P>
     Стас:
-    {roll?.diceWhite === 1 && <BsDice1 />}
-    {roll?.diceWhite === 2 && <BsDice2 />}
-    {roll?.diceWhite === 3 && <BsDice3 />}
-    {roll?.diceWhite === 4 && <BsDice4 />}
-    {roll?.diceWhite === 5 && <BsDice5 />}
-    {roll?.diceWhite === 6 && <BsDice6 />}
+    {isRolling ? (
+     <Spinner />
+    ) : (
+     <>
+      {roll?.diceWhite === 1 && <BsDice1 />}
+      {roll?.diceWhite === 2 && <BsDice2 />}
+      {roll?.diceWhite === 3 && <BsDice3 />}
+      {roll?.diceWhite === 4 && <BsDice4 />}
+      {roll?.diceWhite === 5 && <BsDice5 />}
+      {roll?.diceWhite === 6 && <BsDice6 />}
+     </>
+    )}
    </P>
    <P>
     Игорь:
-    {roll?.diceBlack === 1 && <BsDice1Fill />}
-    {roll?.diceBlack === 2 && <BsDice2Fill />}
-    {roll?.diceBlack === 3 && <BsDice3Fill />}
-    {roll?.diceBlack === 4 && <BsDice4Fill />}
-    {roll?.diceBlack === 5 && <BsDice5Fill />}
-    {roll?.diceBlack === 6 && <BsDice6Fill />}
+    {isRolling ? (
+     <Spinner />
+    ) : (
+     <>
+      {roll?.diceBlack === 1 && <BsDice1Fill />}
+      {roll?.diceBlack === 2 && <BsDice2Fill />}
+      {roll?.diceBlack === 3 && <BsDice3Fill />}
+      {roll?.diceBlack === 4 && <BsDice4Fill />}
+      {roll?.diceBlack === 5 && <BsDice5Fill />}
+      {roll?.diceBlack === 6 && <BsDice6Fill />}
+     </>
+    )}
    </P>
    <Button onClick={handleRefreshStep}>
-    <span>Снова атаковать</span>
+    <span>
+     <IoRefreshCircleOutline />
+    </span>
    </Button>
   </Component>
  );

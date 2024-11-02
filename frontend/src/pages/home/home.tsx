@@ -3,7 +3,6 @@ import SelectPlayer from "../../components/select_player/select_player";
 import SelectDeck from "../../components/select_deck/select_deck";
 import styled from "styled-components";
 import Card from "../../components/card/card";
-import DiceRoll from "../../components/dice_roll/dice_roll";
 import { site } from "../../site_state.js";
 import Chat from "../../components/chat/chat";
 
@@ -340,10 +339,7 @@ const Home: React.FC = () => {
        </div>
       ))}
     </TableContainer>
-    <div style={{ display: "flex", flexDirection: "column", flex: "25%" }}>
-     <DiceRoll />
      <Chat />
-    </div>
    </div>
 
    <SelectDeck

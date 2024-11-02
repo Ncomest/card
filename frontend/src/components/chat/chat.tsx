@@ -1,15 +1,24 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { StyledButton } from "../../style/global.style";
+import DiceRoll from "../dice_roll/dice_roll";
+
+const Container = styled.div`
+ position: fixed;
+ bottom: 60px;
+ right: 0;
+ flex: 1;
+ margin: 5px;
+`;
 
 const Component = styled.div`
  z-index: 1;
- position: fixed;
- bottom: 36px;
- right: -8px;
+ /* position: absolute; */
+ bottom: 0;
+ right: 0;
  width: 400px;
  height: 300px;
- margin: 20px;
+ /* margin: 20px; */
  padding: 20px;
  border-radius: 5px;
  border: 3px solid #bebebe;
@@ -30,10 +39,11 @@ const Input = styled.input`
 `;
 
 const BtnShow = styled(StyledButton)`
+ position: absolute;
+ left: calc(100% - 160px);
  width: 160px;
- position: fixed;
- bottom: 0;
- right: 0;
+ margin: 5px 0;
+ top: 100%;
  z-index: 1;
 `;
 
@@ -115,7 +125,8 @@ const Chat = () => {
  };
 
  return (
-  <>
+  <Container>
+   <DiceRoll />
    <BtnShow onClick={handleChatHide}>
     <span>{chatHide ? "Показать" : "Скрыть"}</span>
    </BtnShow>
@@ -159,7 +170,7 @@ const Chat = () => {
      </>
     )}
    </Component>
-  </>
+  </Container>
  );
 };
 
