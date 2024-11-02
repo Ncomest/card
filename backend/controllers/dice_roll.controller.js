@@ -22,10 +22,18 @@ const updateDiceRoll = async (req, res) => {
    diceRoll.diceBlack = Math.floor(Math.random() * 6) + 1;
   }
 
-  listeners.forEach((listener) => listener.json(diceRoll));
-  listeners.length = 0;
+  listeners.forEach((listener) => listener.json({ rolling: true }));
 
-  res.status(200).json(diceRoll);
+  setTimeout(() => {
+   listeners.forEach((listener) => listener.json(diceRoll));
+   listeners.length = 0;
+  }, 3000);
+
+  // listeners.forEach((listener) => listener.json(diceRoll));
+  // listeners.length = 0;
+
+  res.status(200).json({ rolling: true });
+  // res.status(200).json(diceRoll);
  } catch (error) {
   res.status(500).json({ message: error.message });
  }
