@@ -13,13 +13,12 @@ const TableContainer = styled.div`
  flex: 75%;
  min-height: 100vh;
  max-width: 1000px;
- margin: 10px;
+ margin: 100px 0 20px 80px;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(7, 1fr);
  grid-template-rows: repeat(3, 1fr);
  gap: 10px 20px;
- margin-bottom: 20px;
  background: rgba(0, 0, 0, 0.25);
 `;
 

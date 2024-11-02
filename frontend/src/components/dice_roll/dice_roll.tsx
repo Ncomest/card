@@ -26,7 +26,7 @@ import { StyledButton } from "../../style/global.style.js";
 const Component = styled.div`
  position: absolute;
  bottom: calc(100%);
- left: 0;
+ left: calc(100% - 255px);
 
  display: inline-flex;
  align-items: center;
@@ -122,7 +122,7 @@ const DiceRoll: React.FC = () => {
 
    <P>
     Стас:
-    {isRolling ? (
+    {isRolling && sessionStorage.getItem("player") === "player1" ? (
      <Spinner />
     ) : (
      <>
@@ -137,7 +137,7 @@ const DiceRoll: React.FC = () => {
    </P>
    <P>
     Игорь:
-    {isRolling ? (
+    {isRolling && sessionStorage.getItem("player") === "player2" ? (
      <Spinner />
     ) : (
      <>

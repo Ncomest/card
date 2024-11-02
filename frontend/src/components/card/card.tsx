@@ -17,7 +17,7 @@ const Component = styled.div<{
     : prop.$user === "player2"
     ? "#5c0911"
     : "transparent"};
- border-radius: 10px;
+ border-radius: 12px;
  transition: transform 0.3s ease;
  outline: 1px solid black;
 
@@ -28,6 +28,7 @@ const Component = styled.div<{
 `;
 
 const Image = styled.img<{ $step_over?: boolean }>`
+border-radius: 8px;
  width: 100%;
  height: 100%;
  filter: ${(prop) => prop.$step_over && "brightness(50%)"};
