@@ -6,21 +6,21 @@ import { FaDiceD20 } from "react-icons/fa";
 import { FaDice } from "react-icons/fa6";
 import { IoRefreshCircleOutline } from "react-icons/io5";
 
-//white
-import { BsDice1 } from "react-icons/bs";
-import { BsDice2 } from "react-icons/bs";
-import { BsDice3 } from "react-icons/bs";
-import { BsDice4 } from "react-icons/bs";
-import { BsDice5 } from "react-icons/bs";
-import { BsDice6 } from "react-icons/bs";
-//black
-import { BsDice1Fill } from "react-icons/bs";
-import { BsDice2Fill } from "react-icons/bs";
-import { BsDice3Fill } from "react-icons/bs";
-import { BsDice4Fill } from "react-icons/bs";
-import { BsDice5Fill } from "react-icons/bs";
-import { BsDice6Fill } from "react-icons/bs";
-// import ButtonDarkStone from "../button/button_dark_stone.js";
+import {
+ BsDice1,
+ BsDice2,
+ BsDice3,
+ BsDice4,
+ BsDice5,
+ BsDice6,
+ BsDice1Fill,
+ BsDice2Fill,
+ BsDice3Fill,
+ BsDice4Fill,
+ BsDice5Fill,
+ BsDice6Fill,
+} from "react-icons/bs";
+
 import { StyledButton } from "../../style/global.style.js";
 
 const Component = styled.div`
@@ -67,18 +67,36 @@ const DiceRoll: React.FC = () => {
  const [roll, setRoll] = useState<IRoll | null>(null);
  const [isRolling, setIsRolling] = useState<boolean>(false);
 
- useEffect(() => {
-  const interval = setInterval(() => {
-   fetch(apiUrl + "/api/dice")
-    .then((res) => res.json())
-    .then((res) => setRoll(res))
-    .catch((err) => console.log(err));
-  }, 6000);
+ const pullDiceRoll = () => {
+  fetch(apiUrl + "/api/dice/wait")
+   .then((res) => res.json())
+   .then((data) => {
+    setRoll(data);
+    pullDiceRoll();
+   })
+   .catch((err) => {
+    console.error("Error in pulling", err);
+    setTimeout(pullDiceRoll, 1000);
+   });
+ };
 
-  return () => clearInterval(interval);
- }, [apiUrl]);
+ useEffect(() => {
+  pullDiceRoll();
+ }, []);
+
+ //  useEffect(() => {
+ //   const interval = setInterval(() => {
+ //    fetch(apiUrl + "/api/dice")
+ //     .then((res) => res.json())
+ //     .then((res) => setRoll(res))
+ //     .catch((err) => console.log(err));
+ //   }, 6000);
+
+ //   return () => clearInterval(interval);
+ //  }, [apiUrl]);
 
  const handleDiceRoll = () => {
+  setIsRolling(true);
   fetch(apiUrl + "/api/dice", {
    method: "PUT",
    headers: { "Content-Type": "application/json" },
@@ -86,14 +104,15 @@ const DiceRoll: React.FC = () => {
   })
    .then((res) => res.json())
    .then((res) => {
-    setIsRolling(true);
-
     setTimeout(() => {
      setRoll(res);
      setIsRolling(false);
     }, 3000);
    })
-   .catch((err) => console.log(err));
+   .catch((err) => {
+    console.log(err);
+    setIsRolling(false);
+   });
  };
 
  const handleRefreshStep = () => {

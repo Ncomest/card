@@ -8,8 +8,6 @@ const getAllDecks = async (req, res) => {
  }
 };
 
-console.log(decks);
-
 module.exports = {
  getAllDecks,
 };
