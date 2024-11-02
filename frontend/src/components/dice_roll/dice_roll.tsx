@@ -71,6 +71,14 @@ const DiceRoll: React.FC = () => {
   fetch(apiUrl + "/api/dice/wait")
    .then((res) => res.json())
    .then((data) => {
+    if (data.rolling) {
+     setIsRolling(true);
+
+     setTimeout(() => {
+      setIsRolling(false);
+     }, 3000);
+    }
+
     setRoll(data);
     pullDiceRoll();
    })
@@ -84,17 +92,6 @@ const DiceRoll: React.FC = () => {
   pullDiceRoll();
  }, []);
 
- //  useEffect(() => {
- //   const interval = setInterval(() => {
- //    fetch(apiUrl + "/api/dice")
- //     .then((res) => res.json())
- //     .then((res) => setRoll(res))
- //     .catch((err) => console.log(err));
- //   }, 6000);
-
- //   return () => clearInterval(interval);
- //  }, [apiUrl]);
-
  const handleDiceRoll = () => {
   setIsRolling(true);
   fetch(apiUrl + "/api/dice", {
@@ -104,10 +101,18 @@ const DiceRoll: React.FC = () => {
   })
    .then((res) => res.json())
    .then((res) => {
-    setTimeout(() => {
-     setRoll(res);
-     setIsRolling(false);
-    }, 3000);
+    if (res.rolling) {
+     setIsRolling(true);
+
+     setTimeout(() => {
+      setRoll(res);
+      setIsRolling(false);
+     }, 3000);
+    }
+    // setTimeout(() => {
+    //  setRoll(res);
+    //  setIsRolling(false);
+    // }, 500);
    })
    .catch((err) => {
     console.log(err);
@@ -141,7 +146,7 @@ const DiceRoll: React.FC = () => {
 
    <P>
     Стас:
-    {isRolling && sessionStorage.getItem("player") === "player1" ? (
+    {isRolling ? (
      <Spinner />
     ) : (
      <>
@@ -156,7 +161,7 @@ const DiceRoll: React.FC = () => {
    </P>
    <P>
     Игорь:
-    {isRolling && sessionStorage.getItem("player") === "player2" ? (
+    {isRolling ? (
      <Spinner />
     ) : (
      <>
