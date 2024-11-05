@@ -84,18 +84,44 @@ const Home: React.FC = () => {
  const apiUrl = site;
 
  //получение стола каждые 9с (пока нет вебсокета)
- useEffect(() => {
-  const interval = setInterval(() => {
-   fetch(`${apiUrl}/api/table`, {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-   })
-    .then((res) => res.json())
-    .then((res) => setTable(res))
-    .catch((err) => console.log(err));
-  }, 9000);
+//  useEffect(() => {
+//   const interval = setInterval(() => {
+//    fetch(`${apiUrl}/api/table`, {
+//     method: "GET",
+//     headers: { "Content-Type": "application/json" },
+//    })
+//     .then((res) => res.json())
+//     .then((res) => setTable(res))
+//     .catch((err) => console.log(err));
+//   }, 9000);
 
-  return () => clearInterval(interval);
+//   return () => clearInterval(interval);
+//  }, [apiUrl]);
+
+ useEffect(() => {
+  const longPull = async () => {
+
+   try {
+    const res = await fetch(apiUrl + "/api/table/update", {
+     method: "GET",
+     headers: { "Content-Type": "application/json" },
+    });
+
+    if (res.ok) {
+     const updatedTable = await res.json();
+     setTable(updatedTable);
+     longPull();
+    } else {
+     console.error("Ошибка получения обновлений:", res.statusText);
+     setTimeout(longPull, 5000);
+    }
+   } catch (error) {
+    console.error("Ошибка соединения:", error);
+    setTimeout(longPull, 5000);
+   }
+  };
+
+  longPull();
  }, [apiUrl]);
 
  //Auto-fetch hand cards
@@ -338,7 +364,7 @@ const Home: React.FC = () => {
        </div>
       ))}
     </TableContainer>
-     <Chat />
+    <Chat />
    </div>
 
    <SelectDeck

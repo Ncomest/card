@@ -1,5 +1,19 @@
 const Table = require("../models/table.model.js");
 
+const clients = [];
+
+const longPullingUpdate = (req, res) => {
+ clients.push(res);
+
+ req.on("close", () => clients.splice(clients.indexOf(res), 1));
+};
+
+const notifyClients = async () => {
+ const updatedTable = await Table.find({});
+ clients.forEach((client) => client.status(200).json(updatedTable));
+ clients.length = 0;
+};
+
 const getTableBoxes = async (req, res) => {
  try {
   const table = await Table.find({});
@@ -63,8 +77,9 @@ const updateTableBox = async (req, res) => {
      );
     }
 
-    const updatedTable = await Table.find({});
-    return res.status(200).json(updatedTable);
+    notifyClients();
+    // const updatedTable = await Table.find({});
+    // return res.status(200).json(updatedTable);
    } else if (data.placePutCard === "hand") {
     const updateCaseTable = await Table.findByIdAndUpdate(
      data.casePickTableId,
@@ -80,8 +95,9 @@ const updateTableBox = async (req, res) => {
     if (!updateCaseTable) {
      return res.status(400).json({ message: error.message });
     }
-    const updatedTable = await Table.find({});
-    return res.status(200).json(updatedTable);
+    // const updatedTable = await Table.find({});
+    // return res.status(200).json(updatedTable);
+    return notifyClients();
    }
   } else if (data.placePickCard === "hand") {
    if (data.placePutCard === "table") {
@@ -110,8 +126,9 @@ const updateTableBox = async (req, res) => {
      return res.status(404).json({ message: "Case of table not found" });
     }
 
-    const updatedTable = await Table.find({});
-    return res.status(200).json(updatedTable);
+    // const updatedTable = await Table.find({});
+    // return res.status(200).json(updatedTable);
+    return notifyClients()
    }
   }
 
@@ -219,4 +236,5 @@ module.exports = {
  updateTableBox,
  updateAllTableBox,
  deleteTableBox,
+ longPullingUpdate,
 };

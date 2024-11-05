@@ -109,10 +109,6 @@ const DiceRoll: React.FC = () => {
       setIsRolling(false);
      }, 3000);
     }
-    // setTimeout(() => {
-    //  setRoll(res);
-    //  setIsRolling(false);
-    // }, 500);
    })
    .catch((err) => {
     console.log(err);

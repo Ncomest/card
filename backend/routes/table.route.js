@@ -8,8 +8,10 @@ const {
  updateTableBox,
  updateAllTableBox,
  deleteTableBox,
+ longPullingUpdate
 } = require("../controllers/table.controller.js");
 
+router.get('/update',longPullingUpdate)
 router.get("/", getTableBoxes);
 router.get("/:id", getTableBox);
 router.post("/", createTableBox);
