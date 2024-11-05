@@ -1,6 +1,6 @@
 {
  "scripts": {
-  "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix frontend\""
+  "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix websocket\""
  },
  "devDependencies": {
   "concurrently": "^9.0.1"
