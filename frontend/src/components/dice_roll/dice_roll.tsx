@@ -26,7 +26,7 @@ import { StyledButton } from "../../style/global.style.js";
 const Component = styled.div`
  position: absolute;
  bottom: calc(100%);
- left: calc(100% - 255px);
+ left: calc(100% - 300px);
 
  display: inline-flex;
  align-items: center;
