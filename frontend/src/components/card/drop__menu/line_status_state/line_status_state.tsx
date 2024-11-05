@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { SideStatusState } from "../../side_status/side_status_state/side_status_state";
+import { RiRefreshLine } from "react-icons/ri";
 
 import { site } from "../../../../site_state";
 
@@ -13,6 +14,13 @@ const StateLine = styled.div`
 
 const Input = styled.input`
  width: 40px;
+`;
+
+const Button = styled.button`
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 2px;
 `;
 
 export const LineStatusState = ({ item, icon, text }: any) => {
@@ -45,6 +53,9 @@ export const LineStatusState = ({ item, icon, text }: any) => {
   <StateLine>
    <SideStatusState icon={icon} />
    <Input type="number" onBlur={handleFetchCardState} />
+   <Button>
+    <RiRefreshLine />
+   </Button>
   </StateLine>
  );
 };

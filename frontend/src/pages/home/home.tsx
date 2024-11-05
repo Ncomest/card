@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Card from "../../components/card/card";
 import { site } from "../../site_state.js";
 import Chat from "../../components/chat/chat";
+import axios from "axios";
 
 const TableContainer = styled.div`
  border-radius: 10px;
@@ -83,58 +84,50 @@ const Home: React.FC = () => {
 
  const apiUrl = site;
 
- //получение стола каждые 9с (пока нет вебсокета)
- useEffect(() => {
-  // const interval = setInterval(() => {
-  fetch(`${apiUrl}/api/table`, {
-   method: "GET",
-   headers: { "Content-Type": "application/json" },
-  })
-   .then((res) => res.json())
-   .then((res) => setTable(res))
-   .catch((err) => console.log(err));
-  // }, 9000);
+ const longPull = async () => {
+  try {
+   const res = await fetch(apiUrl + "/api/table/update", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+   });
 
-  // return () => clearInterval(interval);
- }, [apiUrl]);
-
- useEffect(() => {
-  const longPull = async () => {
-   try {
-    const res = await fetch(apiUrl + "/api/table/update", {
-     method: "GET",
-     headers: { "Content-Type": "application/json" },
-    });
-
-    if (res.ok) {
-     const updatedTable = await res.json();
-     setTable(updatedTable);
-     longPull();
-    } else {
-     console.error("Ошибка получения обновлений:", res.statusText);
-     setTimeout(longPull, 5000);
-    }
-   } catch (error) {
-    console.error("Ошибка соединения:", error);
-    setTimeout(longPull, 5000);
+   if (!res.ok) {
+    throw new Error("Error нет данных от лонгпулла");
    }
-  };
+
+   if (res.ok) {
+    const updatedTable: ICardTable[] = await res.json();
+    console.log(updatedTable, "updatedTable in longpull");
+    setTable(updatedTable);
+
+    longPull();
+   } else {
+    console.error("Ошибка получения обновлений:", res.statusText);
+    setTimeout(longPull, 500);
+   }
+  } catch (error) {
+   console.error("Ошибка соединения:", error);
+   setTimeout(longPull, 500);
+  }
+ };
+ // Получение стола
+ useEffect(() => {
+  axios
+   .get<ICardTable[]>(`${apiUrl}/api/table`)
+   .then((res) => setTable(res.data))
+   .catch((err) => console.error(err));
+
+  axios
+   .post<ICard[]>(apiUrl + "/api/hand", {
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+     user: sessionStorage.getItem("player"),
+    }),
+   })
+   .then((res) => setHand(res.data))
+   .catch((err) => console.error(err));
 
   longPull();
- }, [apiUrl]);
-
- //Auto-fetch hand cards
- useEffect(() => {
-  fetch(apiUrl + "/api/hand", {
-   method: "POST",
-   headers: { "Content-Type": "application/json" },
-   body: JSON.stringify({
-    user: sessionStorage.getItem("player"),
-   }),
-  })
-   .then((res) => res.json())
-   .then((data: ICard[]) => setHand(data))
-   .catch((err) => console.log(err));
  }, [apiUrl]);
 
  //================Drag==============//
@@ -149,6 +142,8 @@ const Home: React.FC = () => {
   e.dataTransfer.setData("casePickTableId", casePickTableId);
   e.dataTransfer.setData("placePickCard", placePickCard);
   e.dataTransfer.setData("cardIndex", cardIndex);
+
+  console.log("cardIndex", e.dataTransfer.getData("cardIndex"));
 
   if (cardId) {
    e.dataTransfer.setData("cardId", cardId);
@@ -169,11 +164,25 @@ const Home: React.FC = () => {
    return;
   }
 
+  // Извлекаем данные из dataTransfer
+  const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));
+  const placePickCard = e.dataTransfer.getData("placePickCard");
+  const cardIndex = e.dataTransfer.getData("cardIndex");
+
+  console.log(
+   { casePickTableId, placePutCard, cardIndex, casePutTableId },
+   "data in handleDrop"
+  );
+  if (!casePickTableId || !casePutTableId) {
+   console.error("missing data for handleDrop");
+   return;
+  }
+
   try {
-   // Извлекаем данные из dataTransfer
-   const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));
-   const placePickCard = e.dataTransfer.getData("placePickCard");
-   const cardIndex = e.dataTransfer.getData("cardIndex");
+   if (cardIndex === undefined) {
+    console.error("cardIndex is undefined");
+    return;
+   }
 
    console.log("index ячейки в руке cardIndex", cardIndex);
 
@@ -220,6 +229,7 @@ const Home: React.FC = () => {
 
      const updatedCardOnTable = await resUpdCardOnTable.json();
      setTable(updatedCardOnTable);
+     //  longPull();
      console.log(
       `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
       updatedCardOnTable
@@ -352,6 +362,7 @@ const Home: React.FC = () => {
           casePickTableId: item._id,
           cardId: item.card?._id ?? null,
           placePickCard: "table",
+          // cardIndex: index,
          })
         }
         onDragOver={handleDragOver}

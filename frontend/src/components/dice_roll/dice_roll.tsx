@@ -67,30 +67,30 @@ const DiceRoll: React.FC = () => {
  const [roll, setRoll] = useState<IRoll | null>(null);
  const [isRolling, setIsRolling] = useState<boolean>(false);
 
- const pullDiceRoll = () => {
-  fetch(apiUrl + "/api/dice/wait")
-   .then((res) => res.json())
-   .then((data) => {
-    if (data.rolling) {
-     setIsRolling(true);
-
-     setTimeout(() => {
-      setIsRolling(false);
-     }, 3000);
-    }
-
-    setRoll(data);
-    pullDiceRoll();
-   })
-   .catch((err) => {
-    console.error("Error in pulling", err);
-    setTimeout(pullDiceRoll, 1000);
-   });
- };
-
  useEffect(() => {
+  const pullDiceRoll = () => {
+   fetch(apiUrl + "/api/dice/wait")
+    .then((res) => res.json())
+    .then((data) => {
+     if (data.rolling) {
+      setIsRolling(true);
+
+      setTimeout(() => {
+       setIsRolling(false);
+      }, 3000);
+     }
+
+     setRoll(data);
+     pullDiceRoll();
+    })
+    .catch((err) => {
+     console.error("Error in pulling", err);
+     setTimeout(pullDiceRoll, 1000);
+    });
+  };
+
   pullDiceRoll();
- }, []);
+ }, [apiUrl]);
 
  const handleDiceRoll = () => {
   setIsRolling(true);
