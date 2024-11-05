@@ -84,23 +84,22 @@ const Home: React.FC = () => {
  const apiUrl = site;
 
  //получение стола каждые 9с (пока нет вебсокета)
-//  useEffect(() => {
-//   const interval = setInterval(() => {
-//    fetch(`${apiUrl}/api/table`, {
-//     method: "GET",
-//     headers: { "Content-Type": "application/json" },
-//    })
-//     .then((res) => res.json())
-//     .then((res) => setTable(res))
-//     .catch((err) => console.log(err));
-//   }, 9000);
+ useEffect(() => {
+  // const interval = setInterval(() => {
+  fetch(`${apiUrl}/api/table`, {
+   method: "GET",
+   headers: { "Content-Type": "application/json" },
+  })
+   .then((res) => res.json())
+   .then((res) => setTable(res))
+   .catch((err) => console.log(err));
+  // }, 9000);
 
-//   return () => clearInterval(interval);
-//  }, [apiUrl]);
+  // return () => clearInterval(interval);
+ }, [apiUrl]);
 
  useEffect(() => {
   const longPull = async () => {
-
    try {
     const res = await fetch(apiUrl + "/api/table/update", {
      method: "GET",

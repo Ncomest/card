@@ -9,8 +9,8 @@ const longPullingUpdate = (req, res) => {
 };
 
 const notifyClients = async () => {
- const updatedTable = await Table.find({});
- clients.forEach((client) => client.status(200).json(updatedTable));
+ const updatedTablePull = await Table.find({});
+ clients.forEach((client) => client.status(200).json(updatedTablePull));
  clients.length = 0;
 };
 
