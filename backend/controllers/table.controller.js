@@ -16,8 +16,9 @@ const notifyClients = async () => {
 
 const getTableBoxes = async (req, res) => {
  try {
-  const table = await Table.find({});
-  res.status(200).json(table);
+  // const table = await Table.find({});
+  // res.status(200).json(table);
+  notifyClients()
  } catch (error) {
   res.status(500).json({ message: error.message });
  }
