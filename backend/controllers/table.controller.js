@@ -18,7 +18,7 @@ const getTableBoxes = async (req, res) => {
  try {
   // const table = await Table.find({});
   // res.status(200).json(table);
-  notifyClients()
+  notifyClients();
  } catch (error) {
   res.status(500).json({ message: error.message });
  }
@@ -129,7 +129,7 @@ const updateTableBox = async (req, res) => {
 
     // const updatedTable = await Table.find({});
     // return res.status(200).json(updatedTable);
-    return notifyClients()
+    return notifyClients();
    }
   }
 
@@ -148,8 +148,9 @@ const updateTableBox = async (req, res) => {
     $set: { [`card_state.${currCardState}`]: value },
    });
 
-   const currData = await Table.find({});
-   return res.status(200).json(currData);
+   //  const currData = await Table.find({});
+   //  return res.status(200).json(currData);
+   return notifyClients();
   }
   //>======установить-состояние-для-карты======//
 
@@ -178,8 +179,9 @@ const updateTableBox = async (req, res) => {
     },
     { new: true, runValidators: true }
    );
-   const updatedCard = await Table.findById(id);
-   return res.status(200).json(updatedCard);
+   //  const updatedCard = await Table.findById(id);
+   //  return res.status(200).json(updatedCard);
+   return notifyClients();
   }
   //>======конец-хода======//
 
