@@ -4,14 +4,15 @@ const clients = [];
 
 const longPullingUpdate = (req, res) => {
  clients.push(res);
-
+ console.log(clients.length);
  req.on("close", () => clients.splice(clients.indexOf(res), 1));
 };
 
-const notifyClients = async () => {
- const updatedTablePull = await Table.find({});
- clients.forEach((client) => client.status(200).json(updatedTablePull));
- clients.length = 0;
+const notifyClients = (data) => {
+ setTimeout(() => {
+  clients.forEach((client) => client.status(200).json(data));
+  clients.length = 0;
+ }, 1000);
 };
 
 const getTableBoxes = async (req, res) => {
@@ -44,12 +45,14 @@ const createTableBox = async (req, res) => {
 };
 
 const updateTableBox = async (req, res) => {
+ console.log("upd work");
  try {
   const { id } = req.params;
   const data = req.body;
 
   if (data.placePickCard === "table") {
    if (data.placePutCard === "table") {
+    console.log("table-table");
     const updateCaseTable = await Table.findByIdAndUpdate(
      id,
      {
@@ -78,9 +81,9 @@ const updateTableBox = async (req, res) => {
      );
     }
 
-    notifyClients();
-    // const updatedTable = await Table.find({});
-    // return res.status(200).json(updatedTable);
+    const updatedTable = await Table.find({});
+    notifyClients(updatedTable);
+    return res.status(200).json(updatedTable);
    } else if (data.placePutCard === "hand") {
     const updateCaseTable = await Table.findByIdAndUpdate(
      data.casePickTableId,
@@ -96,9 +99,10 @@ const updateTableBox = async (req, res) => {
     if (!updateCaseTable) {
      return res.status(400).json({ message: error.message });
     }
-    // const updatedTable = await Table.find({});
-    // return res.status(200).json(updatedTable);
-    return notifyClients();
+    const updatedTable = await Table.find({});
+    notifyClients(updatedTable);
+    return res.status(200).json(updatedTable);
+    // return notifyClients();
    }
   } else if (data.placePickCard === "hand") {
    if (data.placePutCard === "table") {
@@ -127,9 +131,10 @@ const updateTableBox = async (req, res) => {
      return res.status(404).json({ message: "Case of table not found" });
     }
 
-    // const updatedTable = await Table.find({});
-    // return res.status(200).json(updatedTable);
-    return notifyClients();
+    const updatedTable = await Table.find({});
+    notifyClients(updatedTable);
+    return res.status(200).json(updatedTable);
+    // return notifyClients();
    }
   }
 
@@ -148,9 +153,10 @@ const updateTableBox = async (req, res) => {
     $set: { [`card_state.${currCardState}`]: value },
    });
 
-   //  const currData = await Table.find({});
-   //  return res.status(200).json(currData);
-   return notifyClients();
+   const currData = await Table.find({});
+   notifyClients(currData);
+   return res.status(200).json(currData);
+   //  return notifyClients();
   }
   //>======установить-состояние-для-карты======//
 
@@ -165,6 +171,8 @@ const updateTableBox = async (req, res) => {
      { new: true, runValidators: true }
     );
     const updatedCard = await Table.findById(id);
+    const updTable = await Table.find({});
+    notifyClients(updTable);
     return res.status(200).json(updatedCard);
    }
   }
@@ -179,9 +187,10 @@ const updateTableBox = async (req, res) => {
     },
     { new: true, runValidators: true }
    );
-   //  const updatedCard = await Table.findById(id);
-   //  return res.status(200).json(updatedCard);
-   return notifyClients();
+   const updatedCard = await Table.findById(id);
+   const updTable = await Table.find({});
+   notifyClients(updTable);
+   return res.status(200).json(updatedCard);
   }
   //>======конец-хода======//
 
@@ -191,6 +200,7 @@ const updateTableBox = async (req, res) => {
  }
 };
 
+// set step over = false
 const updateAllTableBox = async (req, res) => {
  try {
   const data = req.body;
@@ -215,6 +225,8 @@ const updateAllTableBox = async (req, res) => {
    updatedTableData.map((card) => Table.updateOne({ _id: card._id }, card))
   );
 
+  const updTable = await Table.find({})
+  notifyClients(updTable)
   res.status(200).json(updatedTableData);
  } catch (error) {
   res.status(500).json({ message: `invalid request ${error.message}` });
