@@ -40,8 +40,8 @@ const ImageEye = styled.img`
  border-radius: 50%;
  border: 1px solid #ece9ce;
  position: absolute;
- bottom: 3px;
- left: 3px;
+ bottom: -12px;
+ left: -12px;
 `;
 
 const ImageCross = styled.img`
