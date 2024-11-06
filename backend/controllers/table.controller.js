@@ -4,7 +4,6 @@ const clients = [];
 
 const longPullingUpdate = (req, res) => {
  clients.push(res);
- console.log(clients.length);
  req.on("close", () => clients.splice(clients.indexOf(res), 1));
 };
 
@@ -52,7 +51,6 @@ const updateTableBox = async (req, res) => {
 
   if (data.placePickCard === "table") {
    if (data.placePutCard === "table") {
-    console.log("table-table");
     const updateCaseTable = await Table.findByIdAndUpdate(
      id,
      {
