@@ -5,109 +5,90 @@ import { StyledButton } from "../../style/global.style";
 import axios from "axios";
 
 const Component = styled.div`
- text-align: center;
- padding: 10px 0;
- background-color: #0b0b0b;
- color: #ffeecd;
+  text-align: center;
+  padding: 10px 0;
+  background-color: #0b0b0b;
+  color: #ffeecd;
 `;
 
 const Button = styled(StyledButton)``;
 
 function SelectPlayer() {
- const [isSelectPlayer, setIsSelectPlayer] = useState<string | null>(sessionStorage.getItem("player"));
+  const [isSelectPlayer, setIsSelectPlayer] = useState<string | null>(
+    sessionStorage.getItem("player")
+  );
 
- const [isPlayer, setIsPlayer] = useState({ player1: false, player2: false });
+  const [isPlayer, setIsPlayer] = useState({ player1: false, player2: false });
 
- const apiUrl = site;
+  const apiUrl = site;
 
- //POST req to select a player
- const handleSelectPlayer = async (e: React.MouseEvent<HTMLButtonElement>) => {
-  const selectPlayer = (e.target as HTMLButtonElement).value;
+  //Get players status
+  useEffect(() => {
+    const fetchPlayerStatus = async () => {
+      try {
+        const res = await axios.get(apiUrl + "/api/player");
+        console.log(res.data, "fetchstatusplayer");
+        setIsPlayer(res.data);
+      } catch (error) {
+        console.error("Ошибка при получении статуса:", error);
+      }
+    };
 
-  try {
-    const res = await axios.post(apiUrl + "/api/select-player",{
-      player: selectPlayer
-    })
-    setIsPlayer(res.data)
-    sessionStorage.setItem('player', selectPlayer)
-    setIsSelectPlayer(selectPlayer)
-  } catch (error) {
-    console.error('Ошибка при выборе игрока', error)
-  }
-};
+    fetchPlayerStatus();
+  }, [apiUrl]);
 
-  // fetch(apiUrl + "/api/select-player", {
-  //  method: "POST",
-  //  headers: { "Content-Type": "application/json" },
-  //  body: JSON.stringify({ player: selectPlayer }),
-  // })
-  //  .then((res) => res.json())
-  //  .then((res) => setIsPlayer(res))
-  //  .then(() => sessionStorage.setItem("player", selectPlayer))
-  //  //  .then(() => setIsSelectPlayer(selectPlayer))
-  //  .catch((err) => console.log("error", err));
+  //POST req to select a player
+  const handleSelectPlayer = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    const selectPlayer = (e.currentTarget as HTMLButtonElement).value;
+    console.log("selectPlayer", selectPlayer);
 
- //Refresh players status
- const handleRefresh = async () => {
-  try {
-    const res = await axios.put(apiUrl + "/api/select-player");
-    setIsPlayer(res.data);
-    sessionStorage.removeItem('player');
-    setIsSelectPlayer(null)
-  } catch (error) {
-    console.error('Ошибка при сбросе игроков:', error)
-  }
-};
-  // fetch(apiUrl + "/api/select-player", {
-  //  method: "PUT",
-  // })
-  //  .then((res) => res.json())
-  //  .then((res) => setIsPlayer(res))
-  //  .then(() => delete sessionStorage.player)
-  //  .then(() => setIsSelectPlayer(""))
-  //  .catch((err) => console.log(err));
-
- //Get players status
- useEffect(() => {
-  const fetchPlayerStatus = async () => {
     try {
-      const res = await axios.get(apiUrl + "/api/player");
-      setIsPlayer(res.data)
+      const res = await axios.post(apiUrl + "/api/select-player", {
+        player: selectPlayer,
+      });
+      setIsPlayer(res.data);
+      sessionStorage.setItem("player", selectPlayer);
+      setIsSelectPlayer(selectPlayer);
     } catch (error) {
-      console.error('Ошибка при получении статуса:', error)
+      console.error("Ошибка при выборе игрока", error);
     }
-  }
+  };
 
-  fetchPlayerStatus()
-}, [apiUrl]);
+  //Refresh players status
+  const handleRefresh = async () => {
+    try {
+      const res = await axios.get(apiUrl + "/api/select-player");
+      console.log(res.data, "refresh");
+      setIsPlayer(res.data);
+      sessionStorage.removeItem("player");
+      setIsSelectPlayer(null);
+    } catch (error) {
+      console.error("Ошибка при сбросе игроков:", error);
+    }
+  };
 
-// fetch(apiUrl + "/api/player")
-//  .then((res) => res.json())
-//  .then((res) => setIsPlayer(res))
-//  .catch((error) => console.log(error));
+  return (
+    <Component>
+      {isPlayer.player1 ? <p>Стас уже выбран</p> : <p>Стас свободен</p>}
+      {isPlayer.player2 ? <p>Игорь уже выбран</p> : <p>Игорь свободен</p>}
 
- return (
-  <Component>
-   {isPlayer.player1 ? <p>Стас уже выбран</p> : <p>Стас свободен</p>}
-   {isPlayer.player2 ? <p>Игорь уже выбран</p> : <p>Игорь свободен</p>}
+      {!isSelectPlayer && !isPlayer.player1 && (
+        <Button onClick={handleSelectPlayer} value={"player1"}>
+          <span>Стас</span>
+        </Button>
+      )}
 
-   {!isSelectPlayer && !isPlayer.player1 && (
-    <Button onClick={handleSelectPlayer} value={"player1"}>
-     <span>Стас</span>
-    </Button>
-   )}
+      {!isSelectPlayer && !isPlayer.player2 && (
+        <Button onClick={handleSelectPlayer} value={"player2"}>
+          <span>Игорь</span>
+        </Button>
+      )}
 
-   {!isSelectPlayer && !isPlayer.player2 && (
-    <Button onClick={handleSelectPlayer} value={"player2"}>
-     <span>Игорь</span>
-    </Button>
-   )}
-
-   <Button onClick={handleRefresh}>
-    <span>Сброс</span>
-   </Button>
-  </Component>
- );
+      <Button onClick={handleRefresh}>
+        <span>Сброс</span>
+      </Button>
+    </Component>
+  );
 }
 
 export default SelectPlayer;

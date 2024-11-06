@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import SelectPlayer from "../../components/select_player/select_player";
 import SelectDeck from "../../components/select_deck/select_deck";
 import styled from "styled-components";
@@ -82,26 +82,27 @@ interface IDrag {
 const Home: React.FC = () => {
  const [table, setTable] = useState<ICardTable[]>([]);
  const [hand, setHand] = useState<ICard[]>([]);
+ const longPullActive = useRef(true)
 
  const apiUrl = site;
 
  const longPull = async () => {
+  if(!longPullActive.current) return;
+
   try {
    const res = await fetch(apiUrl + "/api/table/update", {
     method: "GET",
     headers: { "Content-Type": "application/json" },
    });
 
-   if (!res.ok) {
-    throw new Error("Error нет данных от лонгпулла");
-   }
+   if (!res.ok) {throw new Error("Error нет данных от лонгпулла");}
 
    if (res.ok) {
     const updatedTable: ICardTable[] = await res.json();
     console.log(updatedTable, "updatedTable in longpull");
     setTable(updatedTable);
 
-    longPull();
+    setTimeout(() => {if(longPullActive.current) longPull();}, 2000);
    } else {
     console.error("Ошибка получения обновлений:", res.statusText);
     setTimeout(longPull, 500);
@@ -111,6 +112,7 @@ const Home: React.FC = () => {
    setTimeout(longPull, 500);
   }
  };
+ 
  // Получение стола
  useEffect(() => {
   axios
@@ -129,6 +131,9 @@ const Home: React.FC = () => {
    .catch((err) => console.error(err));
 
   longPull();
+
+  return () => {longPullActive.current = false};
+ // eslint-disable-next-line react-hooks/exhaustive-deps
  }, [apiUrl]);
 
  //================Drag==============//
