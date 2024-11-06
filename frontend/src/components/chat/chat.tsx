@@ -9,6 +9,7 @@ const Container = styled.div`
  right: 0;
  flex: 1;
  margin: 5px;
+ z-index: 1;
 `;
 
 const Component = styled.div`

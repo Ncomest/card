@@ -24,11 +24,11 @@ const Component = styled.div<{
  transform: ${(isZoom) => isZoom.$isZoom && "scale(2.4)"};
  z-index: ${(isZoom) => isZoom.$isZoom && 1};
 
- cursor: pointer;
+ cursor: ${(isEmpty) => !isEmpty.$empty && "pointer"};
 `;
 
 const Image = styled.img<{ $step_over?: boolean }>`
-border-radius: 8px;
+ border-radius: 8px;
  width: 100%;
  height: 100%;
  filter: ${(prop) => prop.$step_over && "brightness(50%)"};
@@ -65,6 +65,7 @@ const Button = styled.button`
 `;
 
 const Background = styled.div`
+ border-radius: 8px;
  background: rgba(0, 0, 0, 0.605);
  width: 100%;
  height: 100%;

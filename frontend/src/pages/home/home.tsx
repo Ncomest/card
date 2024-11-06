@@ -7,6 +7,26 @@ import { site } from "../../site_state.js";
 import Chat from "../../components/chat/chat";
 import axios from "axios";
 
+const Background = styled.div`
+ background: none;
+ position: relative;
+ display: flex;
+ &::before {
+  background-image: url("/image/misc/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  filter: brightness(45%) blur(1px);
+  z-index: -1;
+  content: "";
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+ }
+`;
+
 const TableContainer = styled.div`
  border-radius: 10px;
  border: 5px solid #000000;
@@ -19,27 +39,8 @@ const TableContainer = styled.div`
  display: grid;
  grid-template-columns: repeat(7, 1fr);
  grid-template-rows: repeat(3, 1fr);
- gap: 10px 20px;
+ gap: 10px;
  background: rgba(0, 0, 0, 0.25);
-`;
-
-const Background = styled.div`
- background: none;
- position: relative;
- &::before {
-  background-image: url("/image/misc/background.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  filter: brightness(45%) blur(1px);
-  z-index: -1;
-  content: "";
-  top: 80px;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
- }
 `;
 
 interface ICard {
@@ -346,9 +347,9 @@ const Home: React.FC = () => {
  //================Drag==============//
 
  return (
-  <Background>
+  <div>
    <SelectPlayer />
-   <div style={{ display: "flex" }}>
+   <Background>
     <TableContainer>
      {table
       ?.sort((a, b) => a._id - b._id)
@@ -362,7 +363,6 @@ const Home: React.FC = () => {
           casePickTableId: item._id,
           cardId: item.card?._id ?? null,
           placePickCard: "table",
-          // cardIndex: index,
          })
         }
         onDragOver={handleDragOver}
@@ -375,7 +375,7 @@ const Home: React.FC = () => {
       ))}
     </TableContainer>
     <Chat />
-   </div>
+   </Background>
 
    <SelectDeck
     hand={hand}
@@ -384,7 +384,7 @@ const Home: React.FC = () => {
     handleDragOver={handleDragOver}
     handleDrop={handleDrop}
    />
-  </Background>
+  </div>
  );
 };
 
