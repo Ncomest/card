@@ -34,7 +34,7 @@ const TableContainer = styled.div`
  flex: 75%;
  min-height: 100vh;
  max-width: 1000px;
- margin: 100px 0 20px 80px;
+ margin: 100px 0 110px 80px;
  padding: 10px;
  display: grid;
  grid-template-columns: repeat(7, 1fr);

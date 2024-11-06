@@ -5,6 +5,7 @@ import { site } from "../../site_state.js";
 import { StyledButton } from "../../style/global.style";
 
 const Component = styled.div`
+ background: #0b0b0b;
  padding: 20px 0 100px 0;
 `;
 
