@@ -8,389 +8,425 @@ import Chat from "../../components/chat/chat";
 import axios from "axios";
 
 const Background = styled.div`
- background: none;
- position: relative;
- display: flex;
- &::before {
-  background-image: url("/image/misc/background.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  filter: brightness(45%) blur(1px);
-  z-index: -1;
-  content: "";
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
- }
+  background: none;
+  position: relative;
+  display: flex;
+  &::before {
+    background-image: url("/image/misc/background.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    filter: brightness(45%) blur(1px);
+    z-index: -1;
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+  }
 `;
 
 const TableContainer = styled.div`
- border-radius: 10px;
- border: 5px solid #000000;
- outline: 1px wheat;
- flex: 75%;
- min-height: 100vh;
- max-width: 1000px;
- margin: 100px 0 110px 80px;
- padding: 10px;
- display: grid;
- grid-template-columns: repeat(7, 1fr);
- grid-template-rows: repeat(3, 1fr);
- gap: 10px;
- background: rgba(0, 0, 0, 0.25);
+  position: relative;
+  border-radius: 10px;
+  border: 5px solid #000000;
+  outline: 1px wheat;
+  flex: 75%;
+  min-height: 100vh;
+  max-width: 1000px;
+  margin: 100px 0 110px 80px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.25);
+`;
+
+const Border = styled.div`
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%);
+  width: 700px;
+  height: 100%;
+  background-color: #ffffff40;
+
+  &::after{
+    content: '';
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 6px;
+    background-color: #bebebe;
+  }
 `;
 
 interface ICard {
- _id: string;
- url: string;
- name: string;
+  _id: string;
+  url: string;
+  name: string;
 }
 
 interface ICardState {
- haveDamaged: number | null;
- poison: number | null;
- blood: number | null;
- armor: number | null;
- stack: number | null;
- fire: number | null;
- closed: boolean;
- stepOver: boolean;
- stepSkip: boolean;
+  haveDamaged: number | null;
+  poison: number | null;
+  blood: number | null;
+  armor: number | null;
+  stack: number | null;
+  fire: number | null;
+  closed: boolean;
+  stepOver: boolean;
+  stepSkip: boolean;
 }
 
 interface ICardTable {
- _id: number;
- isEmpty: boolean;
- user: string;
- card?: ICard | null;
- cardState?: ICardState | null;
+  _id: number;
+  isEmpty: boolean;
+  user: string;
+  card?: ICard | null;
+  cardState?: ICardState | null;
 }
 
 interface IDrag {
- e?: any;
- casePickTableId?: number;
- casePutTableId?: number;
- cardId?: string | null;
- placePickCard?: string;
- placePutCard?: string;
- cardIndex?: number;
+  e?: any;
+  casePickTableId?: number;
+  casePutTableId?: number;
+  cardId?: string | null;
+  placePickCard?: string;
+  placePutCard?: string;
+  cardIndex?: number;
 }
 
 const Home: React.FC = () => {
- const [table, setTable] = useState<ICardTable[]>([]);
- const [hand, setHand] = useState<ICard[]>([]);
- const longPullActive = useRef(true)
+  const [table, setTable] = useState<ICardTable[]>([]);
+  const [hand, setHand] = useState<ICard[]>([]);
+  const longPullActive = useRef(true);
 
- const apiUrl = site;
+  const apiUrl = site;
 
- const longPull = async () => {
-  if(!longPullActive.current) return;
+  const longPull = async () => {
+    if (!longPullActive.current) return;
 
-  try {
-   const res = await fetch(apiUrl + "/api/table/update", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-   });
+    try {
+      const res = await fetch(apiUrl + "/api/table/update", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
 
-   if (!res.ok) {throw new Error("Error нет данных от лонгпулла");}
+      if (!res.ok) {
+        throw new Error("Error нет данных от лонгпулла");
+      }
 
-   if (res.ok) {
-    const updatedTable: ICardTable[] = await res.json();
-    console.log(updatedTable, "updatedTable in longpull");
-    setTable(updatedTable);
+      if (res.ok) {
+        const updatedTable: ICardTable[] = await res.json();
+        console.log(updatedTable, "updatedTable in longpull");
+        setTable(updatedTable);
 
-    setTimeout(() => {if(longPullActive.current) longPull();}, 2000);
-   } else {
-    console.error("Ошибка получения обновлений:", res.statusText);
-    setTimeout(longPull, 500);
-   }
-  } catch (error) {
-   console.error("Ошибка соединения:", error);
-   setTimeout(longPull, 500);
-  }
- };
- 
- // Получение стола
- useEffect(() => {
-  axios
-   .get<ICardTable[]>(`${apiUrl}/api/table`)
-   .then((res) => setTable(res.data))
-   .catch((err) => console.error(err));
+        setTimeout(() => {
+          if (longPullActive.current) longPull();
+        }, 2000);
+      } else {
+        console.error("Ошибка получения обновлений:", res.statusText);
+        setTimeout(longPull, 500);
+      }
+    } catch (error) {
+      console.error("Ошибка соединения:", error);
+      setTimeout(longPull, 500);
+    }
+  };
 
-  axios
-   .post<ICard[]>(apiUrl + "/api/hand", {
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-     user: sessionStorage.getItem("player"),
-    }),
-   })
-   .then((res) => setHand(res.data))
-   .catch((err) => console.error(err));
+  // Получение стола
+  useEffect(() => {
+    axios
+      .get<ICardTable[]>(`${apiUrl}/api/table`)
+      .then((res) => setTable(res.data))
+      .catch((err) => console.error(err));
 
-  longPull();
+    axios
+      .post<ICard[]>(apiUrl + "/api/hand", {
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user: sessionStorage.getItem("player"),
+        }),
+      })
+      .then((res) => setHand(res.data))
+      .catch((err) => console.error(err));
 
-  return () => {longPullActive.current = false};
- // eslint-disable-next-line react-hooks/exhaustive-deps
- }, [apiUrl]);
+    longPull();
 
- //================Drag==============//
- const handleDragStart = ({
-  e,
-  casePickTableId,
-  cardId,
-  placePickCard,
-  cardIndex,
- }: IDrag) => {
-  // Передаем данные о карте через dataTransfer
-  e.dataTransfer.setData("casePickTableId", casePickTableId);
-  e.dataTransfer.setData("placePickCard", placePickCard);
-  e.dataTransfer.setData("cardIndex", cardIndex);
+    return () => {
+      longPullActive.current = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiUrl]);
 
-  console.log("cardIndex", e.dataTransfer.getData("cardIndex"));
+  //================Drag==============//
+  const handleDragStart = ({
+    e,
+    casePickTableId,
+    cardId,
+    placePickCard,
+    cardIndex,
+  }: IDrag) => {
+    // Передаем данные о карте через dataTransfer
+    e.dataTransfer.setData("casePickTableId", casePickTableId);
+    e.dataTransfer.setData("placePickCard", placePickCard);
+    e.dataTransfer.setData("cardIndex", cardIndex);
 
-  if (cardId) {
-   e.dataTransfer.setData("cardId", cardId);
-  }
- };
+    console.log("cardIndex", e.dataTransfer.getData("cardIndex"));
 
- const handleDragOver = (e: any) => {
-  e.preventDefault();
- };
+    if (cardId) {
+      e.dataTransfer.setData("cardId", cardId);
+    }
+  };
 
- const handleDrop = async ({ e, casePutTableId, placePutCard }: IDrag) => {
-  e.preventDefault();
+  const handleDragOver = (e: any) => {
+    e.preventDefault();
+  };
 
-  if (
-   Number(e.dataTransfer.getData("casePickTableId")) === Number(casePutTableId)
-  ) {
-   console.log("так не получиться");
-   return;
-  }
+  const handleDrop = async ({ e, casePutTableId, placePutCard }: IDrag) => {
+    e.preventDefault();
 
-  // Извлекаем данные из dataTransfer
-  const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));
-  const placePickCard = e.dataTransfer.getData("placePickCard");
-  const cardIndex = e.dataTransfer.getData("cardIndex");
-
-  console.log(
-   { casePickTableId, placePutCard, cardIndex, casePutTableId },
-   "data in handleDrop"
-  );
-  if (!casePickTableId || !casePutTableId) {
-   console.error("missing data for handleDrop");
-   return;
-  }
-
-  try {
-   if (cardIndex === undefined) {
-    console.error("cardIndex is undefined");
-    return;
-   }
-
-   console.log("index ячейки в руке cardIndex", cardIndex);
-
-   if (placePickCard === "table") {
-    // отправим запрос на получение данных
-    const resCardPickOnTableId = await fetch(
-     apiUrl + `/api/table/${casePickTableId}`
-    );
-
-    if (!resCardPickOnTableId.ok) {
-     throw new Error("ошибка получения запроса по id со стола");
+    if (
+      Number(e.dataTransfer.getData("casePickTableId")) ===
+      Number(casePutTableId)
+    ) {
+      console.log("так не получиться");
+      return;
     }
 
-    const resCardFromTableId = await resCardPickOnTableId.json();
+    // Извлекаем данные из dataTransfer
+    const casePickTableId = Number(e.dataTransfer.getData("casePickTableId"));
+    const placePickCard = e.dataTransfer.getData("placePickCard");
+    const cardIndex = e.dataTransfer.getData("cardIndex");
+
     console.log(
-     `получение данных с ячейки с ${casePickTableId} сервера resCardFromTableId`,
-     resCardFromTableId
+      { casePickTableId, placePutCard, cardIndex, casePutTableId },
+      "data in handleDrop"
     );
-
-    if (placePutCard === "table") {
-     console.log("сработал if положить со стола на стол");
-     // отправим запрос на обновление данных
-     const resUpdCardOnTable = await fetch(
-      apiUrl + `/api/table/${casePutTableId}`,
-      {
-       method: "PUT",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-        placePickCard: placePickCard, // место откуда берем карту стол или рука
-        placePutCard: placePutCard, // место куда кладем карту стол или рука
-        casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-        casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-        card: resCardFromTableId.card,
-        card_state: resCardFromTableId.card_state,
-        isEmpty: false,
-        user: sessionStorage.getItem("player"),
-       }),
-      }
-     );
-
-     if (!resUpdCardOnTable.ok) {
-      throw new Error("Не получилось обновить данные в БД");
-     }
-
-     const updatedCardOnTable = await resUpdCardOnTable.json();
-     setTable(updatedCardOnTable);
-     //  longPull();
-     console.log(
-      `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
-      updatedCardOnTable
-     );
-    } else if (placePutCard === "hand") {
-     const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/update", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-       user: sessionStorage.getItem("player"),
-       card: resCardFromTableId.card,
-      }),
-     });
-
-     if (!resUpdCardOnHand.ok) {
-      throw new Error("Не получилось обновить данные руки на сервере");
-     }
-
-     const resCardFromHand = await resUpdCardOnHand.json();
-     setHand(resCardFromHand);
-     console.log("resCardFromHand", resCardFromHand);
-
-     const resUpdCardOnTable = await fetch(
-      apiUrl + `/api/table/${casePickTableId}`,
-      {
-       method: "PUT",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-        placePickCard: placePickCard, // место откуда берем карту стол или рука
-        placePutCard: placePutCard, // место куда кладем карту стол или рука
-        casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-        casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-        isEmpty: true,
-       }),
-      }
-     );
-
-     if (!resUpdCardOnTable.ok) {
-      throw new Error("Не удалось обновить стол, очистить ячейку от карты");
-     }
-
-     const updatedCardOnTable = await resUpdCardOnTable.json();
-     setTable(updatedCardOnTable);
-    }
-   } else if (placePickCard === "hand") {
-    console.log("взяли карту с руки");
-
-    const resCardOnHand = await fetch(apiUrl + "/api/hand/", {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-      user: sessionStorage.getItem("player"),
-     }),
-    });
-
-    if (!resCardOnHand.ok) {
-     throw new Error("Не получилось получить данные с руки");
+    if (!casePickTableId || !casePutTableId) {
+      console.error("missing data for handleDrop");
+      return;
     }
 
-    const resCardFromHand = await resCardOnHand.json();
-    console.log("resCardFromHand[cardindex]", resCardFromHand[cardIndex]);
-
-    if (placePutCard === "hand") {
-     console.log("сработал if взяли с руки и положили в руку");
-    } else if (placePutCard === "table") {
-     console.log("сработал if взяли карту с руки и положили на стол");
-
-     const resUpdCardOnTable = await fetch(
-      apiUrl + `/api/table/${casePutTableId}`,
-      {
-       method: "PUT",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify({
-        placePickCard: placePickCard, // место откуда берем карту стол или рука
-        placePutCard: placePutCard, // место куда кладем карту стол или рука
-        casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-        casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-        card: resCardFromHand[cardIndex],
-        isEmpty: false,
-        user: sessionStorage.getItem("player"),
-       }),
+    try {
+      if (cardIndex === undefined) {
+        console.error("cardIndex is undefined");
+        return;
       }
-     );
 
-     if (!resUpdCardOnTable.ok) {
-      throw new Error("не удалось обновить данные на столе в бд");
-     }
+      console.log("index ячейки в руке cardIndex", cardIndex);
 
-     const resUpdCardFromTable = await resUpdCardOnTable.json();
-     setTable(resUpdCardFromTable);
+      if (placePickCard === "table") {
+        // отправим запрос на получение данных
+        const resCardPickOnTableId = await fetch(
+          apiUrl + `/api/table/${casePickTableId}`
+        );
 
-     //=============== запрос на обновление данных в руке
-     const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/filter", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-       user: sessionStorage.getItem("player"),
-       cardIndex: Number(cardIndex),
-      }),
-     });
-
-     if (!resUpdCardOnHand.ok) {
-      throw new Error("не получилось обновить данные в руке");
-     }
-
-     const updatedCardFromHand = await resUpdCardOnHand.json();
-     setHand(updatedCardFromHand);
-    }
-   }
-  } catch (error) {
-   console.error("Error:", error);
-  }
- };
- //================Drag==============//
-
- return (
-  <div>
-   <SelectPlayer />
-   <Background>
-    <TableContainer>
-     {table
-      ?.sort((a, b) => a._id - b._id)
-      .map((item, index) => (
-       <div
-        key={index}
-        draggable={!item.isEmpty}
-        onDragStart={(e) =>
-         handleDragStart({
-          e,
-          casePickTableId: item._id,
-          cardId: item.card?._id ?? null,
-          placePickCard: "table",
-         })
+        if (!resCardPickOnTableId.ok) {
+          throw new Error("ошибка получения запроса по id со стола");
         }
-        onDragOver={handleDragOver}
-        onDrop={(e) =>
-         handleDrop({ e, casePutTableId: item._id, placePutCard: "table" })
-        }
-       >
-        <Card item={item} />
-       </div>
-      ))}
-    </TableContainer>
-    <Chat />
-   </Background>
 
-   <SelectDeck
-    hand={hand}
-    setHand={setHand}
-    handleDragStart={handleDragStart}
-    handleDragOver={handleDragOver}
-    handleDrop={handleDrop}
-   />
-  </div>
- );
+        const resCardFromTableId = await resCardPickOnTableId.json();
+        console.log(
+          `получение данных с ячейки с ${casePickTableId} сервера resCardFromTableId`,
+          resCardFromTableId
+        );
+
+        if (placePutCard === "table") {
+          console.log("сработал if положить со стола на стол");
+          // отправим запрос на обновление данных
+          const resUpdCardOnTable = await fetch(
+            apiUrl + `/api/table/${casePutTableId}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                placePickCard: placePickCard, // место откуда берем карту стол или рука
+                placePutCard: placePutCard, // место куда кладем карту стол или рука
+                casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+                casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+                card: resCardFromTableId.card,
+                card_state: resCardFromTableId.card_state,
+                isEmpty: false,
+                user: sessionStorage.getItem("player"),
+              }),
+            }
+          );
+
+          if (!resUpdCardOnTable.ok) {
+            throw new Error("Не получилось обновить данные в БД");
+          }
+
+          const updatedCardOnTable = await resUpdCardOnTable.json();
+          setTable(updatedCardOnTable);
+          //  longPull();
+          console.log(
+            `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
+            updatedCardOnTable
+          );
+        } else if (placePutCard === "hand") {
+          const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/update", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user: sessionStorage.getItem("player"),
+              card: resCardFromTableId.card,
+            }),
+          });
+
+          if (!resUpdCardOnHand.ok) {
+            throw new Error("Не получилось обновить данные руки на сервере");
+          }
+
+          const resCardFromHand = await resUpdCardOnHand.json();
+          setHand(resCardFromHand);
+          console.log("resCardFromHand", resCardFromHand);
+
+          const resUpdCardOnTable = await fetch(
+            apiUrl + `/api/table/${casePickTableId}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                placePickCard: placePickCard, // место откуда берем карту стол или рука
+                placePutCard: placePutCard, // место куда кладем карту стол или рука
+                casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+                casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+                isEmpty: true,
+              }),
+            }
+          );
+
+          if (!resUpdCardOnTable.ok) {
+            throw new Error(
+              "Не удалось обновить стол, очистить ячейку от карты"
+            );
+          }
+
+          const updatedCardOnTable = await resUpdCardOnTable.json();
+          setTable(updatedCardOnTable);
+        }
+      } else if (placePickCard === "hand") {
+        console.log("взяли карту с руки");
+
+        const resCardOnHand = await fetch(apiUrl + "/api/hand/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user: sessionStorage.getItem("player"),
+          }),
+        });
+
+        if (!resCardOnHand.ok) {
+          throw new Error("Не получилось получить данные с руки");
+        }
+
+        const resCardFromHand = await resCardOnHand.json();
+        console.log("resCardFromHand[cardindex]", resCardFromHand[cardIndex]);
+
+        if (placePutCard === "hand") {
+          console.log("сработал if взяли с руки и положили в руку");
+        } else if (placePutCard === "table") {
+          console.log("сработал if взяли карту с руки и положили на стол");
+
+          const resUpdCardOnTable = await fetch(
+            apiUrl + `/api/table/${casePutTableId}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                placePickCard: placePickCard, // место откуда берем карту стол или рука
+                placePutCard: placePutCard, // место куда кладем карту стол или рука
+                casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+                casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+                card: resCardFromHand[cardIndex],
+                isEmpty: false,
+                user: sessionStorage.getItem("player"),
+              }),
+            }
+          );
+
+          if (!resUpdCardOnTable.ok) {
+            throw new Error("не удалось обновить данные на столе в бд");
+          }
+
+          const resUpdCardFromTable = await resUpdCardOnTable.json();
+          setTable(resUpdCardFromTable);
+
+          //=============== запрос на обновление данных в руке
+          const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/filter", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user: sessionStorage.getItem("player"),
+              cardIndex: Number(cardIndex),
+            }),
+          });
+
+          if (!resUpdCardOnHand.ok) {
+            throw new Error("не получилось обновить данные в руке");
+          }
+
+          const updatedCardFromHand = await resUpdCardOnHand.json();
+          setHand(updatedCardFromHand);
+        }
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+  //================Drag==============//
+
+  return (
+    <div>
+      <SelectPlayer />
+      <Background>
+        <TableContainer>
+          <Border />
+          {table
+            ?.sort((a, b) => a._id - b._id)
+            .map((item, index) => (
+              <div
+                key={index}
+                draggable={!item.isEmpty}
+                onDragStart={(e) =>
+                  handleDragStart({
+                    e,
+                    casePickTableId: item._id,
+                    cardId: item.card?._id ?? null,
+                    placePickCard: "table",
+                  })
+                }
+                onDragOver={handleDragOver}
+                onDrop={(e) =>
+                  handleDrop({
+                    e,
+                    casePutTableId: item._id,
+                    placePutCard: "table",
+                  })
+                }
+              >
+                <Card item={item} index={index}/>
+              </div>
+            ))}
+        </TableContainer>
+        <Chat />
+      </Background>
+
+      <SelectDeck
+        hand={hand}
+        setHand={setHand}
+        handleDragStart={handleDragStart}
+        handleDragOver={handleDragOver}
+        handleDrop={handleDrop}
+      />
+    </div>
+  );
 };
 
 export default Home;

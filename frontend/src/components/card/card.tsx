@@ -2,202 +2,237 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import DropMenu from "./drop__menu/drop__menu";
 import SideStatus from "./side_status/side_status";
+import { GiSeaDragon } from "react-icons/gi";
+import { GiWillowTree } from "react-icons/gi";
+import { FaCross } from "react-icons/fa";
+import { GiBatteredAxe } from "react-icons/gi";
+import { GiCardBurn } from "react-icons/gi";
+
+
 
 const Component = styled.div<{
- $empty?: boolean;
- $user: string;
- $isZoom: boolean;
+  $empty?: boolean;
+  $user: string;
+  $isZoom: boolean;
 }>`
- height: 160px;
- position: relative;
- border: 5px solid
-  ${(prop) =>
-   prop.$user === "player1"
-    ? "#705601"
-    : prop.$user === "player2"
-    ? "#5c0911"
-    : "transparent"};
- border-radius: 12px;
- transition: transform 0.3s ease;
- outline: 1px solid black;
+  height: 160px;
+  position: relative;
+  border: 5px solid
+    ${(prop) =>
+      prop.$user === "player1"
+        ? "#705601"
+        : prop.$user === "player2"
+        ? "#5c0911"
+        : "transparent"};
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+  outline: 1px solid black;
 
- transform: ${(isZoom) => isZoom.$isZoom && "scale(2.4)"};
- z-index: ${(isZoom) => isZoom.$isZoom && 1};
+  transform: ${(isZoom) => isZoom.$isZoom && "scale(2.4)"};
+  z-index: ${(isZoom) => isZoom.$isZoom && 1};
 
- cursor: ${(isEmpty) => !isEmpty.$empty && "pointer"};
+  cursor: ${(isEmpty) => !isEmpty.$empty && "pointer"};
 `;
 
 const Image = styled.img<{ $step_over?: boolean }>`
- border-radius: 8px;
- width: 100%;
- height: 100%;
- filter: ${(prop) => prop.$step_over && "brightness(50%)"};
+  border-radius: 10px;
+  border: 1px solid #bebebe;
+  width: 100%;
+  height: 100%;
+  filter: ${(prop) => prop.$step_over && "brightness(50%)"};
 `;
 
 const ImageEye = styled.img`
- width: 30px;
- height: 30px;
- border-radius: 50%;
- border: 1px solid #ece9ce;
- position: absolute;
- bottom: -12px;
- left: -12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid #ece9ce;
+  position: absolute;
+  bottom: -12px;
+  left: -12px;
 `;
 
 const ImageCross = styled.img`
- width: 100%;
- height: 100%;
- border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
 `;
 
 const Button = styled.button`
- position: absolute;
- top: 5px;
- right: -10px;
- width: 20px;
- height: 20px;
- border: 1px solid #bebebe;
- border-radius: 6px;
- cursor: pointer;
- &:hover {
-  border: 1px solid red;
- }
+  position: absolute;
+  top: 5px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #bebebe;
+  border-radius: 6px;
+  cursor: pointer;
+  &:hover {
+    border: 1px solid red;
+  }
 `;
 
 const Background = styled.div`
- border-radius: 8px;
- background: rgba(0, 0, 0, 0.605);
- width: 100%;
- height: 100%;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.605);
+  width: 100%;
+  height: 100%;
 `;
 
+const Dragon = styled(GiSeaDragon)`
+  display: flex;
+  margin: auto;
+  width: 100px;
+  height: 100%;
+  color: #4d4d4d;
+`;
+
+const Place = styled(Dragon).attrs({ as: GiWillowTree })``;
+const Cross = styled(Dragon).attrs({ as: FaCross })``;
+const Banish = styled(Dragon).attrs({ as: GiBatteredAxe })``;
+const Deck = styled(Dragon).attrs({ as: GiCardBurn })``;
+
 interface ICard {
- _id: string;
- url: string;
- name: string;
+  _id: string;
+  url: string;
+  name: string;
 }
 
 interface ICardState {
- have_damaged: number | null;
- poison: number | null;
- blood: number | null;
- armor: number | null;
- stack: number | null;
- fire: number | null;
- closed: boolean | string;
- step_over: boolean;
- step_skip: boolean;
+  have_damaged: number | null;
+  poison: number | null;
+  blood: number | null;
+  armor: number | null;
+  stack: number | null;
+  fire: number | null;
+  closed: boolean | string;
+  step_over: boolean;
+  step_skip: boolean;
 }
 
 interface ICardTable {
- _id: number;
- isEmpty: boolean;
- user: string;
- card?: ICard | null;
- card_state?: ICardState | null;
+  _id: number;
+  isEmpty: boolean;
+  user: string;
+  card?: ICard | null;
+  card_state?: ICardState | null;
 }
 
 interface ICardProps {
- item: ICardTable;
+  item: ICardTable;
+  index: number;
 }
 
-const Card: React.FC<ICardProps> = ({ item }) => {
- const [isOpen, setIsOpen] = useState(false);
- const [isZoom, setIsZoom] = useState(false);
- const dropdownRef = useRef<HTMLDivElement>(null);
- const cardRef = useRef<HTMLDivElement>(null);
+const Card: React.FC<ICardProps> = ({ item, index }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [isZoom, setIsZoom] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
- // Переключаем состояние Zoom
- const handleIsZoom = () => {
-  if (!item.isEmpty) setIsZoom((prevZoom) => !prevZoom);
- };
-
- // Открытие/закрытие меню
- const toggleDropDown = (e: React.MouseEvent<HTMLButtonElement>) => {
-  e.stopPropagation();
-  setIsOpen((prev) => !prev);
- };
-
- useEffect(() => {
-  const handleClickCard = (e: MouseEvent) => {
-   if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
-    setIsZoom(false);
-   }
+  // Переключаем состояние Zoom
+  const handleIsZoom = () => {
+    if (!item.isEmpty) setIsZoom((prevZoom) => !prevZoom);
   };
 
-  if (isZoom) {
-   document.addEventListener("mousedown", handleClickCard);
-  } else {
-   document.removeEventListener("mousedown", handleClickCard);
-  }
-
-  return () => {
-   document.removeEventListener("mousedown", handleClickCard);
-  };
- }, [isZoom]);
-
- useEffect(() => {
-  const handleClickOutside = (e: MouseEvent) => {
-   if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-    setIsOpen(false);
-   }
+  // Открытие/закрытие меню
+  const toggleDropDown = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsOpen((prev) => !prev);
   };
 
-  if (isOpen) {
-   document.addEventListener("mousedown", handleClickOutside);
-  } else {
-   document.removeEventListener("mousedown", handleClickOutside);
-  }
+  useEffect(() => {
+    const handleClickCard = (e: MouseEvent) => {
+      if (cardRef.current && !cardRef.current.contains(e.target as Node)) {
+        setIsZoom(false);
+      }
+    };
 
-  return () => {
-   document.removeEventListener("mousedown", handleClickOutside);
-  };
- }, [isOpen]);
+    if (isZoom) {
+      document.addEventListener("mousedown", handleClickCard);
+    } else {
+      document.removeEventListener("mousedown", handleClickCard);
+    }
 
- return (
-  <Component
-   $empty={item.isEmpty}
-   $user={item.user}
-   id={item._id.toString()}
-   $isZoom={!item.isEmpty && isZoom}
-   onClick={handleIsZoom}
-   ref={cardRef}
-  >
-   {!item.isEmpty && (
-    <>
-     {item.user === sessionStorage.getItem("player") ||
-     !item.card_state?.closed ? (
-      <>
-       <Image
-        src={item.card?.url}
-        alt={item.card?.name}
-        $step_over={item.card_state?.step_over}
-        loading="lazy"
-       />
-       <SideStatus item={item} />
-      </>
-     ) : (
-      <Image src="/image/t_shirt.jpg" alt="Closed card" />
-     )}
-     {!isOpen && (
-      <Button onClick={toggleDropDown}>
-       <ImageCross src="/image/misc/cross.jpg" />
-      </Button>
-     )}
-     {isOpen && (
-      <Button onClick={() => setIsOpen(false)}>
-       <ImageCross src="/image/misc/cross.jpg" />
-      </Button>
-     )}
-     {isOpen && <DropMenu item={item} ref={dropdownRef} />}
-     {item.card_state?.closed && (
-      <ImageEye src="/image/misc/eye.jpg" alt="eye" />
-     )}
-    </>
-   )}
-   {item.isEmpty && <Background />}
-  </Component>
- );
+    return () => {
+      document.removeEventListener("mousedown", handleClickCard);
+    };
+  }, [isZoom]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
+
+  return (
+    <Component
+      $empty={item.isEmpty}
+      $user={item.user}
+      id={item._id.toString()}
+      $isZoom={!item.isEmpty && isZoom}
+      onClick={handleIsZoom}
+      ref={cardRef}
+    >
+      {!item.isEmpty && (
+        <>
+          {item.user === sessionStorage.getItem("player") ||
+          !item.card_state?.closed ? (
+            <>
+              <Image
+                src={item.card?.url}
+                alt={item.card?.name}
+                $step_over={item.card_state?.step_over}
+                loading="lazy"
+              />
+              <SideStatus item={item} />
+            </>
+          ) : (
+            <Image src="/image/t_shirt.jpg" alt="Closed card" />
+          )}
+          {!isOpen && (
+            <Button onClick={toggleDropDown}>
+              <ImageCross src="/image/misc/cross.jpg" />
+            </Button>
+          )}
+          {isOpen && (
+            <Button onClick={() => setIsOpen(false)}>
+              <ImageCross src="/image/misc/cross.jpg" />
+            </Button>
+          )}
+          {isOpen && <DropMenu item={item} ref={dropdownRef} />}
+          {item.card_state?.closed && (
+            <ImageEye src="/image/misc/eye.jpg" alt="eye" />
+          )}
+        </>
+      )}
+      {item.isEmpty && (
+        <>
+          <Background>
+            {[0, 7, 34, 41].includes(index) && <Dragon />}
+            {[14, 27].includes(index) && <Place />}
+            {[20, 21].includes(index) && <Cross />}
+            {[13, 28].includes(index) && <Banish />}
+            {[6, 35].includes(index) && <Deck />}
+          </Background>
+        </>
+      )}
+    </Component>
+  );
 };
 
 export default Card;

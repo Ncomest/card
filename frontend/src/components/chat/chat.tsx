@@ -13,13 +13,8 @@ const Container = styled.div`
 `;
 
 const Component = styled.div`
- z-index: 1;
- /* position: absolute; */
- bottom: 0;
- right: 0;
- width: 400px;
+ width: 340px; 
  height: 300px;
- /* margin: 20px; */
  padding: 20px;
  border-radius: 5px;
  border: 3px solid #bebebe;
