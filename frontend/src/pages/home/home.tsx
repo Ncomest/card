@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import axios from "axios";
+import { site } from "../../site_state.js";
+import styled from "styled-components";
+
 import SelectPlayer from "../../components/select_player/select_player";
 import SelectDeck from "../../components/select_deck/select_deck";
-import styled from "styled-components";
 import Card from "../../components/card/card";
-import { site } from "../../site_state.js";
 import Chat from "../../components/chat/chat";
-import axios from "axios";
+import Rules from "../../components/rules/rules";
+import DropRules from "../../components/rules/drop_rules/drop_rules";
 
 const Background = styled.div`
   background: none;
@@ -53,9 +56,9 @@ const Border = styled.div`
   height: 100%;
   background-color: #ffffff40;
 
-  &::after{
-    content: '';
-    position:absolute;
+  &::after {
+    content: "";
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -411,10 +414,11 @@ const Home: React.FC = () => {
                   })
                 }
               >
-                <Card item={item} index={index}/>
+                <Card item={item} index={index} />
               </div>
             ))}
         </TableContainer>
+        <DropRules />
         <Chat />
       </Background>
 
@@ -425,6 +429,7 @@ const Home: React.FC = () => {
         handleDragOver={handleDragOver}
         handleDrop={handleDrop}
       />
+      <Rules />
     </div>
   );
 };
