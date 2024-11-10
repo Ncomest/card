@@ -11,9 +11,11 @@ import Rules from "../../components/rules/rules";
 import DropRules from "../../components/rules/drop_rules/drop_rules";
 
 const Background = styled.div`
+  padding: 10px;
   background: none;
   position: relative;
   display: flex;
+  overflow-x: hidden;
   &::before {
     background-image: url("/image/misc/background.jpg");
     background-repeat: no-repeat;
@@ -32,14 +34,11 @@ const Background = styled.div`
 
 const TableContainer = styled.div`
   position: relative;
-  border-radius: 10px;
-  border: 5px solid #000000;
-  outline: 1px wheat;
-  flex: 75%;
   min-height: 100vh;
-  max-width: 1000px;
-  margin: 100px 0 110px 80px;
+  width: 100%;
   padding: 10px;
+  border: 5px solid #000;
+  border-radius: 10px;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: repeat(3, 1fr);
@@ -52,7 +51,7 @@ const Border = styled.div`
   top: 0;
   left: 50%;
   transform: translate(-50%);
-  width: 700px;
+  width: 71%;
   height: 100%;
   background-color: #ffffff40;
 
@@ -66,6 +65,18 @@ const Border = styled.div`
     height: 6px;
     background-color: #bebebe;
   }
+`;
+
+const RightSide = styled.div`
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  height: 100vh;
+  top: 0;
+  right: 0;
+  width: 30%;
+  background: #0b0b0b;
 `;
 
 interface ICard {
@@ -131,7 +142,7 @@ const Home: React.FC = () => {
 
         setTimeout(() => {
           if (longPullActive.current) longPull();
-        }, 2000);
+        }, 1000);
       } else {
         console.error("Ошибка получения обновлений:", res.statusText);
         setTimeout(longPull, 500);
@@ -387,49 +398,53 @@ const Home: React.FC = () => {
 
   return (
     <div>
-      <SelectPlayer />
-      <Background>
-        <TableContainer>
-          <Border />
-          {table
-            ?.sort((a, b) => a._id - b._id)
-            .map((item, index) => (
-              <div
-                key={index}
-                draggable={!item.isEmpty}
-                onDragStart={(e) =>
-                  handleDragStart({
-                    e,
-                    casePickTableId: item._id,
-                    cardId: item.card?._id ?? null,
-                    placePickCard: "table",
-                  })
-                }
-                onDragOver={handleDragOver}
-                onDrop={(e) =>
-                  handleDrop({
-                    e,
-                    casePutTableId: item._id,
-                    placePutCard: "table",
-                  })
-                }
-              >
-                <Card item={item} index={index} />
-              </div>
-            ))}
-        </TableContainer>
+      <div style={{ width: "70%" }}>
+        <SelectPlayer />
+        <Background>
+          <TableContainer>
+            <Border />
+            {table
+              ?.sort((a, b) => a._id - b._id)
+              .map((item, index) => (
+                <div
+                  key={index}
+                  draggable={!item.isEmpty}
+                  onDragStart={(e) =>
+                    handleDragStart({
+                      e,
+                      casePickTableId: item._id,
+                      cardId: item.card?._id ?? null,
+                      placePickCard: "table",
+                    })
+                  }
+                  onDragOver={handleDragOver}
+                  onDrop={(e) =>
+                    handleDrop({
+                      e,
+                      casePutTableId: item._id,
+                      placePutCard: "table",
+                    })
+                  }
+                >
+                  <Card item={item} index={index} />
+                </div>
+              ))}
+          </TableContainer>
+        </Background>
+
+        <SelectDeck
+          hand={hand}
+          setHand={setHand}
+          handleDragStart={handleDragStart}
+          handleDragOver={handleDragOver}
+          handleDrop={handleDrop}
+        />
+        <Rules />
+      </div>
+      <RightSide>
         <DropRules />
         <Chat />
-      </Background>
-
-      <SelectDeck
-        hand={hand}
-        setHand={setHand}
-        handleDragStart={handleDragStart}
-        handleDragOver={handleDragOver}
-        handleDrop={handleDrop}
-      />
-      <Rules />
+      </RightSide>
     </div>
   );
 };

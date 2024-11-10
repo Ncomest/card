@@ -7,9 +7,9 @@ const Component = styled.div`
 `;
 
 const Title = styled.div`
-font-weight: 600;
+  font-weight: 600;
   font-size: 18px;
-  color: #af0000;
+  color: #000;
   /* white-space: nowrap; */
 `;
 
@@ -17,7 +17,7 @@ const Txt = styled.p`
   /* letter-spacing: 1px; */
   font-size: 16px;
   font-weight: 400;
-  color: #bebebe;
+  color: #313131;
 `;
 
 const Icon = styled.div``;

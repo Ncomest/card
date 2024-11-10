@@ -1,35 +1,36 @@
 import styled from "styled-components";
-import Helper from "./helper";
-import Note from "./note";
 import { useState } from "react";
+import Note from "./note";
+import BattlesDice from "./battles_dice";
+import Coins from "./coins";
+import Position from "./position";
 
 const Comnponent = styled.div`
-  flex: 1;
+  overflow-y: scroll;
+  scrollbar-color: #bebebe #000;
+  scrollbar-width: none;
   padding: 10px;
-  justify-content: center;
+  flex: 1;
 `;
 
 const DropItem = styled.div`
-  padding: 10px;
-  background-color: #f4f4f4;
+  padding: 5px 10px;
+  background-color: #242424ab;
+  border-radius: 5px;
   margin: 5px 0;
   cursor: pointer;
   border: 1px solid #ccc;
+
   &:hover {
-    background-color: #e0e0e0;
+    background-color: #626262c3;
   }
 `;
 
-const Title = styled.div`
-  font-weight: bold;
-  margin-bottom: 5px;
-  font-size: 16px;
-  color: #333;
-`;
-
 const components = [
-  { name: "helper", Component: Helper, title: "подсказки" },
-  { name: "note", Component: Note, title: "заметки" },
+  { name: "coins", Component: Coins, title: "Монетки" },
+  { name: "battles", Component: BattlesDice, title: "Сражение и броски" },
+  { name: "position", Component: Position, title: "Позициониравние и атаки" },
+  // { name: "note", Component: Note, title: "Заметки" },
 ];
 
 const DropRules = () => {
@@ -43,12 +44,9 @@ const DropRules = () => {
     <Comnponent>
       {components.map(({ name, Component, title }) => (
         <DropItem key={name} onClick={() => handleToggle(name)}>
-          <Title>{title}</Title>
-          <Component isOpen={isOpen === name} />
+          <Component isOpen={isOpen === name} title={title} />
         </DropItem>
       ))}
-      <Helper />
-      <Note />
     </Comnponent>
   );
 };

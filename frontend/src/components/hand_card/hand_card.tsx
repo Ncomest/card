@@ -8,14 +8,14 @@ interface IHandCard {
 const Component = styled.div`
  position: relative;
  width: 100%;
- height: 180px;
+ height: 150px;
  border: 1px solid #fff;
  border-radius: 5px;
  transition: transform 0.3s ease;
 
  &:hover {
   z-index: 2;
-  transform: scale(2.4);
+  transform: scale(3);
  }
 `;
 
