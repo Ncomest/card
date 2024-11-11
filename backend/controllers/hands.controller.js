@@ -86,7 +86,6 @@ const refreshHandsCard = async (req, res) => {
 const filterHandsCard = async (req, res) => {
  try {
   const data = req.body;
-  console.log("данные которые получил сервер data", data);
   if (data.user === "player1") {
    handArrP1 = handArrP1.filter((_, index) => index !== Number(data.cardIndex));
    return res.status(200).json(handArrP1);
