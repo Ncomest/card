@@ -118,7 +118,6 @@ interface IDrag {
 const Home: React.FC = () => {
   const [table, setTable] = useState<ICardTable[]>([]);
   const [hand, setHand] = useState<ICard[]>([]);
-  const [isDrag, setIsDrag] = useState(false);
 
   const longPullActive = useRef(true);
 
@@ -188,7 +187,6 @@ const Home: React.FC = () => {
     placePickCard,
     cardIndex,
   }: IDrag) => {
-    setIsDrag(true);
     // Передаем данные о карте через dataTransfer
     e.dataTransfer.setData("casePickTableId", casePickTableId);
     e.dataTransfer.setData("placePickCard", placePickCard);
@@ -199,10 +197,6 @@ const Home: React.FC = () => {
     if (cardId) {
       e.dataTransfer.setData("cardId", cardId);
     }
-  };
-
-  const handleDragEnd = () => {
-    setIsDrag(false);
   };
 
   const handleDragOver = (e: any) => {
@@ -424,7 +418,6 @@ const Home: React.FC = () => {
                       placePickCard: "table",
                     })
                   }
-                  onDragEnd={handleDragEnd}
                   onDragOver={handleDragOver}
                   onDrop={(e) =>
                     handleDrop({
@@ -434,7 +427,7 @@ const Home: React.FC = () => {
                     })
                   }
                 >
-                  <Card item={item} index={index} isDrag={isDrag} />
+                  <Card item={item} index={index} />
                 </div>
               ))}
           </TableContainer>
