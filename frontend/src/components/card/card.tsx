@@ -8,12 +8,12 @@ import { FaCross } from "react-icons/fa";
 import { GiBatteredAxe } from "react-icons/gi";
 import { GiCardBurn } from "react-icons/gi";
 
-
-
 const Component = styled.div<{
   $empty?: boolean;
   $user: string;
   $isZoom: boolean;
+  $itemId: any;
+  $isDrag: boolean;
 }>`
   height: 160px;
   position: relative;
@@ -28,8 +28,38 @@ const Component = styled.div<{
   transition: transform 0.3s ease;
   outline: 1px solid black;
 
-  transform: ${(isZoom) => isZoom.$isZoom && "scale(2.4)"};
-  z-index: ${(isZoom) => isZoom.$isZoom && 1};
+  transform: ${(prop) => {
+    if (prop.$isDrag) {
+      return "scale(1), translate(0, 0)";
+    }
+
+    if (prop.$isZoom) {
+      switch (true) {
+        case [2, 3, 4, 5, 6].includes(prop.$itemId):
+          return "scale(2.4) translateY(30%)";
+        case [37, 38, 39, 40].includes(prop.$itemId):
+          return "scale(2.4) translateY(-30%)";
+        case [8, 15, 22, 29].includes(prop.$itemId):
+          return "scale(2.4) translateX(30%)";
+        case [14, 21, 28, 35].includes(prop.$itemId):
+          return "scale(2.4) translateX(-30%)";
+        case [1].includes(prop.$itemId):
+          return "scale(2.4) translate(30%, 30%)";
+        case [7].includes(prop.$itemId):
+          return "scale(2.4) translate(-30%, 30%)";
+        case [36].includes(prop.$itemId):
+          return "scale(2.4) translate(30%, -30%)";
+        case [42].includes(prop.$itemId):
+          return "scale(2.4) translate(-30%, -30%)";
+        default:
+          return "scale(2.4) translate(0, 0)";
+      }
+    }
+    // [1, 8, 15, 22, 29, 36].includes(prop.$itemId) &&
+    //   prop.$isZoom &&
+    //   "scale(2.4) translateX(50%)";
+  }};
+  z-index: ${(prop) => prop.$isZoom && 1};
 
   cursor: ${(isEmpty) => !isEmpty.$empty && "pointer"};
 `;
@@ -73,16 +103,17 @@ const Button = styled.button`
 `;
 
 const Background = styled.div`
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.605);
   width: 100%;
   height: 100%;
+  border-radius: 8px;
+  padding: 5px;
+  background: rgba(0, 0, 0, 0.605);
 `;
 
 const Dragon = styled(GiSeaDragon)`
   display: flex;
   margin: auto;
-  width: 100px;
+  width: 100%;
   height: 100%;
   color: #4d4d4d;
 `;
@@ -121,9 +152,10 @@ interface ICardTable {
 interface ICardProps {
   item: ICardTable;
   index: number;
+  isDrag: any;
 }
 
-const Card: React.FC<ICardProps> = ({ item, index }) => {
+const Card: React.FC<ICardProps> = ({ item, index, isDrag }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isZoom, setIsZoom] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -181,10 +213,12 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
 
   return (
     <Component
+      $itemId={item._id}
       $empty={item.isEmpty}
       $user={item.user}
       id={item._id.toString()}
       $isZoom={!item.isEmpty && isZoom}
+      $isDrag={isDrag}
       onClick={handleIsZoom}
       ref={cardRef}
     >
