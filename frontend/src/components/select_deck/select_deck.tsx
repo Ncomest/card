@@ -6,13 +6,13 @@ import { StyledButton } from "../../style/global.style";
 
 const Component = styled.div`
   background: #0b0b0b;
-  padding: 20px 0 100px 0;
   overflow: hidden;
 `;
 
 const Hand = styled.div`
+  overflow: hidden;
   margin: 0 auto;
-  padding: 10px;
+  padding: 60px 10px;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(2, 1fr);
@@ -137,7 +137,8 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
               })
             }
           >
-            <HandCard card={card} />
+            <HandCard card={card} index={index} 
+            />
           </div>
         ))}
       </Hand>
