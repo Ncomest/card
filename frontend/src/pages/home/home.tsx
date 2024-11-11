@@ -434,7 +434,7 @@ const Home: React.FC = () => {
                     })
                   }
                 >
-                  <Card item={item} index={index} isDrag={isDrag}/>
+                  <Card item={item} index={index} isDrag={isDrag} />
                 </div>
               ))}
           </TableContainer>

@@ -14,7 +14,7 @@ const Hand = styled.div`
   margin: 0 auto;
   padding: 10px;
   display: grid;
-  grid-template-columns: repeat(10, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 10px;
   border: 1px solid;

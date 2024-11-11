@@ -18,7 +18,7 @@ const getHandsCard = async (req, res) => {
 
 const randomCard = (arr) => {
  arr = arr.sort(() => Math.random() - 0.5);
- return arr.slice(0, 20);
+ return arr.slice(0, 16);
 };
 
 //helper for addHandsCard

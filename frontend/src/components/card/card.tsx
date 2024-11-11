@@ -17,6 +17,12 @@ const Component = styled.div<{
 }>`
   height: 160px;
   position: relative;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+  outline: 1px solid black;
+  z-index: ${(prop) => prop.$isZoom && 1};
+  cursor: ${(prop) => !prop.$empty && "pointer"};
+
   border: 5px solid
     ${(prop) =>
       prop.$user === "player1"
@@ -24,14 +30,9 @@ const Component = styled.div<{
         : prop.$user === "player2"
         ? "#5c0911"
         : "transparent"};
-  border-radius: 15px;
-  transition: transform 0.3s ease;
-  outline: 1px solid black;
 
   transform: ${(prop) => {
-    if (prop.$isDrag) {
-      return "scale(1), translate(0, 0)";
-    }
+    if (prop.$isDrag) return "scale(1), translate(0, 0)";
 
     if (prop.$isZoom) {
       switch (true) {
@@ -55,13 +56,7 @@ const Component = styled.div<{
           return "scale(2.4) translate(0, 0)";
       }
     }
-    // [1, 8, 15, 22, 29, 36].includes(prop.$itemId) &&
-    //   prop.$isZoom &&
-    //   "scale(2.4) translateX(50%)";
   }};
-  z-index: ${(prop) => prop.$isZoom && 1};
-
-  cursor: ${(isEmpty) => !isEmpty.$empty && "pointer"};
 `;
 
 const Image = styled.img<{ $step_over?: boolean }>`
@@ -152,7 +147,7 @@ interface ICardTable {
 interface ICardProps {
   item: ICardTable;
   index: number;
-  isDrag: any;
+  isDrag: boolean;
 }
 
 const Card: React.FC<ICardProps> = ({ item, index, isDrag }) => {
