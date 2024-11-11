@@ -38,7 +38,7 @@ const Component = styled.div<{
       switch (true) {
         case [2, 3, 4, 5, 6].includes(prop.$itemId):
           return "scale(2.4) translateY(30%)";
-        case [37, 38, 39, 40].includes(prop.$itemId):
+        case [37, 38, 39, 40, 41].includes(prop.$itemId):
           return "scale(2.4) translateY(-30%)";
         case [8, 15, 22, 29].includes(prop.$itemId):
           return "scale(2.4) translateX(30%)";
@@ -147,18 +147,26 @@ interface ICardTable {
 interface ICardProps {
   item: ICardTable;
   index: number;
-  isDrag: boolean;
 }
 
-const Card: React.FC<ICardProps> = ({ item, index, isDrag }) => {
+const Card: React.FC<ICardProps> = ({ item, index }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isZoom, setIsZoom] = useState(false);
+  const [isDraggs, setIsDraggs] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Переключаем состояние Zoom
   const handleIsZoom = () => {
     if (!item.isEmpty) setIsZoom((prevZoom) => !prevZoom);
+  };
+
+  const handleDragStart = () => {
+    setIsDraggs(true);
+  };
+
+  const handleDragEnd = () => {
+    setIsDraggs(false);
   };
 
   // Открытие/закрытие меню
@@ -213,7 +221,9 @@ const Card: React.FC<ICardProps> = ({ item, index, isDrag }) => {
       $user={item.user}
       id={item._id.toString()}
       $isZoom={!item.isEmpty && isZoom}
-      $isDrag={isDrag}
+      $isDrag={isDraggs}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       onClick={handleIsZoom}
       ref={cardRef}
     >
