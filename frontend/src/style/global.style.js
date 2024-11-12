@@ -12,6 +12,7 @@ export const GlobalStyles = createGlobalStyle`
   }
 `;
 
+
 export const StyledButton = styled.button`
   font-family: "Cinzel", serif;
   font-size: 18px;

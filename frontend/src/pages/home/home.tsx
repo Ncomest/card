@@ -44,6 +44,11 @@ const TableContainer = styled.div`
   grid-template-rows: repeat(3, 1fr);
   gap: 10px;
   background: rgba(0, 0, 0, 0.25);
+  @media (max-width: 768px) {
+    gap: 5px;
+    border: 2px solid #000;
+    border-radius: 5px;
+  }
 `;
 
 const Border = styled.div`

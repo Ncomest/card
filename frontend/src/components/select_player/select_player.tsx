@@ -27,7 +27,6 @@ function SelectPlayer() {
     const fetchPlayerStatus = async () => {
       try {
         const res = await axios.get(apiUrl + "/api/player");
-        console.log(res.data, "fetchstatusplayer");
         setIsPlayer(res.data);
       } catch (error) {
         console.error("Ошибка при получении статуса:", error);
