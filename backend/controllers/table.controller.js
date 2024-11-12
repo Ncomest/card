@@ -44,7 +44,6 @@ const createTableBox = async (req, res) => {
 };
 
 const updateTableBox = async (req, res) => {
- console.log("upd work");
  try {
   const { id } = req.params;
   const data = req.body;
@@ -138,7 +137,6 @@ const updateTableBox = async (req, res) => {
 
   //======установить-состояние-для-карты======>//
   if (data.set_state == "setstate") {
-   console.log(data, "setstate");
    const currCardState = data.currCardState;
    const value = data.value;
 
