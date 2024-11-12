@@ -7,15 +7,15 @@ import { GiWillowTree } from "react-icons/gi";
 import { FaCross } from "react-icons/fa";
 import { GiBatteredAxe } from "react-icons/gi";
 import { GiCardBurn } from "react-icons/gi";
+import { cardSize } from "../../style/global.style";
 
-const Component = styled.div<{
+const Component = styled(cardSize)<{
   $empty?: boolean;
   $user: string;
   $isZoom: boolean;
   $itemId: any;
   $isDrag: boolean;
 }>`
-  height: 160px;
   position: relative;
   border-radius: 15px;
   transition: transform 0.3s ease;

@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import { IDeck } from "../select_deck/select_deck";
 import { useEffect, useRef, useState } from "react";
+import { cardSize } from "../../style/global.style";
 
-const Component = styled.div<{
+const Component = styled(cardSize)<{
   $isZoom: boolean;
   $index: number;
   $isDrag: boolean;
 }>`
   position: relative;
   width: 100%;
-  height: 150px;
   border: 1px solid #fff;
   border-radius: 5px;
   transition: transform 0.3s ease;
@@ -71,7 +71,7 @@ const HandCard: React.FC<IHandCard> = ({ card, index }) => {
   const handleDragStart = () => {
     setIsDragging(true);
   };
-  
+
   const handleDragEnd = () => {
     setIsDragging(true);
   };

@@ -50,3 +50,20 @@ export const StyledButton = styled.button`
     position: relative;
   }
 `;
+
+export const cardSize = styled.div`
+  height: 300px;
+
+  @media (max-width: 1920px) {
+    height: 200px;
+  }
+  @media (max-width: 1440px) {
+    height: 160px;
+  }
+  @media (max-width: 1024px) {
+    height: 120px;
+  }
+  @media (max-width: 768px) {
+    height: 80px;
+  }
+`;

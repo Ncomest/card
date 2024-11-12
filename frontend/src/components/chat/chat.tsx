@@ -3,7 +3,7 @@ import styled from "styled-components";
 import DiceRoll from "../dice_roll/dice_roll";
 
 const Container = styled.div`
-  flex: 1;
+  flex: 0;
   margin: 5px;
   z-index: 1;
 `;
@@ -20,6 +20,13 @@ const Component = styled.div`
   scrollbar-color: #bebebe #000;
   scrollbar-width: thin;
   /* display: ${({ hidden }) => (hidden ? "none" : "block")}; */
+
+  @media (max-width: 1024px) {
+    height: 200px;
+  }
+  @media (max-width: 768px) {
+    height: 150px;
+  }
 `;
 
 const Form = styled.form`
