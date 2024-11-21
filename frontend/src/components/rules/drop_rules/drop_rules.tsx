@@ -18,12 +18,7 @@ const DropItem = styled.div`
   background-color: #242424ab;
   border-radius: 5px;
   margin: 5px 0;
-  cursor: pointer;
   border: 1px solid #ccc;
-
-  &:hover {
-    background-color: #626262c3;
-  }
 `;
 
 const components = [

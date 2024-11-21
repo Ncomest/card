@@ -9,6 +9,10 @@ const Header = styled.div`
   justify-content: space-between;
   color: #bebebe;
   border-bottom: 1px solid #bebebe;
+  cursor: pointer;
+  &:hover {
+    background-color: #626262c3;
+  }
 `;
 
 const Title = styled.div`
@@ -16,6 +20,7 @@ const Title = styled.div`
   margin-bottom: 5px;
   font-size: 16px;
   color: #ce8d00;
+  padding: 0 5px;
 `;
 
 const Icon = styled.div``;
