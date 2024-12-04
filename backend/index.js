@@ -2,48 +2,75 @@ const express = require("express");
 const mongoose = require("mongoose");
 const PORT = process.env.PORT || 4000;
 const addMoreDeck = require("./data/add_deck/add_deck.js");
+const cookieParser = require("cookie-parser");
 
-const humanRoutes = require("./routes/humans.route.js");
-const orcRoutes = require("./routes/orcs.route.js");
+const { verifyAccessToken } = require("./constance/token.js");
+
+// Routes import
+// const humanRoutes = require("./routes/humans.route.js");
+// const orcRoutes = require("./routes/orcs.route.js");
 const handRoute = require("./routes/hand.route.js");
 const selectPlayerRoute = require("./routes/select_player.route.js");
 const playerRoute = require("./routes/player.route.js");
 const tableRoute = require("./routes/table.route.js");
 const diceRoute = require("./routes/dice_roll.route.js");
 const decksRoute = require("./routes/decks.route.js");
+const authRoute = require("./routes/auth.route.js");
 
 const app = express();
 const cors = require("cors");
 
+const allowedOrigins = ["http://localhost:3000", "http://87.228.10.233/"];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Не разрешенный источник"));
+    }
+  },
+  credentials: true,
+};
+
+// Modules
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cors());
+app.use(cookieParser());
 
-addMoreDeck(app);
+addMoreDeck(app); /* 
+                      создать автоматически колоду и добавить туда карту
+                      PS. надо вписать название колоды в массив
+                  */
 
-app.use("/api/table", tableRoute);
-app.use("/api/hand", handRoute);
-app.use("/api/decks", decksRoute);
-app.use("/api/humans", humanRoutes);
-app.use("/api/orcs", orcRoutes);
-app.use("/api/select-player", selectPlayerRoute);
-app.use("/api/player", playerRoute);
-app.use("/api/dice", diceRoute);
+// Routes
+// app.use("/api/humans", humanRoutes);
+// app.use("/api/orcs", orcRoutes);
+app.use("/api/table", verifyAccessToken, tableRoute);
+app.use("/api/hand", verifyAccessToken, handRoute);
+app.use("/api/decks", verifyAccessToken, decksRoute);
+app.use("/api/select-player", verifyAccessToken, selectPlayerRoute);
+app.use("/api/player", verifyAccessToken, playerRoute);
+app.use("/api/dice", verifyAccessToken, diceRoute);
+app.use("/api/auth/v1", authRoute);
 
+// Health route
 app.get("/", (req, res) => {
- res.send("Hi my dear baby");
+  res.send("Hi my dear baby");
 });
 
+// Mongo DB
 mongoose
- .connect(
-  "mongodb+srv://admin:c0sQmrDsv4nfxUGy@backenddb.lfsny.mongodb.net/Cards?retryWrites=true&w=majority&appName=BackendDB"
- )
- .then(() => {
-  console.log("connent to database");
-  app.listen(PORT, () => {
-   console.log(`server on port ${PORT}`);
+  .connect(
+    "mongodb+srv://admin:c0sQmrDsv4nfxUGy@backenddb.lfsny.mongodb.net/Cards?retryWrites=true&w=majority&appName=BackendDB"
+  )
+  .then(() => {
+    console.log("connent to database");
+    app.listen(PORT, () => {
+      console.log(`server on port ${PORT}`);
+    });
+  })
+  .catch(() => {
+    console.log("connect failed");
   });
- })
- .catch(() => {
-  console.log("connect failed");
- });

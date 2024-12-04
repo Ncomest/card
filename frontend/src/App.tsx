@@ -1,18 +1,22 @@
-import styled from "styled-components";
 import "./App.css";
 import Home from "./pages/home/home";
+import Login from "./pages/auth/login";
 
-const Component = styled.div`
- /* display: inline-block; */
- 
-`;
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import AuthCheck from "./pages/auth/auth_check";
 
-function App() {
- return (
-  <Component>
-   <Home />
-  </Component>
- );
-}
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/auth" element={<Login />} />
+        <Route element={<AuthCheck />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
+  );
+};
 
 export default App;

@@ -159,6 +159,7 @@ const Home: React.FC = () => {
     }
   };
 
+
   // Получение стола
   useEffect(() => {
     axios

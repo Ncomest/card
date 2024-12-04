@@ -66,7 +66,7 @@ const DiceRoll: React.FC = () => {
 
   useEffect(() => {
     const pullDiceRoll = () => {
-      fetch(apiUrl + "/api/dice/wait")
+      fetch(apiUrl + "/api/dice/wait", { credentials: "include" })
         .then((res) => res.json())
         .then((data) => {
           if (data.rolling) {
