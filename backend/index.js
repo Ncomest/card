@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const PORT = process.env.PORT || 4000;
 const addMoreDeck = require("./data/add_deck/add_deck.js");
 const cookieParser = require("cookie-parser");
+require("dotenv").config();
 
 const { verifyAccessToken } = require("./constance/token.js");
 
@@ -20,7 +21,7 @@ const authRoute = require("./routes/auth.route.js");
 const app = express();
 const cors = require("cors");
 
-const allowedOrigins = ["http://localhost:3000", "http://87.228.10.233/"];
+const allowedOrigins = [process.env.LOCAL, process.env.SITE];
 
 const corsOptions = {
   origin: (origin, callback) => {

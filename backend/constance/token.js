@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET || "berserk";
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || "refresh-berserk";
+const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 const generateToken = (payload) => {
   const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
