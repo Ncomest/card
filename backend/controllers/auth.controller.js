@@ -1,20 +1,21 @@
 const { generateToken } = require("../constance/token");
+const bcrypt = require("bcrypt");
 
 // Временно пока нет данные в БД
 const users = [
   {
     username: "Igor",
-    password: "admin",
+    password: "$2b$05$98KZk.ApcIvh8euJC488ieo3NbKiEkCsd77w.rCiXyHN2xqxd0ahW", // admin
     role: "admin",
   },
   {
     username: "Stas",
-    password: "berserk2024",
+    password: "$2b$05$Ba2JZLubTAKSH906YUHsyeW862NxkQUO4iO4ZjmbFsiOba2sXyuF.", // berserk2024
     role: "gamer",
   },
   {
     username: "Viewer",
-    password: "viewer",
+    password: "$2b$05$BU/gL5/DLRFVQ8YKwjJcneMXqcsh6M5L0iXRWQ.QW1BymkhYUupm6", // viewer
     role: "viewer",
   },
 ];
@@ -23,8 +24,13 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   const user = users.find((u) => u.username === username);
 
+  // const hashPassword = await bcrypt.hash(password, 5);
+  const hashedPassword = await bcrypt.compare(password, user.password)
+  // console.log(hashPassword);
+  // console.log(hashedPassword)
+
   try {
-    if (username === user.username && password === user.password) {
+    if (username === user.username && hashedPassword) {
       const tokens = generateToken({ user: user.username, role: user.role });
 
       res.cookie("accessToken", tokens.accessToken, {
