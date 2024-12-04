@@ -58,6 +58,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  
   const navigate = useNavigate();
 
   const apiUrl = site;
@@ -68,7 +69,7 @@ const Login = () => {
     console.log({ username, password });
 
     try {
-      const response = await fetch(apiUrl + "/api/auth/login", {
+      const response = await fetch(apiUrl + "/api/auth/v1/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -76,9 +77,6 @@ const Login = () => {
       });
 
       if (response.ok) {
-        // const data = await response.json();
-        // localStorage.setItem("token", data.token);
-        // console.log(data, "data");
         navigate("/");
       } else {
         const errorData = await response.json();
