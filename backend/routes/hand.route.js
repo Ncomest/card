@@ -2,13 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 const {
- getHandsCard,
- //  addHandsCard,
- updateHandsCard,
- randomHandsCard,
- refreshHandsCard,
- filterHandsCard
+  getHandsCard,
+  //  addHandsCard,
+  updateHandsCard,
+  randomHandsCard,
+  refreshHandsCard,
+  filterHandsCard,
 } = require("../controllers/hands.controller.js");
+const { verifyAccessToken } = require("../constance/token.js");
 
 router.post("/", getHandsCard);
 router.post("/random", randomHandsCard);

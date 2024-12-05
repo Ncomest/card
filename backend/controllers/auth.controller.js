@@ -24,26 +24,31 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   const user = users.find((u) => u.username === username);
 
-  // const hashPassword = await bcrypt.hash(password, 5);
-  const hashedPassword = await bcrypt.compare(password, user.password)
-  // console.log(hashPassword);
-  // console.log(hashedPassword)
-
+  
   try {
+    if (!user)
+      return res.status(401).json({ message: "net takogo polzovately" });
+    const hashPassword = await bcrypt.hash(password, 5);
+    const hashedPassword = await bcrypt.compare(password, user.password);
+    console.log(hashPassword);
+    console.log(hashedPassword);
+    
     if (username === user.username && hashedPassword) {
       const tokens = generateToken({ user: user.username, role: user.role });
 
       res.cookie("accessToken", tokens.accessToken, {
         httpOnly: true,
         secure: true,
-        sameTime: "strict",
+        sameSite: "None",
+        // sameTime: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
       res.cookie("refreshToken", tokens.refreshToken, {
         httpOnly: true,
         secure: true,
-        sameTime: "strict",
+        sameSite: "None",
+        // sameTime: "strict",
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
 
@@ -63,6 +68,7 @@ const logout = (req, res) => {
 };
 
 const check = async (req, res) => {
+  console.log('work')
   try {
     res.status(200).json({ message: "Вы авторизованы" });
   } catch (error) {

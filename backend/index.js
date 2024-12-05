@@ -21,7 +21,7 @@ const authRoute = require("./routes/auth.route.js");
 const app = express();
 const cors = require("cors");
 
-const allowedOrigins = [process.env.LOCAL, process.env.SITE];
+const allowedOrigins = [process.env.SITE, process.env.LOCAL];
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -48,12 +48,12 @@ addMoreDeck(app); /*
 // Routes
 // app.use("/api/humans", humanRoutes);
 // app.use("/api/orcs", orcRoutes);
-app.use("/api/table", verifyAccessToken, tableRoute);
-app.use("/api/hand", verifyAccessToken, handRoute);
-app.use("/api/decks", verifyAccessToken, decksRoute);
-app.use("/api/select-player", verifyAccessToken, selectPlayerRoute);
-app.use("/api/player", verifyAccessToken, playerRoute);
-app.use("/api/dice", verifyAccessToken, diceRoute);
+app.use("/api/table", tableRoute);
+app.use("/api/hand", handRoute);
+app.use("/api/decks", decksRoute);
+app.use("/api/select-player", selectPlayerRoute);
+app.use("/api/player", playerRoute);
+app.use("/api/dice", diceRoute);
 app.use("/api/auth/v1", authRoute);
 
 // Health route

@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
+
 const generateToken = (payload) => {
   const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
   const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
@@ -16,6 +17,9 @@ const verifyAccessToken = (req, res, next) => {
   // const authHeader = req.headers["authorization"];
   // const token = authHeader && authHeader.split(" ")[1];
   const token = req.cookies.accessToken;
+  console.log(token,'token')
+  const test = req.cookies;
+  console.log('test', test)
 
   if (!token)
     return res.status(401).json({ message: "Access token не предоставлен" });
@@ -41,8 +45,9 @@ const verifyAccessToken = (req, res, next) => {
 
         res.cookie("accessToken", newAccessToken, {
           httpOnly: true,
-          secure: true,
-          sameTime: "strict",
+          secure: false,
+          sameSite: "None",
+          // sameTime: "strict",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
 
