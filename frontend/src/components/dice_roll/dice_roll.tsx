@@ -86,7 +86,7 @@ const DiceRoll: React.FC = () => {
         });
     };
 
-    pullDiceRoll();
+    // pullDiceRoll();
   }, [apiUrl]);
 
   const handleDiceRoll = () => {

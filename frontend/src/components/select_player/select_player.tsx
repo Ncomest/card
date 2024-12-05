@@ -26,8 +26,14 @@ function SelectPlayer() {
   useEffect(() => {
     const fetchPlayerStatus = async () => {
       try {
-        const res = await axios.get(apiUrl + "/api/player");
-        setIsPlayer(res.data);
+        const res = await fetch(apiUrl + "/api/player", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+        });
+
+        const data = await res.json();
+        setIsPlayer(data);
       } catch (error) {
         console.error("Ошибка при получении статуса:", error);
       }
@@ -42,9 +48,12 @@ function SelectPlayer() {
     console.log("selectPlayer", selectPlayer);
 
     try {
-      const res = await axios.post(apiUrl + "/api/select-player", {
-        player: selectPlayer,
-      });
+      const res = await axios.post(
+        apiUrl + "/api/select-player",
+        { player: selectPlayer },
+        { withCredentials: true }
+      );
+
       setIsPlayer(res.data);
       sessionStorage.setItem("player", selectPlayer);
       setIsSelectPlayer(selectPlayer);
@@ -56,9 +65,14 @@ function SelectPlayer() {
   //Refresh players status
   const handleRefresh = async () => {
     try {
-      const res = await axios.get(apiUrl + "/api/select-player");
-      console.log(res.data, "refresh");
-      setIsPlayer(res.data);
+      const res = await fetch(apiUrl + "/api/select-player", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      });
+      const data = await res.json();
+      console.log(data, "refresh");
+      setIsPlayer(data);
       sessionStorage.removeItem("player");
       setIsSelectPlayer(null);
     } catch (error) {

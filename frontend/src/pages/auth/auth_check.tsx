@@ -14,12 +14,12 @@ const AuthCheck = () => {
           credentials: "include",
         });
 
-        response.ok ? setAuth(true) : setAuth(false);
-        // if (response.ok) {
-        //   setAuth(true);
-        // } else {
-        //   setAuth(false);
-        // }
+        // response.ok ? setAuth(true) : setAuth(false);
+        if (response.ok) {
+          setAuth(true);
+        } else {
+          setAuth(false);
+        }
       } catch (error) {
         console.error("Ошибка авторизации", error);
         setAuth(false);

@@ -11,8 +11,8 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<Login />} />
-        <Route element={<AuthCheck />}>
           <Route path="/" element={<Home />} />
+        <Route element={<AuthCheck />}>
         </Route>
       </Routes>
     </BrowserRouter>

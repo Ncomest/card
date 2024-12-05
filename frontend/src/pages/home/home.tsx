@@ -135,6 +135,7 @@ const Home: React.FC = () => {
       const res = await fetch(apiUrl + "/api/table/update", {
         method: "GET",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
       });
 
       if (!res.ok) {
@@ -159,11 +160,12 @@ const Home: React.FC = () => {
     }
   };
 
-
   // Получение стола
   useEffect(() => {
     axios
-      .get<ICardTable[]>(`${apiUrl}/api/table`)
+      .get<ICardTable[]>(`${apiUrl}/api/table`, {
+        withCredentials: true,
+      })
       .then((res) => setTable(res.data))
       .catch((err) => console.error(err));
 

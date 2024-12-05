@@ -70,7 +70,11 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
   const apiUrl = site;
 
   useEffect(() => {
-    fetch(apiUrl + "/api/decks")
+    fetch(apiUrl + "/api/decks", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    })
       .then((res) => res.json())
       .then((data: [string]) => setDecks(data))
       .catch((err) => console.log(err));
@@ -81,6 +85,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
     sessionStorage.setItem("race", name);
     fetch(apiUrl + "/api/hand/random", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         deck: name,
@@ -106,6 +111,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 
   return (
     <Component>
+      <button onClick={() => console.log('cookie',document.cookie)}>23</button>
       {decks.map((deck, i) => (
         <Button key={i} onClick={() => handleSelectDeck(`${deck}`)}>
           <span>{deck}</span>
@@ -137,8 +143,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
               })
             }
           >
-            <HandCard card={card} index={index} 
-            />
+            <HandCard card={card} index={index} />
           </div>
         ))}
       </Hand>

@@ -58,7 +58,7 @@ const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  
+
   const navigate = useNavigate();
 
   const apiUrl = site;
@@ -77,6 +77,8 @@ const Login = () => {
       });
 
       if (response.ok) {
+        const data = await response.json();
+        console.log("data", data);
         navigate("/");
       } else {
         const errorData = await response.json();
