@@ -21,6 +21,7 @@ const authRoute = require("./routes/auth.route.js");
 const app = express();
 const cors = require("cors");
 
+// const allowedOrigins = ["http://localhost:3000", "http://87.228.10.233"];
 const allowedOrigins = [process.env.SITE, process.env.LOCAL];
 
 const corsOptions = {
