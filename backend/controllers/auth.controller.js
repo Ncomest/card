@@ -24,7 +24,6 @@ const login = async (req, res) => {
   const { username, password } = req.body;
   const user = users.find((u) => u.username === username);
 
-  
   try {
     if (!user)
       return res.status(401).json({ message: "net takogo polzovately" });
@@ -32,7 +31,7 @@ const login = async (req, res) => {
     const hashedPassword = await bcrypt.compare(password, user.password);
     console.log(hashPassword);
     console.log(hashedPassword);
-    
+
     if (username === user.username && hashedPassword) {
       const tokens = generateToken({ user: user.username, role: user.role });
 
@@ -68,7 +67,7 @@ const logout = (req, res) => {
 };
 
 const check = async (req, res) => {
-  console.log('work')
+  console.log("work");
   try {
     res.status(200).json({ message: "Вы авторизованы" });
   } catch (error) {

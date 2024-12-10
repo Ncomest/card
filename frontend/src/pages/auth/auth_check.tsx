@@ -9,8 +9,14 @@ const AuthCheck = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        const token = localStorage.getItem("accessToken");
+        console.log("token", token);
         const response = await fetch(apiUrl + "/api/auth/v1/check", {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
           credentials: "include",
         });
 

@@ -78,7 +78,8 @@ const Login = () => {
 
       if (response.ok) {
         const data = await response.json();
-        console.log("data", data);
+        console.log("data", data.accessToken);
+        localStorage.setItem("accessToken", data.accessToken);
         navigate("/");
       } else {
         const errorData = await response.json();

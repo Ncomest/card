@@ -64,10 +64,14 @@ function SelectPlayer() {
 
   //Refresh players status
   const handleRefresh = async () => {
+    const token = localStorage.getItem("accessToken");
     try {
       const res = await fetch(apiUrl + "/api/select-player", {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
         credentials: "include",
       });
       const data = await res.json();
