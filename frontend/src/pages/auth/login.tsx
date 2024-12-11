@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { site } from "../../site_state";
+import { fetchApi } from "../../helper/fetchApi";
 
 const Component = styled.div`
   height: 100vh;
@@ -61,28 +62,24 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const apiUrl = site;
-
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     setError(null);
     console.log({ username, password });
 
     try {
-      const response = await fetch(apiUrl + "/api/auth/v1/login", {
+      const data = await fetchApi({
+        API_URI: "/api/auth/v1/login",
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ username: username, password: password }),
+        body: { username: username, password: password },
       });
 
-      if (response.ok) {
-        const data = await response.json();
+      if (data) {
         console.log("data", data.accessToken);
         localStorage.setItem("accessToken", data.accessToken);
         navigate("/");
       } else {
-        const errorData = await response.json();
+        const errorData = await data;
         setError(errorData.message || "Неверный логин или пароль");
       }
     } catch (error) {
