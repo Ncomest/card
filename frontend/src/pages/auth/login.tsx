@@ -41,6 +41,12 @@ const Input = styled.input`
   }
 `;
 
+const P = styled.p`
+  text-align: center;
+  background-color: red;
+  padding: 5px;
+`;
+
 const Button = styled.button`
   padding: 10px 20px;
   border-radius: 10px;
@@ -83,12 +89,16 @@ const Login = () => {
       }
     } catch (error) {
       setError("Произошла ошибка, попробуйте снова");
+      setTimeout(() => {
+        setError(null);
+      }, 3000);
     }
   };
 
   return (
     <Component>
       <Form onSubmit={handleSubmit}>
+        {error && <P>{error}</P>}
         <Label>
           Логин:
           <Input

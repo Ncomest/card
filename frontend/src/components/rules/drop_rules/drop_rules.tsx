@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import Note from "./note";
+// import Note from "./note";
 import BattlesDice from "./battles_dice";
 import Coins from "./coins";
 import Position from "./position";

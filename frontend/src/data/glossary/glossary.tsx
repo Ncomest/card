@@ -1,7 +1,3 @@
-import { site } from "../../site_state";
-import attExp from "/image/icons/AttExp.png";
-
-const apiUrl = site;
 
 export const glossary = [
   {

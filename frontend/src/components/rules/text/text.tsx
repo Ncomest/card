@@ -20,7 +20,7 @@ const Txt = styled.p`
   color: #313131;
 `;
 
-const Icon = styled.div``;
+// const Icon = styled.div``;
 
 interface IProps {
   // icon?: HTMLElement | undefined;

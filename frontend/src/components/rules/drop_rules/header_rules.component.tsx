@@ -23,7 +23,7 @@ const Title = styled.div`
   padding: 0 5px;
 `;
 
-const Icon = styled.div``;
+// const Icon = styled.div``;
 
 interface IHeader {
   title: string;
