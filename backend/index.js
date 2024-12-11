@@ -21,14 +21,18 @@ const authRoute = require("./routes/auth.route.js");
 const app = express();
 const cors = require("cors");
 
-// const allowedOrigins = ["http://localhost:3000", "http://87.228.10.233"];
-const allowedOrigins = [process.env.SITE, process.env.LOCAL];
+const allowedOrigins = [
+  process.env.WEB_SITE,
+  process.env.LOCAL,
+  process.env.IP_SITE,
+];
 
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.error(`Blocked CORS request from origin: ${origin}`);
       callback(new Error("Не разрешенный источник"));
     }
   },

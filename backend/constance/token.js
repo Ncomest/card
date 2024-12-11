@@ -6,7 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 const generateToken = (payload) => {
   try {
-    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
+    const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "3h" });
     //только если будет cookie
     // const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
     //   expiresIn: "7d",
