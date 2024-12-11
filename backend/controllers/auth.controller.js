@@ -49,7 +49,7 @@ const login = async (req, res) => {
       //   maxAge: 7 * 24 * 60 * 60 * 1000,
       // });
 
-      return res.json({ accessToken: token });
+      return res.json({ accessToken: token.accessToken });
     } else {
       res.status(401).json({ message: "Неверные логин или пароль" });
     }
