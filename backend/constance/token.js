@@ -1,14 +1,16 @@
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
-
+// только если будет куки
+// const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
 const generateToken = (payload) => {
   const accessToken = jwt.sign(payload, JWT_SECRET, { expiresIn: "15m" });
-  const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
-    expiresIn: "7d",
-  });
+
+  // только если будет cookie
+  // const refreshToken = jwt.sign(payload, JWT_REFRESH_SECRET, {
+  //   expiresIn: "7d",
+  // });
 
   return { accessToken, refreshToken };
 };
@@ -17,7 +19,7 @@ const verifyAccessToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   // const token = req.cookies.accessToken;
-  console.log(token,'token')
+  console.log("token", token);
   // const test = req.cookies;
   // console.log('test', test)
 
@@ -26,7 +28,7 @@ const verifyAccessToken = (req, res, next) => {
 
   jwt.verify(token, JWT_SECRET, (err, user) => {
     // if (err) {
-    //   const refToken = req.cookies.refreshToken;
+    // const refToken = req.cookies.refreshToken;
 
     //   if (!refToken)
     //     return res.status(403).json({ message: "Нет refretsh Token'a " });
@@ -51,12 +53,12 @@ const verifyAccessToken = (req, res, next) => {
     //       maxAge: 7 * 24 * 60 * 60 * 1000,
     //     });
 
-    //     req.user = decoded;
-    //     return next();
+    // req.user = decoded;
+    // return next();
     //   });
     // } else {
-      req.user = user;
-      next();
+    req.user = user;
+    next();
     // }
   });
 };

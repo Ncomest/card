@@ -1,31 +1,18 @@
 import { useEffect, useState } from "react";
 import { site } from "../../site_state";
 import { Navigate, Outlet } from "react-router-dom";
+import { fetchApi } from "../../helper/fetchApi";
 
-const AuthCheck = () => {
+
+
+const AuthCheck:React.FC = () => {
   const [auth, setAuth] = useState<boolean | null>(null);
-
-  const apiUrl = site;
+  
   useEffect(() => {
     const checkAuth = async () => {
-      try {
-        const token = localStorage.getItem("accessToken");
-        console.log("token", token);
-        const response = await fetch(apiUrl + "/api/auth/v1/check", {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-        });
-
-        // response.ok ? setAuth(true) : setAuth(false);
-        if (response.ok) {
-          setAuth(true);
-        } else {
-          setAuth(false);
-        }
+      try {  
+        const data = await fetchApi({API_URI: "/api/auth/v1/check", bearer: true});
+        data ? setAuth(true) : setAuth(false)
       } catch (error) {
         console.error("Ошибка авторизации", error);
         setAuth(false);
@@ -33,7 +20,6 @@ const AuthCheck = () => {
     };
 
     checkAuth();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (auth === null) return <div>Spiner</div>;
