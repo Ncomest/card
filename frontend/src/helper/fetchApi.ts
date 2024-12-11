@@ -40,4 +40,3 @@ export const fetchApi = async ({
   }
 };
 
-module.exports = { fetchApi };

@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { site } from "../../site_state";
 import { Navigate, Outlet } from "react-router-dom";
 import { fetchApi } from "../../helper/fetchApi";
 
-
-
-const AuthCheck:React.FC = () => {
+const AuthCheck: React.FC = () => {
   const [auth, setAuth] = useState<boolean | null>(null);
-  
+
   useEffect(() => {
     const checkAuth = async () => {
-      try {  
-        const data = await fetchApi({API_URI: "/api/auth/v1/check", bearer: true});
-        data ? setAuth(true) : setAuth(false)
+      try {
+        const data = await fetchApi({
+          API_URI: "/api/auth/v1/check",
+          bearer: true,
+        });
+        data ? setAuth(true) : setAuth(false);
       } catch (error) {
         console.error("Ошибка авторизации", error);
         setAuth(false);
