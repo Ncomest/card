@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { fetchApi } from "../../helper/fetchApi";
+import Spinner from "../../components/spinner/spinner";
 
 const AuthCheck: React.FC = () => {
   const [auth, setAuth] = useState<boolean | null>(null);
@@ -22,7 +23,7 @@ const AuthCheck: React.FC = () => {
     checkAuth();
   }, []);
 
-  if (auth === null) return <div>Spiner</div>;
+  if (auth === null) return <Spinner />;
 
   return auth ? <Outlet /> : <Navigate to="/auth" />;
 };

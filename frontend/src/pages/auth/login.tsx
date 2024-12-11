@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import { site } from "../../site_state";
 import { fetchApi } from "../../helper/fetchApi";
 
 const Component = styled.div`
