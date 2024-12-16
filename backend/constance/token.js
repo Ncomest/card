@@ -21,7 +21,7 @@ const verifyAccessToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader?.split(" ")[1];
   // const token = req.cookies.accessToken;
-  console.log("(token.js, verifyAccessToken)", token);
+  // console.log("(token.js, verifyAccessToken)", token);
   // const test = req.cookies;
   // console.log('test', test)
 

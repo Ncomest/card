@@ -31,6 +31,7 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
+      
     } else {
       console.error(`Blocked CORS request from origin: ${origin}`);
       callback(new Error("Не разрешенный источник"));
