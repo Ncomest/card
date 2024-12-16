@@ -9,6 +9,7 @@ import Card from "../../components/card/card";
 import Chat from "../../components/chat/chat";
 import Rules from "../../components/rules/rules";
 import DropRules from "../../components/rules/drop_rules/drop_rules";
+import { fetchApi } from "../../helper/fetchApi";
 
 const Background = styled.div`
   padding: 10px;
@@ -132,26 +133,15 @@ const Home: React.FC = () => {
     if (!longPullActive.current) return;
 
     try {
-      const res = await fetch(apiUrl + "/api/table/update", {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-      });
+      const data = await fetchApi({ API_URI: "/api/table/update" });
 
-      if (!res.ok) {
-        throw new Error("Error нет данных от лонгпулла");
-      }
-
-      if (res.ok) {
-        const updatedTable: ICardTable[] = await res.json();
-        console.log(updatedTable, "updatedTable in longpull");
-        setTable(updatedTable);
-
+      if (data) {
+        setTable(data);
         setTimeout(() => {
           if (longPullActive.current) longPull();
         }, 1000);
       } else {
-        console.error("Ошибка получения обновлений:", res.statusText);
+        console.error("Ошибка получения обновлений:");
         setTimeout(longPull, 500);
       }
     } catch (error) {
@@ -160,32 +150,42 @@ const Home: React.FC = () => {
     }
   };
 
-  // Получение стола
+  // Получение стола и руки
   useEffect(() => {
-    axios
-      .get<ICardTable[]>(`${apiUrl}/api/table`, {
-        withCredentials: true,
-      })
-      .then((res) => setTable(res.data))
-      .catch((err) => console.error(err));
+    const fetchTable = async () => {
+      try {
+        const data = await fetchApi({ API_URI: "/api/table" });
+        setTable(data);
+      } catch (error) {
+        console.error("ошибка");
+        throw new Error("Данные стола не получены");
+      }
+    };
 
-    axios
-      .post<ICard[]>(apiUrl + "/api/hand", {
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user: sessionStorage.getItem("player"),
-        }),
-      })
-      .then((res) => setHand(res.data))
-      .catch((err) => console.error(err));
+    const fetchHand = async () => {
+      try {
+        const data = await fetchApi({
+          API_URI: "/api/hand",
+          method: "POST",
+          body: { user: sessionStorage.getItem("player") },
+        });
+        console.log("рука данные data", data);
+        setHand(data);
+      } catch (error) {
+        console.error("ошибка");
+        throw new Error("Данные руки не получены");
+      }
+    };
 
+    fetchTable();
+    fetchHand();
     longPull();
 
     return () => {
       longPullActive.current = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [apiUrl]);
+  }, []);
 
   //================Drag==============//
   const handleDragStart = ({
@@ -246,18 +246,18 @@ const Home: React.FC = () => {
 
       if (placePickCard === "table") {
         // отправим запрос на получение данных
-        const resCardPickOnTableId = await fetch(
-          apiUrl + `/api/table/${casePickTableId}`
-        );
+        const resCardPickOnTableId = await fetchApi({
+          API_URI: `/api/table/${casePickTableId}`,
+        });
 
-        if (!resCardPickOnTableId.ok) {
-          throw new Error("ошибка получения запроса по id со стола");
-        }
+        // if (!resCardPickOnTableId.ok) {
+        //   throw new Error("ошибка получения запроса по id со стола");
+        // }
 
-        const resCardFromTableId = await resCardPickOnTableId.json();
+        // const resCardPickOnTableId = await resCardPickOnTableId;
         console.log(
-          `получение данных с ячейки с ${casePickTableId} сервера resCardFromTableId`,
-          resCardFromTableId
+          `получение данных с ячейки с ${casePickTableId} сервера resCardPickOnTableId`,
+          resCardPickOnTableId
         );
 
         if (placePutCard === "table") {
@@ -273,8 +273,8 @@ const Home: React.FC = () => {
                 placePutCard: placePutCard, // место куда кладем карту стол или рука
                 casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
                 casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-                card: resCardFromTableId.card,
-                card_state: resCardFromTableId.card_state,
+                card: resCardPickOnTableId.card,
+                card_state: resCardPickOnTableId.card_state,
                 isEmpty: false,
                 user: sessionStorage.getItem("player"),
               }),
@@ -298,7 +298,7 @@ const Home: React.FC = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               user: sessionStorage.getItem("player"),
-              card: resCardFromTableId.card,
+              card: resCardPickOnTableId.card,
             }),
           });
 
