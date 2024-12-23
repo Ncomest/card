@@ -31,7 +31,6 @@ const corsOptions = {
   origin: (origin, callback) => {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
-      
     } else {
       console.error(`Blocked CORS request from origin: ${origin}`);
       callback(new Error("Не разрешенный источник"));
@@ -41,6 +40,7 @@ const corsOptions = {
 };
 
 // Modules
+// app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
