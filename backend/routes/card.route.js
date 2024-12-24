@@ -6,6 +6,7 @@ const {
  createCard,
  updateCard,
  deleteCard,
+ updCardInDB
 } = require("../controllers/card.controller.js");
 
 const cardRoutes = (DeckModel) => {
@@ -14,6 +15,7 @@ const cardRoutes = (DeckModel) => {
  router.get("/", getCards(DeckModel));
  router.get("/:id", getCardById(DeckModel));
  router.post("/", createCard(DeckModel));
+ router.put("/updallcard", updCardInDB(DeckModel));
  router.put("/:id", updateCard(DeckModel));
  router.delete("/:id", deleteCard(DeckModel));
  
