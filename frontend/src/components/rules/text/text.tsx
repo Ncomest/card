@@ -20,24 +20,24 @@ const Txt = styled.p`
   color: #313131;
 `;
 
-// const Icon = styled.div``;
+const Icon = styled.img`
+  height: 20px;
+  width: 20px;
+`;
 
 interface IProps {
-  // icon?: HTMLElement | undefined;
-  title: string;
-  text: string;
+  icons?: any;
+  title?: string;
+  text?: string;
 }
 
-const Text = ({
-  title,
-  text,
-}: //  icon
-IProps) => {
+const Text = ({ title, text, icons }: IProps) => {
   return (
     <Component>
-      {/* <Icon>{icon}</Icon> */}
       <Title>
-        {title}: <Txt>{text}</Txt>
+        {title} {icons && <Icon src={icons} alt={icons} />}
+        {text && ":"}
+        <Txt>{text}</Txt>
       </Title>
     </Component>
   );

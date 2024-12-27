@@ -40,8 +40,8 @@ const corsOptions = {
 };
 
 // Modules
-// app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
-app.use(cors(corsOptions));
+app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
+// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

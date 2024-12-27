@@ -81,7 +81,7 @@ const Rules: React.FC = () => {
       {isOpen && (
         <Component>
           {glossary.map((item, index) => (
-            <Text key={index} title={item.title} text={item.text} />
+            <Text key={index} title={item.title} text={item.text} icons={item?.icons}/>
           ))}
         </Component>
       )}
