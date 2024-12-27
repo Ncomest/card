@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
 import { site } from "../../site_state.js";
 import styled from "styled-components";
 
@@ -218,7 +217,7 @@ const Home: React.FC = () => {
       Number(e.dataTransfer.getData("casePickTableId")) ===
       Number(casePutTableId)
     ) {
-      console.log("так не получиться");
+      // console.log("так не получиться");
       return;
     }
 
@@ -227,22 +226,22 @@ const Home: React.FC = () => {
     const placePickCard = e.dataTransfer.getData("placePickCard");
     const cardIndex = e.dataTransfer.getData("cardIndex");
 
-    console.log(
-      { casePickTableId, placePutCard, cardIndex, casePutTableId },
-      "data in handleDrop"
-    );
+    // console.log(
+    //   { casePickTableId, placePutCard, cardIndex, casePutTableId },
+    //   "data in handleDrop"
+    // );
     if (!casePickTableId || !casePutTableId) {
-      console.error("missing data for handleDrop");
+      // console.error("missing data for handleDrop");
       return;
     }
 
     try {
       if (cardIndex === undefined) {
-        console.error("cardIndex is undefined");
+        // console.error("cardIndex is undefined");
         return;
       }
 
-      console.log("index ячейки в руке cardIndex", cardIndex);
+      // console.log("index ячейки в руке cardIndex", cardIndex);
 
       if (placePickCard === "table") {
         // отправим запрос на получение данных
@@ -250,153 +249,213 @@ const Home: React.FC = () => {
           API_URI: `/api/table/${casePickTableId}`,
         });
 
-        // if (!resCardPickOnTableId.ok) {
-        //   throw new Error("ошибка получения запроса по id со стола");
-        // }
-
-        // const resCardPickOnTableId = await resCardPickOnTableId;
-        console.log(
-          `получение данных с ячейки с ${casePickTableId} сервера resCardPickOnTableId`,
-          resCardPickOnTableId
-        );
+        // console.log(
+        //   `получение данных с ячейки с ${casePickTableId} сервера resCardPickOnTableId`,
+        //   resCardPickOnTableId
+        // );
 
         if (placePutCard === "table") {
-          console.log("сработал if положить со стола на стол");
+          // console.log("сработал if положить со стола на стол");
           // отправим запрос на обновление данных
-          const resUpdCardOnTable = await fetch(
-            apiUrl + `/api/table/${casePutTableId}`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                placePickCard: placePickCard, // место откуда берем карту стол или рука
-                placePutCard: placePutCard, // место куда кладем карту стол или рука
-                casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-                casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-                card: resCardPickOnTableId.card,
-                card_state: resCardPickOnTableId.card_state,
-                isEmpty: false,
-                user: sessionStorage.getItem("player"),
-              }),
-            }
-          );
-
-          if (!resUpdCardOnTable.ok) {
-            throw new Error("Не получилось обновить данные в БД");
-          }
-
-          const updatedCardOnTable = await resUpdCardOnTable.json();
-          setTable(updatedCardOnTable);
-          //  longPull();
-          console.log(
-            `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
-            updatedCardOnTable
-          );
-        } else if (placePutCard === "hand") {
-          const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/update", {
+          const resUpdCardOnTable = await fetchApi({
+            API_URI: `/api/table/${casePutTableId}`,
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+            body: {
+              placePickCard: placePickCard, // место откуда берем карту стол или рука
+              placePutCard: placePutCard, // место куда кладем карту стол или рука
+              casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+              casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+              card: resCardPickOnTableId.card,
+              card_state: resCardPickOnTableId.card_state,
+              isEmpty: false,
+              user: sessionStorage.getItem("player"),
+            },
+          });
+
+          // const resUpdCardOnTable = await fetch(
+          //   apiUrl + `/api/table/${casePutTableId}`,
+          //   {
+          //     method: "PUT",
+          //     headers: { "Content-Type": "application/json" },
+          //     body: JSON.stringify({
+          //       placePickCard: placePickCard, // место откуда берем карту стол или рука
+          //       placePutCard: placePutCard, // место куда кладем карту стол или рука
+          //       casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+          //       casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+          //       card: resCardPickOnTableId.card,
+          //       card_state: resCardPickOnTableId.card_state,
+          //       isEmpty: false,
+          //       user: sessionStorage.getItem("player"),
+          //     }),
+          //   }
+          // );
+
+          // if (!resUpdCardOnTable.ok) {
+          //   throw new Error("Не получилось обновить данные в БД");
+          // }
+
+          // const updatedCardOnTable = await resUpdCardOnTable.json();
+          setTable(resUpdCardOnTable);
+          // console.log(
+          //   `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
+          //   resUpdCardOnTable
+          // );
+        } else if (placePutCard === "hand") {
+          const resUpdCardOnHand = await fetchApi({
+            API_URI: "/api/hand/update",
+            method: "PUT",
+            body: {
               user: sessionStorage.getItem("player"),
               card: resCardPickOnTableId.card,
-            }),
+            },
+          });
+          // const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/update", {
+          //   method: "PUT",
+          //   headers: { "Content-Type": "application/json" },
+          //   body: JSON.stringify({
+          //     user: sessionStorage.getItem("player"),
+          //     card: resCardPickOnTableId.card,
+          //   }),
+          // });
+
+          // if (!resUpdCardOnHand.ok) {
+          //   throw new Error("Не получилось обновить данные руки на сервере");
+          // }
+
+          // const resCardFromHand = await resUpdCardOnHand.json();
+          setHand(resUpdCardOnHand);
+          // console.log("resUpdCardOnHand", resUpdCardOnHand);
+
+          const resUpdCardOnTable = await fetchApi({
+            API_URI: `/api/table/${casePickTableId}`,
+            method: "PUT",
+            body: {
+              placePickCard: placePickCard, // место откуда берем карту стол или рука
+              placePutCard: placePutCard, // место куда кладем карту стол или рука
+              casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+              casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+              isEmpty: true,
+            },
           });
 
-          if (!resUpdCardOnHand.ok) {
-            throw new Error("Не получилось обновить данные руки на сервере");
-          }
+          // const resUpdCardOnTable = await fetch(
+          //   apiUrl + `/api/table/${casePickTableId}`,
+          //   {
+          //     method: "PUT",
+          //     headers: { "Content-Type": "application/json" },
+          //     body: JSON.stringify({
+          //       placePickCard: placePickCard, // место откуда берем карту стол или рука
+          //       placePutCard: placePutCard, // место куда кладем карту стол или рука
+          //       casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+          //       casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+          //       isEmpty: true,
+          //     }),
+          //   }
+          // );
 
-          const resCardFromHand = await resUpdCardOnHand.json();
-          setHand(resCardFromHand);
-          console.log("resCardFromHand", resCardFromHand);
+          // if (!resUpdCardOnTable.ok) {
+          //   throw new Error(
+          //     "Не удалось обновить стол, очистить ячейку от карты"
+          //   );
+          // }
 
-          const resUpdCardOnTable = await fetch(
-            apiUrl + `/api/table/${casePickTableId}`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                placePickCard: placePickCard, // место откуда берем карту стол или рука
-                placePutCard: placePutCard, // место куда кладем карту стол или рука
-                casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-                casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-                isEmpty: true,
-              }),
-            }
-          );
-
-          if (!resUpdCardOnTable.ok) {
-            throw new Error(
-              "Не удалось обновить стол, очистить ячейку от карты"
-            );
-          }
-
-          const updatedCardOnTable = await resUpdCardOnTable.json();
-          setTable(updatedCardOnTable);
+          // const updatedCardOnTable = await resUpdCardOnTable.json();
+          setTable(resUpdCardOnTable);
         }
       } else if (placePickCard === "hand") {
-        console.log("взяли карту с руки");
+        // console.log("взяли карту с руки");
 
-        const resCardOnHand = await fetch(apiUrl + "/api/hand/", {
+        const resCardOnHand = await fetchApi({
+          API_URI: "/api/hand/",
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+          body: {
             user: sessionStorage.getItem("player"),
-          }),
+          },
         });
 
-        if (!resCardOnHand.ok) {
-          throw new Error("Не получилось получить данные с руки");
-        }
+        // const resCardOnHand = await fetch(apiUrl + "/api/hand/", {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({
+        //     user: sessionStorage.getItem("player"),
+        //   }),
+        // });
 
-        const resCardFromHand = await resCardOnHand.json();
-        console.log("resCardFromHand[cardindex]", resCardFromHand[cardIndex]);
+        // if (!resCardOnHand.ok) {
+        //   throw new Error("Не получилось получить данные с руки");
+        // }
+
+        // const resCardFromHand = await resCardOnHand.json();
+        // console.log("resCardFromHand[cardindex]", resCardOnHand[cardIndex]);
 
         if (placePutCard === "hand") {
-          console.log("сработал if взяли с руки и положили в руку");
+          // console.log("сработал if взяли с руки и положили в руку");
         } else if (placePutCard === "table") {
-          console.log("сработал if взяли карту с руки и положили на стол");
+          // console.log("сработал if взяли карту с руки и положили на стол");
 
-          const resUpdCardOnTable = await fetch(
-            apiUrl + `/api/table/${casePutTableId}`,
-            {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                placePickCard: placePickCard, // место откуда берем карту стол или рука
-                placePutCard: placePutCard, // место куда кладем карту стол или рука
-                casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-                casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-                card: resCardFromHand[cardIndex],
-                isEmpty: false,
-                user: sessionStorage.getItem("player"),
-              }),
-            }
-          );
-
-          if (!resUpdCardOnTable.ok) {
-            throw new Error("не удалось обновить данные на столе в бд");
-          }
-
-          const resUpdCardFromTable = await resUpdCardOnTable.json();
-          setTable(resUpdCardFromTable);
-
-          //=============== запрос на обновление данных в руке
-          const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/filter", {
+          const resUpdCardOnTable = await fetchApi({
+            API_URI: `/api/table/${casePutTableId}`,
             method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
+            body: {
+              placePickCard: placePickCard, // место откуда берем карту стол или рука
+              placePutCard: placePutCard, // место куда кладем карту стол или рука
+              casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+              casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+              card: resCardOnHand[cardIndex],
+              isEmpty: false,
               user: sessionStorage.getItem("player"),
-              cardIndex: Number(cardIndex),
-            }),
+            },
           });
 
-          if (!resUpdCardOnHand.ok) {
-            throw new Error("не получилось обновить данные в руке");
-          }
+          // const resUpdCardOnTable = await fetch(
+          //   apiUrl + `/api/table/${casePutTableId}`,
+          //   {
+          //     method: "PUT",
+          //     headers: { "Content-Type": "application/json" },
+          //     body: JSON.stringify({
+          //       placePickCard: placePickCard, // место откуда берем карту стол или рука
+          //       placePutCard: placePutCard, // место куда кладем карту стол или рука
+          //       casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
+          //       casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
+          //       card: resCardOnHand[cardIndex],
+          //       isEmpty: false,
+          //       user: sessionStorage.getItem("player"),
+          //     }),
+          //   }
+          // );
 
-          const updatedCardFromHand = await resUpdCardOnHand.json();
-          setHand(updatedCardFromHand);
+          // if (!resUpdCardOnTable.ok) {
+          //   throw new Error("не удалось обновить данные на столе в бд");
+          // }
+
+          // const resUpdCardFromTable = await resUpdCardOnTable.json();
+          setTable(resUpdCardOnTable);
+
+          //=============== запрос на обновление данных в руке
+          const resUpdCardOnHand = await fetchApi({
+            API_URI: "/api/hand/filter",
+            method: "PUT",
+            body: {
+              user: sessionStorage.getItem("player"),
+              cardIndex: Number(cardIndex),
+            },
+          });
+
+          // const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/filter", {
+          //   method: "PUT",
+          //   headers: { "Content-Type": "application/json" },
+          //   body: JSON.stringify({
+          //     user: sessionStorage.getItem("player"),
+          //     cardIndex: Number(cardIndex),
+          //   }),
+          // });
+
+          // if (!resUpdCardOnHand.ok) {
+          //   throw new Error("не получилось обновить данные в руке");
+          // }
+
+          // const updatedCardFromHand = await resUpdCardOnHand.json();
+          setHand(resUpdCardOnHand);
         }
       }
     } catch (error) {
