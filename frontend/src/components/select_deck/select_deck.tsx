@@ -1,15 +1,15 @@
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
 import React, { useEffect, useState } from "react";
-import { site } from "../../site_state.js";
 import { StyledButton } from "../../style/global.style";
+import { fetchApi } from "../../helper/fetchApi";
 
-const Component = styled.div`
+const ComponentStyle = styled.div`
   background: #0b0b0b;
   overflow: hidden;
 `;
 
-const Hand = styled.div`
+const HandStyle = styled.div`
   overflow: hidden;
   margin: 0 auto;
   padding: 60px 10px;
@@ -21,7 +21,7 @@ const Hand = styled.div`
   background: rgba(0, 0, 0, 0.434);
 `;
 
-const Button = styled(StyledButton)``;
+const ButtonStyle = styled(StyledButton)``;
 
 export interface IDeck {
   _id: string;
@@ -67,60 +67,53 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
   handleDrop,
 }) => {
   const [decks, setDecks] = useState<[string]>([""]);
-  const apiUrl = site;
 
   useEffect(() => {
-    fetch(apiUrl + "/api/decks", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .then((data: [string]) => setDecks(data))
-      .catch((err) => console.log(err));
-  }, [apiUrl]);
+    const fetchData = async () => {
+      await fetchApi({ API_URI: "/api/decks" })
+        .then((data: [string]) => setDecks(data))
+        .catch((err) => console.log(err));
+    };
+    fetchData();
+  }, []);
 
   //POST select deck
-  const handleSelectDeck = (name: string) => {
+  const handleSelectDeck = async (name: string) => {
     sessionStorage.setItem("race", name);
-    fetch(apiUrl + "/api/hand/random", {
+    await fetchApi({
+      API_URI: "/api/hand/random",
       method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+      body: {
         deck: name,
         user: sessionStorage.getItem("player"),
-      }),
+      },
     })
-      .then((res) => res.json())
       .then((data: ICard[]) => setHand(data))
       .catch((err) => console.error("Ошибка при получении данных:", err));
   };
 
   //PUT clear hand
-  const handleUpdateDeck = () => {
-    fetch(apiUrl + "/api/hand/refresh", {
+  const handleUpdateDeck = async () => {
+    await fetchApi({
+      API_URI: "/api/hand/refresh",
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: sessionStorage.getItem("player") }),
+      body: { user: sessionStorage.getItem("player") },
     })
-      .then((res) => res.json())
       .then((data: IDeck[]) => setHand(data))
       .catch((err) => console.error("Ошибка при получении данных:", err));
   };
 
   return (
-    <Component>
-      <button onClick={() => console.log('cookie',document.cookie)}>23</button>
+    <ComponentStyle>
       {decks.map((deck, i) => (
-        <Button key={i} onClick={() => handleSelectDeck(`${deck}`)}>
+        <ButtonStyle key={i} onClick={() => handleSelectDeck(`${deck}`)}>
           <span>{deck}</span>
-        </Button>
+        </ButtonStyle>
       ))}
-      <Button className="btn btn-primary" onClick={handleUpdateDeck}>
+      <ButtonStyle className="btn btn-primary" onClick={handleUpdateDeck}>
         <span>Удалить карты из руки</span>
-      </Button>
-      <Hand>
+      </ButtonStyle>
+      <HandStyle>
         {hand.map((card, index) => (
           <div
             key={index}
@@ -146,8 +139,8 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
             <HandCard card={card} index={index} />
           </div>
         ))}
-      </Hand>
-    </Component>
+      </HandStyle>
+    </ComponentStyle>
   );
 };
 

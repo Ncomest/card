@@ -22,28 +22,31 @@ function SelectPlayer() {
     player2: false,
   });
 
-
   //Get players status
   useEffect(() => {
-    const fetchPlayerStatus = () => {
+    const fetchPlayerStatus = async () => {
       try {
-        const data = fetchApi({ API_URI: "/api/player" });
+        const data = await fetchApi({ API_URI: "/api/player" });
         setIsPlayer(data);
       } catch (error) {
         console.error("Ошибка при получении статуса:", error);
       }
     };
-
+    
     fetchPlayerStatus();
   }, []);
-
+  
   //POST req to select a player
   const handleSelectPlayer = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectPlayer = (e.currentTarget as HTMLButtonElement).value;
-    // console.log("selectPlayer", selectPlayer);
-
+    
     try {
-      const data = fetchApi({ API_URI: "/api/select-player", method: "POST" });
+      const data = await fetchApi({
+        API_URI: "/api/select-player",
+        method: "POST",
+        body: {player: selectPlayer}
+      });
+      
       setIsPlayer(data);
       sessionStorage.setItem("player", selectPlayer);
       setIsSelectPlayer(selectPlayer);
@@ -53,9 +56,9 @@ function SelectPlayer() {
   };
 
   //Refresh players status
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     try {
-      const data = fetchApi({ API_URI: "/api/select-player" });
+      const data = await fetchApi({ API_URI: "/api/select-player" });
       setIsPlayer(data);
       sessionStorage.removeItem("player");
       setIsSelectPlayer(null);

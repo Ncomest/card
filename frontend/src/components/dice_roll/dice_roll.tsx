@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { site } from "../../site_state.js";
 import styled, { keyframes } from "styled-components";
 
 import { FaDiceD20 } from "react-icons/fa";
@@ -24,34 +23,34 @@ import {
 import { StyledButton } from "../../style/global.style.js";
 import { fetchApi } from "../../helper/fetchApi";
 
-const Component = styled.div`
+const ComponentStyle = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 5px;
   color: wheat;
 `;
 
-const Button = styled(StyledButton)`
+const ButtonStyle = styled(StyledButton)`
   height: 40px;
   font-size: 16px;
   margin: 5px 0;
 `;
 
-const P = styled.p`
+const PStyle = styled.p`
   align-items: center;
   gap: 4px;
   display: flex;
 `;
 
-const spin = keyframes`
+const spinStyle = keyframes`
  0% {transform: rotate(0deg);}
  100% {transform: rotate(360deg);}
 `;
 
-const Spinner = styled(FaDiceD20)`
+const SpinnerStyle = styled(FaDiceD20)`
   font-size: 26px;
   margin: auto;
-  animation: ${spin} 2s linear infinite;
+  animation: ${spinStyle} 2s linear infinite;
 `;
 
 interface IRoll {
@@ -60,44 +59,28 @@ interface IRoll {
 }
 
 const DiceRoll: React.FC = () => {
-  const apiUrl = site;
-
   const [roll, setRoll] = useState<IRoll | null>(null);
   const [isRolling, setIsRolling] = useState<boolean>(false);
 
   useEffect(() => {
     const pullDiceRoll = async () => {
-      const data: any = await fetchApi({ API_URI: "api/dice/wait" });
+      await fetchApi({ API_URI: "/api/dice/wait" })
+        // await fetch(apiUrl + "/api/dice/wait")
+        .then((data) => {
+          if (data.rolling) {
+            setIsRolling(true);
+            setTimeout(() => {
+              setIsRolling(false);
+            }, 3000);
+          }
 
-      if (data.rolling) {
-        setIsRolling(true);
-        setTimeout(() => {
-          setIsRolling(false);
-        }, 3000);
-        setRoll(data);
-        pullDiceRoll();
-      } else {
-        setTimeout(pullDiceRoll, 1000);
-      }
-
-      // await fetch(apiUrl + "/api/dice/wait")
-      //   .then((res) => res.json())
-      //   .then((data) => {
-      //     if (data.rolling) {
-      //       setIsRolling(true);
-
-      //       setTimeout(() => {
-      //         setIsRolling(false);
-      //       }, 3000);
-      //     }
-
-      //     setRoll(data);
-      //     pullDiceRoll();
-      //   })
-      // .catch((err) => {
-      //   console.error("Error in pulling", err);
-      //   setTimeout(pullDiceRoll, 1000);
-      // });
+          setRoll(data);
+          pullDiceRoll();
+        })
+        .catch((err) => {
+          console.error("Error in pulling", err);
+          setTimeout(pullDiceRoll, 1000);
+        });
     };
 
     pullDiceRoll();
@@ -105,25 +88,23 @@ const DiceRoll: React.FC = () => {
 
   const handleDiceRoll = async () => {
     setIsRolling(true);
-    await fetch(apiUrl + "/api/dice", {
+    await fetchApi({
+      API_URI: "/api/dice",
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: sessionStorage.getItem("player") }),
+      body: { user: sessionStorage.getItem("player") },
     })
-      .then((res) => res.json())
       .then((res) => {
-        if (res.rolling) {
-          setIsRolling(true);
-
-          setTimeout(() => {
-            setRoll(res);
-            setIsRolling(false);
-          }, 3000);
-        }
+        // if (res.rolling) {
+        // setIsRolling(true);
+        // setTimeout(() => {
+        //   setIsRolling(false);
+        // }, 3000);
+        // }
+        setRoll(res);
       })
       .catch((err) => {
         console.log(err);
-        setIsRolling(false);
+        // setIsRolling(false);
       });
   };
 
@@ -154,17 +135,17 @@ const DiceRoll: React.FC = () => {
   };
 
   return (
-    <Component>
-      <Button onClick={handleDiceRoll}>
+    <ComponentStyle>
+      <ButtonStyle onClick={handleDiceRoll}>
         <span>
           <FaDice />
         </span>
-      </Button>
+      </ButtonStyle>
 
-      <P>
+      <PStyle>
         Стас:
         {isRolling ? (
-          <Spinner />
+          <SpinnerStyle />
         ) : (
           <>
             {roll?.diceWhite === 1 && <BsDice1 size={26} />}
@@ -175,11 +156,11 @@ const DiceRoll: React.FC = () => {
             {roll?.diceWhite === 6 && <BsDice6 size={26} />}
           </>
         )}
-      </P>
-      <P>
+      </PStyle>
+      <PStyle>
         Игорь:
         {isRolling ? (
-          <Spinner />
+          <SpinnerStyle />
         ) : (
           <>
             {roll?.diceBlack === 1 && <BsDice1Fill size={26} />}
@@ -190,13 +171,13 @@ const DiceRoll: React.FC = () => {
             {roll?.diceBlack === 6 && <BsDice6Fill size={26} />}
           </>
         )}
-      </P>
-      <Button onClick={handleRefreshStep}>
+      </PStyle>
+      <ButtonStyle onClick={handleRefreshStep}>
         <span>
           <IoRefreshCircleOutline />
         </span>
-      </Button>
-    </Component>
+      </ButtonStyle>
+    </ComponentStyle>
   );
 };
 
