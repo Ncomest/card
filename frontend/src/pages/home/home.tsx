@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { site } from "../../site_state.js";
 import styled from "styled-components";
 
 import SelectPlayer from "../../components/select_player/select_player";
@@ -10,7 +9,7 @@ import Rules from "../../components/rules/rules";
 import DropRules from "../../components/rules/drop_rules/drop_rules";
 import { fetchApi } from "../../helper/fetchApi";
 
-const Background = styled.div`
+const BackgroundStyle = styled.div`
   padding: 10px;
   background: none;
   position: relative;
@@ -32,7 +31,7 @@ const Background = styled.div`
   }
 `;
 
-const TableContainer = styled.div`
+const TableContainerStyle = styled.div`
   position: relative;
   min-height: 100vh;
   width: 100%;
@@ -51,7 +50,7 @@ const TableContainer = styled.div`
   }
 `;
 
-const Border = styled.div`
+const BorderStyle = styled.div`
   position: absolute;
   top: 0;
   left: 50%;
@@ -72,7 +71,7 @@ const Border = styled.div`
   }
 `;
 
-const RightSide = styled.div`
+const RightSideStyle = styled.div`
   position: fixed;
   display: flex;
   flex-direction: column;
@@ -197,7 +196,7 @@ const Home: React.FC = () => {
     e.dataTransfer.setData("placePickCard", placePickCard);
     e.dataTransfer.setData("cardIndex", cardIndex);
 
-    console.log("cardIndex", e.dataTransfer.getData("cardIndex"));
+    // console.log("cardIndex", e.dataTransfer.getData("cardIndex"));
 
     if (cardId) {
       e.dataTransfer.setData("cardId", cardId);
@@ -270,34 +269,8 @@ const Home: React.FC = () => {
             },
           });
 
-          // const resUpdCardOnTable = await fetch(
-          //   apiUrl + `/api/table/${casePutTableId}`,
-          //   {
-          //     method: "PUT",
-          //     headers: { "Content-Type": "application/json" },
-          //     body: JSON.stringify({
-          //       placePickCard: placePickCard, // место откуда берем карту стол или рука
-          //       placePutCard: placePutCard, // место куда кладем карту стол или рука
-          //       casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-          //       casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-          //       card: resCardPickOnTableId.card,
-          //       card_state: resCardPickOnTableId.card_state,
-          //       isEmpty: false,
-          //       user: sessionStorage.getItem("player"),
-          //     }),
-          //   }
-          // );
-
-          // if (!resUpdCardOnTable.ok) {
-          //   throw new Error("Не получилось обновить данные в БД");
-          // }
-
-          // const updatedCardOnTable = await resUpdCardOnTable.json();
           setTable(resUpdCardOnTable);
-          // console.log(
-          //   `обновленные данные которые теперь в ячейке ${casePutTableId} в бд updatedCardOnTable`,
-          //   resUpdCardOnTable
-          // );
+
         } else if (placePutCard === "hand") {
           const resUpdCardOnHand = await fetchApi({
             API_URI: "/api/hand/update",
@@ -307,20 +280,7 @@ const Home: React.FC = () => {
               card: resCardPickOnTableId.card,
             },
           });
-          // const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/update", {
-          //   method: "PUT",
-          //   headers: { "Content-Type": "application/json" },
-          //   body: JSON.stringify({
-          //     user: sessionStorage.getItem("player"),
-          //     card: resCardPickOnTableId.card,
-          //   }),
-          // });
 
-          // if (!resUpdCardOnHand.ok) {
-          //   throw new Error("Не получилось обновить данные руки на сервере");
-          // }
-
-          // const resCardFromHand = await resUpdCardOnHand.json();
           setHand(resUpdCardOnHand);
           // console.log("resUpdCardOnHand", resUpdCardOnHand);
 
@@ -336,28 +296,6 @@ const Home: React.FC = () => {
             },
           });
 
-          // const resUpdCardOnTable = await fetch(
-          //   apiUrl + `/api/table/${casePickTableId}`,
-          //   {
-          //     method: "PUT",
-          //     headers: { "Content-Type": "application/json" },
-          //     body: JSON.stringify({
-          //       placePickCard: placePickCard, // место откуда берем карту стол или рука
-          //       placePutCard: placePutCard, // место куда кладем карту стол или рука
-          //       casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-          //       casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-          //       isEmpty: true,
-          //     }),
-          //   }
-          // );
-
-          // if (!resUpdCardOnTable.ok) {
-          //   throw new Error(
-          //     "Не удалось обновить стол, очистить ячейку от карты"
-          //   );
-          // }
-
-          // const updatedCardOnTable = await resUpdCardOnTable.json();
           setTable(resUpdCardOnTable);
         }
 
@@ -371,21 +309,6 @@ const Home: React.FC = () => {
             user: sessionStorage.getItem("player"),
           },
         });
-
-        // const resCardOnHand = await fetch(apiUrl + "/api/hand/", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({
-        //     user: sessionStorage.getItem("player"),
-        //   }),
-        // });
-
-        // if (!resCardOnHand.ok) {
-        //   throw new Error("Не получилось получить данные с руки");
-        // }
-
-        // const resCardFromHand = await resCardOnHand.json();
-        // console.log("resCardFromHand[cardindex]", resCardOnHand[cardIndex]);
 
         if (placePutCard === "hand") {
           // console.log("сработал if взяли с руки и положили в руку");
@@ -406,28 +329,6 @@ const Home: React.FC = () => {
             },
           });
 
-          // const resUpdCardOnTable = await fetch(
-          //   apiUrl + `/api/table/${casePutTableId}`,
-          //   {
-          //     method: "PUT",
-          //     headers: { "Content-Type": "application/json" },
-          //     body: JSON.stringify({
-          //       placePickCard: placePickCard, // место откуда берем карту стол или рука
-          //       placePutCard: placePutCard, // место куда кладем карту стол или рука
-          //       casePickTableId: casePickTableId, // ячейка id или -1 если hand, откуда взяли карту
-          //       casePutTableId: casePutTableId, // ячейка id или -1 если hand, куда кладем карту
-          //       card: resCardOnHand[cardIndex],
-          //       isEmpty: false,
-          //       user: sessionStorage.getItem("player"),
-          //     }),
-          //   }
-          // );
-
-          // if (!resUpdCardOnTable.ok) {
-          //   throw new Error("не удалось обновить данные на столе в бд");
-          // }
-
-          // const resUpdCardFromTable = await resUpdCardOnTable.json();
           setTable(resUpdCardOnTable);
 
           //=============== запрос на обновление данных в руке
@@ -440,20 +341,6 @@ const Home: React.FC = () => {
             },
           });
 
-          // const resUpdCardOnHand = await fetch(apiUrl + "/api/hand/filter", {
-          //   method: "PUT",
-          //   headers: { "Content-Type": "application/json" },
-          //   body: JSON.stringify({
-          //     user: sessionStorage.getItem("player"),
-          //     cardIndex: Number(cardIndex),
-          //   }),
-          // });
-
-          // if (!resUpdCardOnHand.ok) {
-          //   throw new Error("не получилось обновить данные в руке");
-          // }
-
-          // const updatedCardFromHand = await resUpdCardOnHand.json();
           setHand(resUpdCardOnHand);
         }
         
@@ -468,9 +355,9 @@ const Home: React.FC = () => {
     <div>
       <div style={{ width: "70%" }}>
         <SelectPlayer />
-        <Background>
-          <TableContainer>
-            <Border />
+        <BackgroundStyle>
+          <TableContainerStyle>
+            <BorderStyle />
             {table
               ?.sort((a, b) => a._id - b._id)
               .map((item, index) => (
@@ -497,8 +384,8 @@ const Home: React.FC = () => {
                   <Card item={item} index={index} />
                 </div>
               ))}
-          </TableContainer>
-        </Background>
+          </TableContainerStyle>
+        </BackgroundStyle>
 
         <SelectDeck
           hand={hand}
@@ -509,10 +396,10 @@ const Home: React.FC = () => {
         />
         <Rules />
       </div>
-      <RightSide>
+      <RightSideStyle>
         <DropRules />
         <Chat />
-      </RightSide>
+      </RightSideStyle>
     </div>
   );
 };

@@ -8,9 +8,9 @@ import {
 } from "react-icons/md";
 import React, { useState } from "react";
 
-const Container = styled.div``;
+const ContainerStyle = styled.div``;
 
-const Component = styled.div`
+const ComponentStyle = styled.div`
   background-color: #0b0b0b;
   background-image: url("/image/bg_paper.jpg");
   background-position: center;
@@ -22,25 +22,25 @@ const Component = styled.div`
   flex-direction: column;
 `;
 
-const Header = styled.div`
+const HeaderStyle = styled.div`
   text-align: center;
   background-color: #0b0b0b;
 `;
 
-const H2 = styled.h2`
+const H2Style = styled.h2`
   font-family: "Cinzel", serif;
   color: #bebebe;
   font-size: 54px;
   font-weight: 600;
 `;
 
-const Span = styled.span`
+const SpanStyle = styled.span`
   display: flex;
   align-items: center;
   gap: 10px;
 `;
 
-const Button = styled(StyledButton)``;
+const ButtonStyle = styled(StyledButton)``;
 
 const Rules: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,11 +57,11 @@ const Rules: React.FC = () => {
   };
 
   return (
-    <Container>
-      <Header id="header">
-        <H2>Глоссарий</H2>
-        <Button onClick={handleToggle}>
-          <Span>
+    <ContainerStyle>
+      <HeaderStyle id="header">
+        <H2Style>Глоссарий</H2Style>
+        <ButtonStyle onClick={handleToggle}>
+          <SpanStyle>
             {isOpen ? (
               <>
                 <MdKeyboardDoubleArrowUp color="#ce8d00" />
@@ -75,17 +75,17 @@ const Rules: React.FC = () => {
                 <MdKeyboardDoubleArrowDown color="#ce8d00" />
               </>
             )}
-          </Span>
-        </Button>
-      </Header>
+          </SpanStyle>
+        </ButtonStyle>
+      </HeaderStyle>
       {isOpen && (
-        <Component>
+        <ComponentStyle>
           {glossary.map(({ title, text, icons }, index) => (
             <Text key={index} title={title} text={text} icons={icons} />
           ))}
-        </Component>
+        </ComponentStyle>
       )}
-    </Container>
+    </ContainerStyle>
   );
 };
 

@@ -12,7 +12,7 @@ export const fetchApi = async ({
   method = "GET",
   bearer = false,
   body,
-}: IFetch) => {
+}: IFetch): Promise<any> => {
   const apiUrl: string = site;
   const token: string | null = localStorage.getItem("accessToken") || null;
   const headers: any = { "Content-Type": "application/json" };
@@ -39,4 +39,3 @@ export const fetchApi = async ({
     throw error;
   }
 };
-

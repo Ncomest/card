@@ -1,38 +1,33 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { site } from "../../site_state";
 import { StyledButton } from "../../style/global.style";
-import axios from "axios";
+import { fetchApi } from "../../helper/fetchApi";
 
-const Component = styled.div`
+const ComponentStyle = styled.div`
   text-align: center;
   padding: 10px 0;
   background-color: #0b0b0b;
   color: #ffeecd;
 `;
 
-const Button = styled(StyledButton)``;
+const ButtonStyle = styled(StyledButton)``;
 
 function SelectPlayer() {
   const [isSelectPlayer, setIsSelectPlayer] = useState<string | null>(
     sessionStorage.getItem("player")
   );
 
-  const [isPlayer, setIsPlayer] = useState({ player1: false, player2: false });
+  const [isPlayer, setIsPlayer] = useState<any>({
+    player1: false,
+    player2: false,
+  });
 
-  const apiUrl = site;
 
   //Get players status
   useEffect(() => {
-    const fetchPlayerStatus = async () => {
+    const fetchPlayerStatus = () => {
       try {
-        const res = await fetch(apiUrl + "/api/player", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-        });
-
-        const data = await res.json();
+        const data = fetchApi({ API_URI: "/api/player" });
         setIsPlayer(data);
       } catch (error) {
         console.error("Ошибка при получении статуса:", error);
@@ -40,21 +35,16 @@ function SelectPlayer() {
     };
 
     fetchPlayerStatus();
-  }, [apiUrl]);
+  }, []);
 
   //POST req to select a player
   const handleSelectPlayer = async (e: React.MouseEvent<HTMLButtonElement>) => {
     const selectPlayer = (e.currentTarget as HTMLButtonElement).value;
-    console.log("selectPlayer", selectPlayer);
+    // console.log("selectPlayer", selectPlayer);
 
     try {
-      const res = await axios.post(
-        apiUrl + "/api/select-player",
-        { player: selectPlayer },
-        { withCredentials: true }
-      );
-
-      setIsPlayer(res.data);
+      const data = fetchApi({ API_URI: "/api/select-player", method: "POST" });
+      setIsPlayer(data);
       sessionStorage.setItem("player", selectPlayer);
       setIsSelectPlayer(selectPlayer);
     } catch (error) {
@@ -63,19 +53,9 @@ function SelectPlayer() {
   };
 
   //Refresh players status
-  const handleRefresh = async () => {
-    const token = localStorage.getItem("accessToken");
+  const handleRefresh = () => {
     try {
-      const res = await fetch(apiUrl + "/api/select-player", {
-        method: "GET",
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const data = await res.json();
-      console.log(data, "refresh");
+      const data = fetchApi({ API_URI: "/api/select-player" });
       setIsPlayer(data);
       sessionStorage.removeItem("player");
       setIsSelectPlayer(null);
@@ -85,26 +65,26 @@ function SelectPlayer() {
   };
 
   return (
-    <Component>
+    <ComponentStyle>
       {isPlayer.player1 ? <p>Стас уже выбран</p> : <p>Стас свободен</p>}
       {isPlayer.player2 ? <p>Игорь уже выбран</p> : <p>Игорь свободен</p>}
 
       {!isSelectPlayer && !isPlayer.player1 && (
-        <Button onClick={handleSelectPlayer} value={"player1"}>
+        <ButtonStyle onClick={handleSelectPlayer} value={"player1"}>
           <span>Стас</span>
-        </Button>
+        </ButtonStyle>
       )}
 
       {!isSelectPlayer && !isPlayer.player2 && (
-        <Button onClick={handleSelectPlayer} value={"player2"}>
+        <ButtonStyle onClick={handleSelectPlayer} value={"player2"}>
           <span>Игорь</span>
-        </Button>
+        </ButtonStyle>
       )}
 
-      <Button onClick={handleRefresh}>
+      <ButtonStyle onClick={handleRefresh}>
         <span>Сброс</span>
-      </Button>
-    </Component>
+      </ButtonStyle>
+    </ComponentStyle>
   );
 }
 

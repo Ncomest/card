@@ -22,6 +22,7 @@ import {
 } from "react-icons/bs";
 
 import { StyledButton } from "../../style/global.style.js";
+import { fetchApi } from "../../helper/fetchApi";
 
 const Component = styled.div`
   display: inline-flex;
@@ -65,33 +66,46 @@ const DiceRoll: React.FC = () => {
   const [isRolling, setIsRolling] = useState<boolean>(false);
 
   useEffect(() => {
-    const pullDiceRoll = () => {
-      fetch(apiUrl + "/api/dice/wait", { credentials: "include" })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.rolling) {
-            setIsRolling(true);
+    const pullDiceRoll = async () => {
+      const data: any = await fetchApi({ API_URI: "api/dice/wait" });
 
-            setTimeout(() => {
-              setIsRolling(false);
-            }, 3000);
-          }
+      if (data.rolling) {
+        setIsRolling(true);
+        setTimeout(() => {
+          setIsRolling(false);
+        }, 3000);
+        setRoll(data);
+        pullDiceRoll();
+      } else {
+        setTimeout(pullDiceRoll, 1000);
+      }
 
-          setRoll(data);
-          pullDiceRoll();
-        })
-        .catch((err) => {
-          console.error("Error in pulling", err);
-          setTimeout(pullDiceRoll, 1000);
-        });
+      // await fetch(apiUrl + "/api/dice/wait")
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     if (data.rolling) {
+      //       setIsRolling(true);
+
+      //       setTimeout(() => {
+      //         setIsRolling(false);
+      //       }, 3000);
+      //     }
+
+      //     setRoll(data);
+      //     pullDiceRoll();
+      //   })
+      // .catch((err) => {
+      //   console.error("Error in pulling", err);
+      //   setTimeout(pullDiceRoll, 1000);
+      // });
     };
 
     pullDiceRoll();
-  }, [apiUrl]);
+  }, []);
 
-  const handleDiceRoll = () => {
+  const handleDiceRoll = async () => {
     setIsRolling(true);
-    fetch(apiUrl + "/api/dice", {
+    await fetch(apiUrl + "/api/dice", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ user: sessionStorage.getItem("player") }),
@@ -113,20 +127,30 @@ const DiceRoll: React.FC = () => {
       });
   };
 
-  const handleRefreshStep = () => {
-    fetch(apiUrl + "/api/table/refstep", {
+  const handleRefreshStep = async () => {
+    const data = await fetchApi({
+      API_URI: "/api/table/refstep",
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user: sessionStorage.getItem("player") }),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Server error: ${res.status}`);
-        }
-        return res.json();
-      })
-      .then((data) => console.log(data))
-      .catch((err) => console.log(err));
+      body: {
+        user: sessionStorage.getItem("player"),
+      },
+    });
+
+    if (data) console.log("data", data);
+
+    // fetch(apiUrl + "/api/table/refstep", {
+    //   method: "PUT",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({ user: sessionStorage.getItem("player") }),
+    // })
+    //   .then((res) => {
+    //     if (!res.ok) {
+    //       throw new Error(`Server error: ${res.status}`);
+    //     }
+    //     return res.json();
+    //   })
+    //   .then((data) => console.log(data))
+    //   .catch((err) => console.log(err));
   };
 
   return (
