@@ -80,8 +80,8 @@ const Rules: React.FC = () => {
       </Header>
       {isOpen && (
         <Component>
-          {glossary.map((item, index) => (
-            <Text key={index} title={item.title} text={item.text} icons={item?.icons}/>
+          {glossary.map(({ title, text, icons }, index) => (
+            <Text key={index} title={title} text={text} icons={icons} />
           ))}
         </Component>
       )}

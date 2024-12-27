@@ -126,8 +126,6 @@ const Home: React.FC = () => {
 
   const longPullActive = useRef(true);
 
-  const apiUrl = site;
-
   const longPull = async () => {
     if (!longPullActive.current) return;
 
@@ -362,6 +360,7 @@ const Home: React.FC = () => {
           // const updatedCardOnTable = await resUpdCardOnTable.json();
           setTable(resUpdCardOnTable);
         }
+
       } else if (placePickCard === "hand") {
         // console.log("взяли карту с руки");
 
@@ -457,6 +456,7 @@ const Home: React.FC = () => {
           // const updatedCardFromHand = await resUpdCardOnHand.json();
           setHand(resUpdCardOnHand);
         }
+        
       }
     } catch (error) {
       console.error("Error:", error);
