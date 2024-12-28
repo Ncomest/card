@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { fetchApi } from "../../helper/fetchApi";
 
-const Component = styled.div`
+const ComponentStyle = styled.div`
   height: 100vh;
   display: flex;
   align-items: center;
@@ -11,7 +11,8 @@ const Component = styled.div`
   background: #0b0b0b;
 `;
 
-const Form = styled.form`
+const FormStyle = styled.form`
+  position: relative;
   border: 1px solid #bebebe;
   border-radius: 10px;
   padding: 100px 50px;
@@ -22,14 +23,14 @@ const Form = styled.form`
   gap: 20px;
 `;
 
-const Label = styled.label`
+const LabelStyle = styled.label`
   display: flex;
   flex-direction: column;
   color: #bebebe;
   font-size: 20px;
 `;
 
-const Input = styled.input`
+const InputStyle = styled.input`
   background-color: #eaeaea;
   border-radius: 5px;
   padding: 5px 10px;
@@ -41,13 +42,17 @@ const Input = styled.input`
   }
 `;
 
-const P = styled.p`
+const PStyle = styled.p`
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
   background-color: red;
   padding: 5px;
 `;
 
-const Button = styled.button`
+const ButtonStyle = styled.button`
   padding: 10px 20px;
   border-radius: 10px;
   margin: 20px 0;
@@ -96,28 +101,28 @@ const Login = () => {
   };
 
   return (
-    <Component>
-      <Form onSubmit={handleSubmit}>
-        {error && <P>{error}</P>}
-        <Label>
+    <ComponentStyle>
+      <FormStyle onSubmit={handleSubmit}>
+        {error && <PStyle>{error}</PStyle>}
+        <LabelStyle>
           Логин:
-          <Input
+          <InputStyle
             type="text"
             onChange={(e: any) => setUsername(e.target.value)}
             placeholder="Введите логин"
           />
-        </Label>
-        <Label>
+        </LabelStyle>
+        <LabelStyle>
           Пароль:
-          <Input
+          <InputStyle
             type="password"
             onChange={(e: any) => setPassword(e.target.value)}
             placeholder="Введите пароль"
           />
-        </Label>
-        <Button>Войти</Button>
-      </Form>
-    </Component>
+        </LabelStyle>
+        <ButtonStyle>Войти</ButtonStyle>
+      </FormStyle>
+    </ComponentStyle>
   );
 };
 
