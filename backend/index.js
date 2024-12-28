@@ -9,7 +9,7 @@ const { verifyAccessToken } = require("./constance/token.js");
 
 // Routes import
 // const humanRoutes = require("./routes/humans.route.js");
-// const orcRoutes = require("./routes/orcs.route.js");
+const randomDeckRoute = require("./routes/random-deck.route.js");
 const handRoute = require("./routes/hand.route.js");
 const selectPlayerRoute = require("./routes/select_player.route.js");
 const playerRoute = require("./routes/player.route.js");
@@ -40,8 +40,8 @@ const corsOptions = {
 };
 
 // Modules
-app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
-// app.use(cors(corsOptions));
+// app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -53,7 +53,7 @@ addMoreDeck(app); /*
 
 // Routes
 // app.use("/api/humans", humanRoutes);
-// app.use("/api/orcs", orcRoutes);
+app.use("/api/random-deck", randomDeckRoute);
 app.use("/api/table", tableRoute);
 app.use("/api/hand", handRoute);
 app.use("/api/decks", decksRoute);
