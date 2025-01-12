@@ -1,8 +1,8 @@
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
-import React, { useEffect, useState } from "react";
 import { StyledButton } from "../../style/global.style";
 import { fetchApi } from "../../helper/fetchApi";
+import { ICard } from "../../pages/home/home";
 
 const ComponentStyle = styled.div`
   background: #0b0b0b;
@@ -23,12 +23,6 @@ const HandStyle = styled.div`
 
 const ButtonStyle = styled(StyledButton)``;
 
-export interface IDeck {
-  _id: string;
-  name: string;
-  url: string;
-}
-
 export interface IDrag {
   e?: any;
   casePickTableId?: number;
@@ -37,12 +31,6 @@ export interface IDrag {
   placePickCard?: string;
   placePutCard?: string;
   cardIndex?: number;
-}
-
-interface ICard {
-  _id: string;
-  url: string;
-  name: string;
 }
 
 interface SelectDeckProps {
@@ -66,57 +54,45 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
   handleDragOver,
   handleDrop,
 }) => {
-  const [decks, setDecks] = useState<[string]>([""]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchApi({ API_URI: "/api/decks" })
-        .then((data: [string]) => setDecks(data))
-        .catch((err) => console.log(err));
-    };
-    fetchData();
-  }, []);
-
   //POST select deck
-  const handleSelectDeck = async (name: string) => {
-    sessionStorage.setItem("race", name);
-    await fetchApi({
+  const handleSelectDeck = async () => {
+    const data = await fetchApi({
       API_URI: "/api/hand/random",
       method: "POST",
       body: {
-        deck: name,
         user: sessionStorage.getItem("player"),
       },
-    })
-      .then((data: ICard[]) => setHand(data))
-      .catch((err) => console.error("Ошибка при получении данных:", err));
+    });
+    setHand(data);
   };
 
   //PUT clear hand
   const handleUpdateDeck = async () => {
-    await fetchApi({
+    const data = await fetchApi({
       API_URI: "/api/hand/refresh",
       method: "PUT",
       body: { user: sessionStorage.getItem("player") },
-    })
-      .then((data: IDeck[]) => setHand(data))
-      .catch((err) => console.error("Ошибка при получении данных:", err));
+    });
+    setHand(data);
   };
 
   return (
     <ComponentStyle>
-      {decks.map((deck, i) => (
+      {/* {decks.map((deck, i) => (
         <ButtonStyle key={i} onClick={() => handleSelectDeck(`${deck}`)}>
           <span>{deck}</span>
         </ButtonStyle>
-      ))}
+      ))} */}
+      <ButtonStyle onClick={handleSelectDeck}>
+        <span>Random</span>
+      </ButtonStyle>
       <ButtonStyle className="btn btn-primary" onClick={handleUpdateDeck}>
         <span>Удалить карты из руки</span>
       </ButtonStyle>
       <HandStyle>
         {hand.map((card, index) => (
           <div
-            key={index}
+            key={card._id}
             draggable={true}
             onDragStart={(e) =>
               handleDragStart({

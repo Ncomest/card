@@ -1,14 +1,15 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import DiceRoll from "../dice_roll/dice_roll";
+import { site } from "../../site_state";
 
-const Container = styled.div`
+const ContainerStyle = styled.div`
   flex: 0;
   margin: 5px;
   z-index: 1;
 `;
 
-const Component = styled.div`
+const ComponentStyle = styled.div`
   display: flex;
   flex-direction: column-reverse;
   height: 300px;
@@ -29,28 +30,19 @@ const Component = styled.div`
   }
 `;
 
-const Form = styled.form`
+const FormStyle = styled.form`
   display: flex;
   gap: 5px;
 `;
 
-const Input = styled.input`
+const InputStyle = styled.input`
   flex: 1;
   color: #bebebe;
   padding: 5px 10px;
   background: rgba(77, 77, 77, 0.584);
 `;
 
-// const BtnShow = styled(StyledButton)`
-//  position: absolute;
-//  top: 0;
-//  left: calc(100% - 160px);
-//  width: 160px;
-//  margin: 5px 0;
-//  z-index: 1;
-// `;
-
-const Button = styled.button`
+const ButtonStyle = styled.button`
   border: 1px solid;
   background-color: #242424ab;
   color: #bebebe;
@@ -64,9 +56,9 @@ const Button = styled.button`
   }
 `;
 
-const Messages = styled.div``;
+const MessagesStyle = styled.div``;
 
-const Message = styled.div`
+const MessageStyle = styled.div`
   padding: 10px;
   border: 1px solid #bebebe;
   margin: 5px 0;
@@ -85,13 +77,10 @@ const Chat = () => {
   const socket = useRef<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [username, setUsername] = useState("");
-  // const [chatHide, setChatHide] = useState(false);
-
-  //  const handleChatHide = () => setChatHide(!chatHide);
 
   const connect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    socket.current = new WebSocket("ws://87.228.10.233/websocket/");
+    socket.current = new WebSocket(site + "/websocket/");
 
     socket.current.onopen = () => {
       setConnected(true);
@@ -128,33 +117,28 @@ const Chat = () => {
   };
 
   return (
-    <Container>
+    <ContainerStyle>
       <DiceRoll />
-      {/* <BtnShow onClick={handleChatHide}> */}
-      {/* <span>{chatHide ? "Показать" : "Скрыть"}</span> */}
-      {/* </BtnShow> */}
-      <Component
-      // hidden={chatHide}
-      >
+      <ComponentStyle>
         {!connected ? (
-          <Form>
-            <Input
+          <FormStyle>
+            <InputStyle
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               type="text"
               placeholder="Введите ваше имя"
             />
-            <Button onClick={connect}>Войти</Button>
-          </Form>
+            <ButtonStyle onClick={connect}>Войти</ButtonStyle>
+          </FormStyle>
         ) : (
           <div>
-            <Messages>
+            <MessagesStyle>
               {messages
                 // .sort((a:any, b:any) => b - a)
                 .slice()
                 .reverse()
                 .map((msg) => (
-                  <Message key={msg.id}>
+                  <MessageStyle key={msg.id}>
                     {msg.event === "connection" ? (
                       <div style={{ background: "#bebebe" }}>
                         Пользователь {msg.username} подключился
@@ -164,22 +148,22 @@ const Chat = () => {
                         {msg.username}: {msg.message}
                       </div>
                     )}
-                  </Message>
+                  </MessageStyle>
                 ))}
-            </Messages>
-            <Form>
-              <Input
+            </MessagesStyle>
+            <FormStyle>
+              <InputStyle
                 type="text"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
                 placeholder="Введите сообщение"
               />
-              <Button onClick={sendMessage}>Отправить</Button>
-            </Form>
+              <ButtonStyle onClick={sendMessage}>Отправить</ButtonStyle>
+            </FormStyle>
           </div>
         )}
-      </Component>
-    </Container>
+      </ComponentStyle>
+    </ContainerStyle>
   );
 };
 

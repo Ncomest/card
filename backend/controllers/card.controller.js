@@ -49,22 +49,15 @@ const deleteCard = (Deck) => async (req, res) => {
   }
 };
 
-// Для обновления url
+// Для обновления uri
 const updCardInDB = (Deck) => async (req, res) => {
   try {
-    const allCardInDB = await Deck.find({
-      url: { $regex: /^http:\/\/87.228.10.233/ },
-    });
+    const cardsToUpdate = await Deck.find({ part: "5" });
 
-    for (const doc of allCardInDB) {
-      const updUrl = doc.url.replace(
-        /^http:\/\/87.228.10.233/,
-        "https://worldofcards.online:4434"
-      );
+    for (const card of cardsToUpdate) {
+      const updURI = card.uri.replace("/5/", "/6/");
 
-      await Deck.updateOne({_id: doc._id},
-        { $set: { url: updUrl}}
-      )
+      await Deck.updateOne({ _id: card._id }, { $set: { uri: updURI } });
     }
 
     res.status(200).json({ message: "success" });

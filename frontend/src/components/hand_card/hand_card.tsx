@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { IDeck } from "../select_deck/select_deck";
+// import { IDeck } from "../select_deck/select_deck";
 import { useEffect, useRef, useState } from "react";
 import { cardSize } from "../../style/global.style";
+import { sites } from "../../site_state";
+import { ICard } from "../../pages/home/home";
 
 const Component = styled(cardSize)<{
   $isZoom: boolean;
@@ -52,7 +54,7 @@ const Image = styled.img`
 `;
 
 interface IHandCard {
-  card: IDeck;
+  card: ICard;
   index: number;
 }
 
@@ -105,7 +107,7 @@ const HandCard: React.FC<IHandCard> = ({ card, index }) => {
       onDragEnd={handleDragEnd}
       ref={cardRef}
     >
-      <Image src={card?.url} alt={card?.name} loading="lazy" />
+      <Image src={sites + card.uri} alt={card.name} loading="lazy" />
     </Component>
   );
 };

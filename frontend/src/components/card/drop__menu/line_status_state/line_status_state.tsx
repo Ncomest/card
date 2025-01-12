@@ -1,61 +1,48 @@
 import styled from "styled-components";
 import { SideStatusState } from "../../side_status/side_status_state/side_status_state";
 import { RiRefreshLine } from "react-icons/ri";
+import { fetchApi } from "../../../../helper/fetchApi";
 
-import { site } from "../../../../site_state";
-
-const StateLine = styled.div`
- display: flex;
- padding: 2px;
- gap: 5px;
- align-items: center;
- justify-content: center;
+const StateLineStyle = styled.div`
+  display: flex;
+  padding: 2px;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
 `;
 
-const Input = styled.input`
- width: 40px;
+const InputStyle = styled.input`
+  width: 40px;
 `;
 
-const Button = styled.button`
- display: flex;
- align-items: center;
- justify-content: center;
- padding: 2px;
+const ButtonStyle = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
 `;
 
 export const LineStatusState = ({ item, icon, text }: any) => {
- const apiUrl = site;
+  
+  const handleFetchCardState = async (e: any) => {
+    await fetchApi({
+      API_URI: `/api/table/${item._id}`,
+      method: "PUT",
+      body: {
+        currCardState: text,
+        value: Number(e.target.value),
+        set_state: "setstate",
+      },
+    });
+  };
 
- const handleFetchCardState = async (e: any) => {
-  try {
-   const res = await fetch(`${apiUrl}/api/table/${item._id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-     currCardState: text,
-     value: Number(e.target.value),
-     set_state: "setstate",
-    }),
-   });
-
-   if (!res.ok) {
-    throw new Error("Ошибка resok");
-   }
-
-   const data = await res.json();
-   console.log(data);
-  } catch (error) {
-   console.error(error, "ошибка сработал catch");
-  }
- };
-
- return (
-  <StateLine>
-   <SideStatusState icon={icon} />
-   <Input type="number" onBlur={handleFetchCardState} />
-   <Button>
-    <RiRefreshLine />
-   </Button>
-  </StateLine>
- );
+  return (
+    <StateLineStyle>
+      <SideStatusState icon={icon} />
+      <InputStyle type="number" onBlur={handleFetchCardState} />
+      <ButtonStyle>
+        <RiRefreshLine />
+      </ButtonStyle>
+    </StateLineStyle>
+  );
 };

@@ -83,30 +83,40 @@ const RightSideStyle = styled.div`
   background: #0b0b0b;
 `;
 
-interface ICard {
+// interface ICard {
+//   _id: string;
+//   url: string;
+//   name: string;
+// }
+
+export interface ICard {
   _id: string;
-  url: string;
+  coin: string;
+  element: string;
+  part: string;
+  type: string;
+  uri: string;
   name: string;
 }
 
-interface ICardState {
-  haveDamaged: number | null;
+export interface ICardState {
+  have_damaged: number | null;
   poison: number | null;
   blood: number | null;
   armor: number | null;
   stack: number | null;
   fire: number | null;
   closed: boolean;
-  stepOver: boolean;
-  stepSkip: boolean;
+  step_over: boolean;
+  step_skip: boolean;
 }
 
-interface ICardTable {
+export interface ICardTable {
   _id: number;
   isEmpty: boolean;
   user: string;
   card?: ICard | null;
-  cardState?: ICardState | null;
+  card_state?: ICardState | null;
 }
 
 interface IDrag {
@@ -152,6 +162,7 @@ const Home: React.FC = () => {
       try {
         const data = await fetchApi({ API_URI: "/api/table" });
         setTable(data);
+        console.log("data стола от useEffect (home.tsx)",data); 
       } catch (error) {
         console.error("ошибка");
         throw new Error("Данные стола не получены");
@@ -270,7 +281,6 @@ const Home: React.FC = () => {
           });
 
           setTable(resUpdCardOnTable);
-
         } else if (placePutCard === "hand") {
           const resUpdCardOnHand = await fetchApi({
             API_URI: "/api/hand/update",
@@ -298,7 +308,6 @@ const Home: React.FC = () => {
 
           setTable(resUpdCardOnTable);
         }
-
       } else if (placePickCard === "hand") {
         // console.log("взяли карту с руки");
 
@@ -343,7 +352,6 @@ const Home: React.FC = () => {
 
           setHand(resUpdCardOnHand);
         }
-        
       }
     } catch (error) {
       console.error("Error:", error);

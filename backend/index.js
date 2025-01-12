@@ -40,8 +40,8 @@ const corsOptions = {
 };
 
 // Modules
-// app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
-app.use(cors(corsOptions));
+app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
+// app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -53,7 +53,7 @@ addMoreDeck(app); /*
 
 // Routes
 // app.use("/api/humans", humanRoutes);
-app.use("/api/random-deck", randomDeckRoute);
+app.use("/api/random-deck", randomDeckRoute); // создать колоду
 app.use("/api/table", tableRoute);
 app.use("/api/hand", handRoute);
 app.use("/api/decks", decksRoute);

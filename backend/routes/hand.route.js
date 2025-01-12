@@ -9,7 +9,6 @@ const {
   refreshHandsCard,
   filterHandsCard,
 } = require("../controllers/hands.controller.js");
-const { verifyAccessToken } = require("../constance/token.js");
 
 router.post("/", getHandsCard);
 router.post("/random", randomHandsCard);

@@ -8,6 +8,7 @@ import { FaCross } from "react-icons/fa";
 import { GiBatteredAxe } from "react-icons/gi";
 import { GiCardBurn } from "react-icons/gi";
 import { cardSize } from "../../style/global.style";
+import { ICard, ICardState, ICardTable } from "../../pages/home/home";
 
 const Component = styled(cardSize)<{
   $empty?: boolean;
@@ -118,31 +119,31 @@ const Cross = styled(Dragon).attrs({ as: FaCross })``;
 const Banish = styled(Dragon).attrs({ as: GiBatteredAxe })``;
 const Deck = styled(Dragon).attrs({ as: GiCardBurn })``;
 
-interface ICard {
-  _id: string;
-  url: string;
-  name: string;
-}
+// interface ICard {
+//   _id: string;
+//   url: string;
+//   name: string;
+// }
 
-interface ICardState {
-  have_damaged: number | null;
-  poison: number | null;
-  blood: number | null;
-  armor: number | null;
-  stack: number | null;
-  fire: number | null;
-  closed: boolean | string;
-  step_over: boolean;
-  step_skip: boolean;
-}
+// interface ICardState {
+//   have_damaged: number | null;
+//   poison: number | null;
+//   blood: number | null;
+//   armor: number | null;
+//   stack: number | null;
+//   fire: number | null;
+//   closed: boolean | string;
+//   step_over: boolean;
+//   step_skip: boolean;
+// }
 
-interface ICardTable {
-  _id: number;
-  isEmpty: boolean;
-  user: string;
-  card?: ICard | null;
-  card_state?: ICardState | null;
-}
+// interface ICardTable {
+//   _id: number;
+//   isEmpty: boolean;
+//   user: string;
+//   card?: ICard | null;
+//   card_state?: ICardState | null;
+// }
 
 interface ICardProps {
   item: ICardTable;
@@ -233,7 +234,7 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
           !item.card_state?.closed ? (
             <>
               <Image
-                src={item.card?.url}
+                src={item.card?.uri}
                 alt={item.card?.name}
                 $step_over={item.card_state?.step_over}
                 loading="lazy"
