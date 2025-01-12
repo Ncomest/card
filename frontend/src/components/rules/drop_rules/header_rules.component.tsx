@@ -4,7 +4,7 @@ import {
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
 
-const Header = styled.div`
+const HeaderStyle = styled.div`
   display: flex;
   justify-content: space-between;
   color: #bebebe;
@@ -15,7 +15,7 @@ const Header = styled.div`
   }
 `;
 
-const Title = styled.div`
+const TitleStyle = styled.div`
   font-weight: bold;
   margin-bottom: 5px;
   font-size: 16px;
@@ -23,24 +23,22 @@ const Title = styled.div`
   padding: 0 5px;
 `;
 
-// const Icon = styled.div``;
-
 interface IHeader {
-  title: string;
+  title?: string;
   isOpen: string | null | boolean;
+  onClick?: any;
 }
 
-const HeaderRules = ({ title, isOpen }: IHeader) => {
+const HeaderRules = ({ title, isOpen, onClick }: IHeader) => {
   return (
-    <Header>
-      <Title>{title}</Title>
-      {/* <Icon>{!isOpen ? "arrowDown" : "arrowUp"}</Icon> */}
+    <HeaderStyle onClick={onClick}>
+      <TitleStyle>{title}</TitleStyle>
       {!isOpen ? (
         <MdKeyboardDoubleArrowDown color="#ce8d00" />
       ) : (
         <MdKeyboardDoubleArrowUp color="#ce8d00" />
       )}
-    </Header>
+    </HeaderStyle>
   );
 };
 

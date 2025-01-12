@@ -55,10 +55,9 @@ const Li = styled.li`
   list-style-position: inside;
 `;
 
-const BattlesDice = ({ isOpen, title }: any) => {
+const BattlesDice = ({ isOpen }: any) => {
   return (
     <div>
-      <HeaderRules title={title} isOpen={isOpen} />
       <Component style={{ display: isOpen ? "block" : "none" }}>
         <ImgContainer>
           <Image

@@ -27,10 +27,9 @@ const Li = styled.li`
   list-style-position: inside;
 `;
 
-const Position = ({ isOpen, title }: any) => {
+const Position = ({ isOpen }: any) => {
   return (
     <div>
-      <HeaderRules title={title} isOpen={isOpen} />
       <div style={{ display: isOpen ? "block" : "none" }}>
         <Image src="/image/rules/start_position.png" alt="Стартовая позиция" />
         <Image src="/image/rules/attack_type.png" alt="Тип атаки" />

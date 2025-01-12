@@ -4,8 +4,9 @@ import { useState } from "react";
 import BattlesDice from "./battles_dice";
 import Coins from "./coins";
 import Position from "./position";
+import HeaderRules from "./header_rules.component";
 
-const Comnponent = styled.div`
+const ComnponentStyle = styled.div`
   overflow-y: scroll;
   scrollbar-color: #bebebe #000;
   scrollbar-width: none;
@@ -13,7 +14,7 @@ const Comnponent = styled.div`
   flex: 1;
 `;
 
-const DropItem = styled.div`
+const DropItemStyle = styled.div`
   padding: 5px 10px;
   background-color: #242424ab;
   border-radius: 5px;
@@ -36,13 +37,14 @@ const DropRules = () => {
   };
 
   return (
-    <Comnponent>
+    <ComnponentStyle>
       {components.map(({ name, Component, title }) => (
-        <DropItem key={name} onClick={() => handleToggle(name)}>
+        <DropItemStyle key={name} >
+          <HeaderRules title={title} isOpen={isOpen} onClick={() => handleToggle(name)}/>
           <Component isOpen={isOpen === name} title={title} />
-        </DropItem>
+        </DropItemStyle>
       ))}
-    </Comnponent>
+    </ComnponentStyle>
   );
 };
 

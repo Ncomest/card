@@ -1,10 +1,7 @@
 import styled from "styled-components";
 import HeaderRules from "./header_rules.component";
 
-interface IisOpen {
-  title: string;
-  isOpen: string | null | boolean;
-}
+
 
 const Image = styled.img`
   width: 100%;
@@ -20,10 +17,10 @@ const P = styled.p`
   color: #bebebe;
 `;
 
-const Coins = ({ isOpen, title }: IisOpen) => {
+
+const Coins = ({ isOpen }: any) => {
   return (
     <div>
-      <HeaderRules title={title} isOpen={isOpen} />
       <div style={{ display: isOpen ? "block" : "none" }}>
         <Image src="/image/rules/card_cost_table.png" alt="" />
         <H4>Влияние стихий на набор отряда</H4>
