@@ -65,6 +65,7 @@ const ButtonStyle = styled.button`
   font-weight: 800px;
 `;
 
+
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -121,6 +122,12 @@ const Login = () => {
           />
         </LabelStyle>
         <ButtonStyle>Войти</ButtonStyle>
+          <div style={{ display: "flex", gap: "10px", color: "#bebebe" }}>
+            <div>Логин:</div>
+            <div>Viewer</div>
+            <div>Пароль:</div>
+            <div>viewer</div>
+          </div>
       </FormStyle>
     </ComponentStyle>
   );
