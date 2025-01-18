@@ -1,4 +1,3 @@
-const { default: axios } = require("axios");
 const RandomDeck = require("../models/random-deck.model");
 
 let handArrP1 = [];
@@ -17,89 +16,58 @@ const getHandsCard = async (req, res) => {
   }
 };
 
-
-// Возвращает массив рандомных ID
-const randomCards = () => {
-  const cardsArr = [
-    {
-      quantity: 4,
-      start_id: 1,
-      end_id: 125,
-    },
-    {
-      quantity: 5,
-      start_id: 126,
-      end_id: 570,
-    },
-    {
-      quantity: 4,
-      start_id: 571,
-      end_id: 772,
-    },
-    {
-      quantity: 3,
-      start_id: 773,
-      end_id: 830,
-    },
-  ];
-
-  const getRandomNumber = (min, max) =>
-    Math.floor(Math.random() * (max - min + 1) + min);
-
-  return cardsArr.flatMap(({ quantity, start_id, end_id }) => {
-    const stackIdCard = new Set();
-
-    while (stackIdCard.size < quantity) {
-      stackIdCard.add(getRandomNumber(start_id, end_id));
-    }
-
-    return [...stackIdCard];
-  });
-};
-
-//helper for addHandsCard
-async function api(args) {
-  try {
-    if (args.user === "player1") {
-      handArrP1 = [];
-      let cardsId = randomCards();
-
-      const cardsFromDB = await Promise.all(
-        cardsId.map(async (id) => {
-          return await RandomDeck.findById(id);
-        })
-      );
-
-      handArrP1.push(...cardsFromDB);
-      return handArrP1;
-    } else if (args.user === "player2") {
-      handArrP2 = [];
-      let cardsId = randomCards();
-
-      const cardsFromDB = await Promise.all(
-        cardsId.map(async (id) => {
-          return await RandomDeck.findById(id);
-        })
-      );
-
-      handArrP2.push(...cardsFromDB);
-      return handArrP2;
-    } else {
-      throw new Error("Undefined user");
-    }
-  } catch (error) {
-    throw new Error("Datas error: " + error.message);
-  }
-}
-
 const randomHandsCard = async (req, res) => {
   try {
     const params = req.body;
-    let response = await api(params);
-    res.status(200).json(response);
+
+    if (params.user === "player1") {
+      //fn для игрока 1
+      handArrP1 = [];
+      const cardsArr = (await randomCards()).sort((a, b) => a.coin - b.coin);
+      handArrP1.push(...cardsArr);
+      console.log("hand1", handArrP1);
+      return res.status(200).json(handArrP1);
+    } else {
+      handArrP2 = [];
+      const cardsArr = (await randomCards()).sort((a, b) => a.coin - b.coin);
+      handArrP2.push(...cardsArr);
+      return res.status(200).json(handArrP2);
+      //fn для игрока 2
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+};
+
+// Возвращает массив руки
+const randomCards = async () => {
+  const cardsArray = [];
+  const stackIdCard = new Set();
+
+  for (let i = 1; i <= 4; i++) {
+    const partArray = await RandomDeck.find({ part: `${i}` });
+
+    // Перемешивание массива и выбор первых 4 элементов
+    const selectCard = [];
+    const usedIndexes = new Set(); // Для хранения использованных индексов
+
+    while (selectCard.length < 4) {
+      const randomIndex = Math.floor(Math.random() * partArray.length);
+
+      if (!usedIndexes.has(randomIndex)) {
+        const card = partArray[randomIndex];
+        if (!stackIdCard.has(card._id)) {
+          selectCard.push(card);
+          stackIdCard.add(card._id);
+          usedIndexes.add(randomIndex);
+        }
+      }
+    }
+    cardsArray.push(...selectCard);
+  }
+
+  console.log(cardsArray);
+  return cardsArray;
 };
 
 const updateHandsCard = async (req, res) => {

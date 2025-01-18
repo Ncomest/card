@@ -52,12 +52,14 @@ const deleteCard = (Deck) => async (req, res) => {
 // Для обновления uri
 const updCardInDB = (Deck) => async (req, res) => {
   try {
-    const cardsToUpdate = await Deck.find({ part: "5" });
+    const cardsToUpdate = await Deck.find({ coin: "8" });
 
     for (const card of cardsToUpdate) {
-      const updURI = card.uri.replace("/5/", "/6/");
+      // const updURI = card.uri.replace("/5/", "/6/");
+      const updPart = card.part.replace("7", "4");
 
-      await Deck.updateOne({ _id: card._id }, { $set: { uri: updURI } });
+      // await Deck.updateOne({ _id: card._id }, { $set: { uri: updURI } });
+      await Deck.updateOne({ _id: card._id }, { $set: { part: updPart } });
     }
 
     res.status(200).json({ message: "success" });

@@ -56,7 +56,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 }) => {
   //POST select deck
   const handleSelectDeck = async () => {
-    const data = await fetchApi({
+    const data:ICard[]= await fetchApi({
       API_URI: "/api/hand/random",
       method: "POST",
       body: {
@@ -64,6 +64,7 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
       },
     });
     setHand(data);
+    console.log(data, "hand");
   };
 
   //PUT clear hand
