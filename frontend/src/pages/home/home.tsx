@@ -71,6 +71,13 @@ const BorderStyle = styled.div`
   }
 `;
 
+const CardContainerStyle = styled.div<{ $isEmpty: boolean }>`
+  &:hover {
+    filter: ${(prop) => !prop.$isEmpty && "brightness(1.1)"};
+    z-index: ${(prop) => !prop.$isEmpty && "1"};
+  }
+`;
+
 const RightSideStyle = styled.div`
   position: fixed;
   display: flex;
@@ -82,12 +89,6 @@ const RightSideStyle = styled.div`
   width: 30%;
   background: #0b0b0b;
 `;
-
-// interface ICard {
-//   _id: string;
-//   url: string;
-//   name: string;
-// }
 
 export interface ICard {
   _id: string;
@@ -162,7 +163,7 @@ const Home: React.FC = () => {
       try {
         const data = await fetchApi({ API_URI: "/api/table" });
         setTable(data);
-        console.log("data стола от useEffect (home.tsx)",data); 
+        console.log("data стола от useEffect (home.tsx)", data);
       } catch (error) {
         console.error("ошибка");
         throw new Error("Данные стола не получены");
@@ -369,7 +370,8 @@ const Home: React.FC = () => {
             {table
               ?.sort((a, b) => a._id - b._id)
               .map((item, index) => (
-                <div
+                <CardContainerStyle
+                  $isEmpty={item.isEmpty}
                   key={index}
                   draggable={!item.isEmpty}
                   onDragStart={(e) =>
@@ -390,7 +392,7 @@ const Home: React.FC = () => {
                   }
                 >
                   <Card item={item} index={index} />
-                </div>
+                </CardContainerStyle>
               ))}
           </TableContainerStyle>
         </BackgroundStyle>

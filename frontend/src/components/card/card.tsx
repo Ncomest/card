@@ -8,7 +8,7 @@ import { FaCross } from "react-icons/fa";
 import { GiBatteredAxe } from "react-icons/gi";
 import { GiCardBurn } from "react-icons/gi";
 import { cardSize } from "../../style/global.style";
-import { ICard, ICardState, ICardTable } from "../../pages/home/home";
+import { ICardTable } from "../../pages/home/home";
 
 const Component = styled(cardSize)<{
   $empty?: boolean;
@@ -23,6 +23,7 @@ const Component = styled(cardSize)<{
   outline: 1px solid black;
   z-index: ${(prop) => prop.$isZoom && 1};
   cursor: ${(prop) => !prop.$empty && "pointer"};
+
 
   border: 5px solid
     ${(prop) =>
@@ -65,6 +66,8 @@ const Image = styled.img<{ $step_over?: boolean }>`
   border: 1px solid #bebebe;
   width: 100%;
   height: 100%;
+  object-fit: cover;
+
   filter: ${(prop) => prop.$step_over && "brightness(50%)"};
 `;
 
@@ -86,8 +89,9 @@ const ImageCross = styled.img`
 
 const Button = styled.button`
   position: absolute;
-  top: 5px;
-  right: -10px;
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
   width: 20px;
   height: 20px;
   border: 1px solid #bebebe;
@@ -118,32 +122,6 @@ const Place = styled(Dragon).attrs({ as: GiWillowTree })``;
 const Cross = styled(Dragon).attrs({ as: FaCross })``;
 const Banish = styled(Dragon).attrs({ as: GiBatteredAxe })``;
 const Deck = styled(Dragon).attrs({ as: GiCardBurn })``;
-
-// interface ICard {
-//   _id: string;
-//   url: string;
-//   name: string;
-// }
-
-// interface ICardState {
-//   have_damaged: number | null;
-//   poison: number | null;
-//   blood: number | null;
-//   armor: number | null;
-//   stack: number | null;
-//   fire: number | null;
-//   closed: boolean | string;
-//   step_over: boolean;
-//   step_skip: boolean;
-// }
-
-// interface ICardTable {
-//   _id: number;
-//   isEmpty: boolean;
-//   user: string;
-//   card?: ICard | null;
-//   card_state?: ICardState | null;
-// }
 
 interface ICardProps {
   item: ICardTable;
@@ -239,7 +217,7 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
                 $step_over={item.card_state?.step_over}
                 loading="lazy"
               />
-              <SideStatus item={item} />
+              <SideStatus item={item} isZoom={isZoom} />
             </>
           ) : (
             <Image src="/image/t_shirt.jpg" alt="Closed card" />
@@ -254,7 +232,7 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
               <ImageCross src="/image/misc/cross.jpg" />
             </Button>
           )}
-          {isOpen && <DropMenu item={item} ref={dropdownRef} />}
+          {isOpen && <DropMenu item={item} ref={dropdownRef} isZoom={isZoom} />}
           {item.card_state?.closed && (
             <ImageEye src="/image/misc/eye.jpg" alt="eye" />
           )}

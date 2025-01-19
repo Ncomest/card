@@ -8,20 +8,21 @@ import { BsFire } from "react-icons/bs";
 import { HiLockClosed } from "react-icons/hi2";
 import { FaEye } from "react-icons/fa";
 import { LineStatusState } from "./line_status_state/line_status_state";
-import { site } from "../../../site_state";
 import { forwardRef } from "react";
-import { ICard, ICardState, ICardTable } from "../../../pages/home/home";
+import { ICardTable } from "../../../pages/home/home";
 import { fetchApi } from "../../../helper/fetchApi";
 
-const Component = styled.div`
+const Component = styled.div<{ $isZoom: boolean }>`
   background-color: white;
   position: absolute;
-  top: 30px;
-  right: -15px;
+  top: ${(prop) => (prop.$isZoom ? "-15%" : "10%")};
+  right: ${(prop) => (prop.$isZoom ? "-32%" : "-10%")};
   border: 1px solid;
   border-radius: 3px;
   padding: 5px;
   z-index: 1;
+
+  transform: ${(prop) => prop.$isZoom && "scale(0.5)"};
 `;
 
 const InlineBtn = styled.button`
@@ -29,7 +30,6 @@ const InlineBtn = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  /* text-align: center; */
   border: none;
   border-radius: 5px;
   background-color: transparent;
@@ -51,95 +51,77 @@ const LineItems = styled.div`
 
 interface ICardProps {
   item: ICardTable;
+  isZoom: boolean;
 }
 
-const DropMenu = forwardRef<HTMLDivElement, ICardProps>(({ item }, ref) => {
+const DropMenu = forwardRef<HTMLDivElement, ICardProps>(
+  ({ item, isZoom }: ICardProps, ref) => {
+    const handleCardToggle = async () => {
+      console.log("item in drop menu", item);
 
-  const handleCardToggle = async () => {
-    console.log("item in drop menu", item);
+      await fetchApi({
+        API_URI: `/api/table/${item._id}`,
+        method: "PUT",
+        body: {
+          tshirt: "tshirt",
+          userCardFront: sessionStorage.getItem("player"),
+          user: item.user,
+        },
+      });
+    };
 
-    const data = await fetchApi({
-      API_URI: `/api/table/${item._id}`,
-      method: "PUT",
-      body: {
-        tshirt: "tshirt",
-        userCardFront: sessionStorage.getItem("player"),
-        user: item.user,
-      },
-    });
-    console.log(data);
-    // fetch(apiUrl + `/api/table/${item._id}`, {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     tshirt: "tshirt",
-    //     userCardFront: sessionStorage.getItem("player"),
-    //     user: item.user,
-    //   }),
-    // })
+    const handleCardStepOver = async () => {
+      console.log("handleCardStepOver", item);
+      await fetchApi({
+        API_URI: `/api/table/${item._id}`,
+        method: "PUT",
+        body: {
+          stepOver: "stepover",
+          step_over: true,
+          userCardFront: sessionStorage.getItem("player"),
+          user: item.user,
+        },
+      });
+    };
 
-    // .then((res) => res.json())
-    // .then((res) => console.log(res))
-    // .catch((err) => console.log(err));
-  };
-
-  const handleCardStepOver = async () => {
-    console.log("handleCardStepOver", item);
-    const data = await fetchApi({
-      API_URI: `/api/table/${item._id}`,
-      method: "PUT",
-      body: {
-        stepOver: "stepover",
-        step_over: true,
-        userCardFront: sessionStorage.getItem("player"),
-        user: item.user,
-      },
-    });
-    console.log(data);
-    // await fetch(apiUrl + `/api/table/${item._id}`, {
-    //   method: "PUT",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     stepOver: "stepover",
-    //     step_over: true,
-    //     userCardFront: sessionStorage.getItem("player"),
-    //     user: item.user,
-    //   }),
-    // })
-    // .then((res) => res.json())
-    // .then((data) => console.log(data))
-    // .catch((err) => console.log(err));
-  };
-
-  return (
-    <Component onClick={(e: any) => e.stopPropagation()} ref={ref}>
-      <LineStatusState
-        item={item}
-        icon={<MdHeartBroken />}
-        text={"have_damaged"}
-      />
-      <LineStatusState item={item} icon={<GiChestArmor />} text={"armor"} />
-      <LineStatusState item={item} icon={<GiBlood />} text={"blood"} />
-      <LineStatusState item={item} icon={<GiPoisonBottle />} text={"poison"} />
-      <LineStatusState item={item} icon={<BsFire />} text={"fire"} />
-      <LineStatusState
-        item={item}
-        icon={<BsLightningChargeFill />}
-        text={"stack"}
-      />
-      <LineItems>
-        {item.user === sessionStorage.getItem("player") &&
-          item.card_state?.closed && (
-            <InlineBtn onClick={handleCardToggle}>
-              <FaEye />
-            </InlineBtn>
-          )}
-        <InlineBtn>
-          <HiLockClosed onClick={handleCardStepOver} />
-        </InlineBtn>
-      </LineItems>
-    </Component>
-  );
-});
+    return (
+      <Component
+        onClick={(e: any) => e.stopPropagation()}
+        ref={ref}
+        $isZoom={isZoom}
+      >
+        <LineStatusState
+          item={item}
+          icon={<MdHeartBroken />}
+          text={"have_damaged"}
+        />
+        <LineStatusState item={item} icon={<GiChestArmor />} text={"armor"} />
+        <LineStatusState item={item} icon={<GiBlood />} text={"blood"} />
+        <LineStatusState
+          item={item}
+          icon={<GiPoisonBottle />}
+          text={"poison"}
+        />
+        <LineStatusState item={item} icon={<BsFire />} text={"fire"} />
+        <LineStatusState
+          item={item}
+          icon={<BsLightningChargeFill />}
+          text={"stack"}
+        />
+        <LineItems>
+          {item.user === sessionStorage.getItem("player") &&
+            item.card_state?.closed && (
+              <InlineBtn onClick={handleCardToggle}>
+                <FaEye />
+              </InlineBtn>
+            )}
+          <InlineBtn>
+            <HiLockClosed onClick={handleCardStepOver} />
+          </InlineBtn>
+        </LineItems>
+      </Component>
+    );
+  }
+);
 
 export default DropMenu;
