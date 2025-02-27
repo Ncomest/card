@@ -72,6 +72,7 @@ const BorderStyle = styled.div`
 `;
 
 const CardContainerStyle = styled.div<{ $isEmpty: boolean }>`
+  touch-action: none;
   &:hover {
     filter: ${(prop) => !prop.$isEmpty && "brightness(1.1)"};
     z-index: ${(prop) => !prop.$isEmpty && "1"};
@@ -226,7 +227,6 @@ const Home: React.FC = () => {
       Number(e.dataTransfer.getData("casePickTableId")) ===
       Number(casePutTableId)
     ) {
-      // console.log("так не получиться");
       return;
     }
 
@@ -235,22 +235,10 @@ const Home: React.FC = () => {
     const placePickCard = e.dataTransfer.getData("placePickCard");
     const cardIndex = e.dataTransfer.getData("cardIndex");
 
-    // console.log(
-    //   { casePickTableId, placePutCard, cardIndex, casePutTableId },
-    //   "data in handleDrop"
-    // );
-    if (!casePickTableId || !casePutTableId) {
-      // console.error("missing data for handleDrop");
-      return;
-    }
+    if (!casePickTableId || !casePutTableId) return;
 
     try {
-      if (cardIndex === undefined) {
-        // console.error("cardIndex is undefined");
-        return;
-      }
-
-      // console.log("index ячейки в руке cardIndex", cardIndex);
+      if (cardIndex === undefined) return;
 
       if (placePickCard === "table") {
         // отправим запрос на получение данных
@@ -258,13 +246,7 @@ const Home: React.FC = () => {
           API_URI: `/api/table/${casePickTableId}`,
         });
 
-        // console.log(
-        //   `получение данных с ячейки с ${casePickTableId} сервера resCardPickOnTableId`,
-        //   resCardPickOnTableId
-        // );
-
         if (placePutCard === "table") {
-          // console.log("сработал if положить со стола на стол");
           // отправим запрос на обновление данных
           const resUpdCardOnTable = await fetchApi({
             API_URI: `/api/table/${casePutTableId}`,
@@ -293,7 +275,6 @@ const Home: React.FC = () => {
           });
 
           setHand(resUpdCardOnHand);
-          // console.log("resUpdCardOnHand", resUpdCardOnHand);
 
           const resUpdCardOnTable = await fetchApi({
             API_URI: `/api/table/${casePickTableId}`,
@@ -310,8 +291,6 @@ const Home: React.FC = () => {
           setTable(resUpdCardOnTable);
         }
       } else if (placePickCard === "hand") {
-        // console.log("взяли карту с руки");
-
         const resCardOnHand = await fetchApi({
           API_URI: "/api/hand/",
           method: "POST",
@@ -321,10 +300,7 @@ const Home: React.FC = () => {
         });
 
         if (placePutCard === "hand") {
-          // console.log("сработал if взяли с руки и положили в руку");
         } else if (placePutCard === "table") {
-          // console.log("сработал if взяли карту с руки и положили на стол");
-
           const resUpdCardOnTable = await fetchApi({
             API_URI: `/api/table/${casePutTableId}`,
             method: "PUT",
