@@ -8,6 +8,8 @@ import Chat from "../../components/chat/chat";
 import Rules from "../../components/rules/rules";
 import DropRules from "../../components/rules/drop_rules/drop_rules";
 import { fetchApi } from "../../helper/fetchApi";
+import { Link } from "react-router-dom";
+import { StyledButton } from "../../style/global.style";
 
 const BackgroundStyle = styled.div`
   padding: 10px;
@@ -90,6 +92,8 @@ const RightSideStyle = styled.div`
   width: 30%;
   background: #0b0b0b;
 `;
+
+const ButtonStyle = styled(StyledButton)``;
 
 export interface ICard {
   _id: string;
@@ -380,6 +384,11 @@ const Home: React.FC = () => {
           handleDragOver={handleDragOver}
           handleDrop={handleDrop}
         />
+        <Link to={"/create_deck"}>
+          <ButtonStyle>
+            <span>+ Собрать колоду</span>
+          </ButtonStyle>
+        </Link>
         <Rules />
       </div>
       <RightSideStyle>

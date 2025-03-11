@@ -17,6 +17,7 @@ const tableRoute = require("./routes/table.route.js");
 const diceRoute = require("./routes/dice_roll.route.js");
 const decksRoute = require("./routes/decks.route.js");
 const authRoute = require("./routes/auth.route.js");
+const createNewDeckRoute = require("./routes/create_new_deck.route.js");
 
 const app = express();
 const cors = require("cors");
@@ -61,6 +62,7 @@ app.use("/api/select-player", selectPlayerRoute);
 app.use("/api/player", playerRoute);
 app.use("/api/dice", diceRoute);
 app.use("/api/auth/v1", authRoute);
+app.use("/api/create-new-deck/v1", createNewDeckRoute)
 
 // Health route
 app.get("/", (req, res) => {

@@ -73,8 +73,8 @@ const InputContainerStyle = styled.div`
 
 const InputStyle = styled.input`
   background-color: #eaeaea;
-  border-radius: 0 5px 5px 0;
-  padding: 5px 10px;
+  border-radius: 5px;
+  padding: 5px 5px 5px 40px;
   font-size: 18px;
   letter-spacing: 0.2rem;
   width: 100%;
@@ -97,22 +97,56 @@ const PStyle = styled.p`
 `;
 
 const ButtonStyle = styled.button`
-  padding: 10px 20px;
-  border-radius: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.15rem;
-  font-weight: 800px;
+  align-items: center;
+  appearance: none;
+  background-color: #FCFCFD;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
+  #D6D6E7 0 -3px 0 inset;
+  box-sizing: border-box;
+  color: #36395A;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: "JetBrains Mono",monospace;
+  height: 48px;
+  justify-content: center;
+  line-height: 1;
+  list-style: none;
+  overflow: hidden;
+  padding-left: 16px;
+  padding-right: 16px;
   position: relative;
-  background-color: #eaeaea;
+  text-align: left;
+  text-decoration: none;
+  transition: box-shadow .15s,transform .15s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: nowrap;
+  will-change: box-shadow,transform;
+  font-size: 18px;
 
-  & span {
-    transition: all 0.3s;
-  }
 
-  &:hover {
-    background-color: #c6c6c6;
-    letter-spacing: 0.4rem;
-  }
+&:focus {
+  box-shadow: #D6D6E7 0 0 0 1.5px inset, 
+  rgba(45, 35, 66, 0.4) 0 2px 4px, 
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, 
+  #D6D6E7 0 -3px 0 inset;
+}
+
+&:hover {
+  box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, 
+  rgba(45, 35, 66, 0.3) 0 7px 13px -3px, 
+  #D6D6E7 0 -3px 0 inset;
+  transform: translateY(-2px);
+}
+
+&:active {
+  box-shadow: #D6D6E7 0 3px 7px inset;
+  transform: translateY(2px);
+}
 `;
 
 const Login = () => {
@@ -160,11 +194,9 @@ const Login = () => {
             <InputContainerStyle>
               <IoMdPerson
                 style={{
-                  color: "#eaeaea",
-                  border: "2px solid #eaeaea",
-                  height: "100%",
-                  boxSizing: "content-box",
-                  borderRadius: "5px 0 0 5px",
+                  color: "#7a7a7a",
+                  borderRight: "1px solid #000",
+                  position: "absolute",
                 }}
                 size={32}
               />
@@ -180,11 +212,9 @@ const Login = () => {
             <InputContainerStyle>
               <MdLockPerson
                 style={{
-                  color: "#eaeaea",
-                  border: "2px solid #eaeaea",
-                  borderRadius: "5px 0 0 5px",
-                  height: "100%",
-                  boxSizing: "content-box",
+                  color: "#7a7a7a",
+                  borderRight: "1px solid #000",
+                  position: "absolute",
                 }}
                 size={32}
               />
