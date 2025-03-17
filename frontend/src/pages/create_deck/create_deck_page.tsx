@@ -55,7 +55,6 @@ const GridStyle = styled.div`
 
 const CardStyle = styled.div`
   border-radius: 10px;
-  border: 1px solid #bebebe;
   height: 280px;
   margin-bottom: 15px;
 `;
@@ -97,6 +96,7 @@ type TCards = {
 export const CreateDeckPage = () => {
   const [cardsData, setCardsData] = useState<TCards>() || [];
   const [page, setPage] = useState(1);
+  const [newDeck, setNewDeck] = useState<ICard[]>([])
 
   const totalPages = Number(cardsData?.pages);
 
@@ -138,28 +138,38 @@ export const CreateDeckPage = () => {
   //>==============Массивы сортировочного списка==============//
 
   const deck = 
-    cardsData?.cards.map(el => <CardStyle key={el._id}><CardInCreateDeck card={el}/></CardStyle>);
+    cardsData?.cards.map(el => 
+      <CardStyle key={el._id}>
+        <CardInCreateDeck card={el} setNewDeck={setNewDeck}/>
+      </CardStyle>);
   //>===========LeftSide_end============//
 
 
 
   //===========RightSide_start============>//
-  const rightCardList = Array.from({ length: 25 }, (_, i) => i + 1);
-  const rightCardListMap = rightCardList.map((el, i) => (
-    <CardBarStyle key={i}>{el}</CardBarStyle>
+  const rightCardListMap = newDeck.map((el, i) => (
+    <CardBarStyle key={i}>{el.name}</CardBarStyle> //TODO создать компонент с данными
   ));
   //>===========RightSide_end============//
 
 
-    //===========Button_inc&dec============>//
-    const increment = () => {
-      setPage(prev => prev + 1)
-    }
+  //===========Button_inc&dec============>//
+  const increment = () => {
+    setPage(prev => prev + 1);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }
 
-    const decrement = () => {
-      setPage(prev => prev - 1)
-    }
-    //>===========Button_inc&dec============//
+  const decrement = () => {
+    setPage(prev => prev - 1)
+  }
+  //>===========Button_inc&dec============//
+
+
+
 
     
 
