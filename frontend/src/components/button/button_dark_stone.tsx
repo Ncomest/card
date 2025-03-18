@@ -5,8 +5,7 @@ const Button = styled(StyledButton)``;
 
 
 interface SelectDeckProps {
- onClick: (e: any) => void;
- value?: string;
+ onClick?: (e: any) => void;
  text: string;
 }
 

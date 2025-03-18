@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 import { ICard } from "../../pages/home/home";
 
@@ -49,18 +48,16 @@ const ButtonAddStyle = styled.button`
 
 interface IProp {
   card: ICard;
-  setNewDeck: React.Dispatch<React.SetStateAction<ICard[]>>;
+  addCard: (card: ICard) => void;
 }
 
-const CardInCreateDeck = ({ card, setNewDeck }: IProp) => {
-  const addCard = () => setNewDeck((prev: ICard[]) => [...prev, card]);
-
+const CardInCreateDeck = ({ card, addCard }: IProp) => {
   return (
     <ContainerStyle>
       <ImageStyle src={card.uri} alt={card.name} />
       <div>
         <p>{card.name}</p>
-        <ButtonAddStyle onClick={addCard}>+</ButtonAddStyle>
+        <ButtonAddStyle onClick={() => addCard(card)}>+</ButtonAddStyle>
       </div>
     </ContainerStyle>
   );

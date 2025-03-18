@@ -10,7 +10,14 @@ export const GlobalStyles = createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+
+  :root {
+    --primary-color: rgba(0, 0, 0, 0.9);
+    --secondary-color: #303030;
+  }
 `;
+
+// export const GlobalThemeStyles
 
 
 export const StyledButton = styled.button`
@@ -19,7 +26,6 @@ export const StyledButton = styled.button`
   text-transform: uppercase;
   position: relative;
   display: inline-block;
-  margin: 10px;
   padding: 10px 20px;
   text-align: center;
   background: none;

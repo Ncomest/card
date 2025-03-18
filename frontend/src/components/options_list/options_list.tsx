@@ -8,6 +8,7 @@ type TProps = {
 const SortContainer = styled.div`
   display: flex;
   gap: 10px;
+  align-items: center;
 `;
 
 const SelectStyle = styled.select`

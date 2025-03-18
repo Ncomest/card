@@ -5,9 +5,12 @@ import Login from "./pages/auth/login";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import AuthCheck from "./pages/auth/auth_check";
 import { CreateDeckPage } from "./pages/create_deck/create_deck_page";
+import { GlobalStyles } from "./style/global.style";
 
 const App: React.FC = () => {
   return (
+    <>
+    <GlobalStyles/>
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<Login />} />
@@ -18,6 +21,7 @@ const App: React.FC = () => {
         </Route>
       </Routes>
     </BrowserRouter>
+    </>
   );
 };
 
