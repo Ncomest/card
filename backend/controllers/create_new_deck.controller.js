@@ -22,7 +22,7 @@ const allCards = async (req, res) => {
   const limit = Number(req.query.limit);
   const skip = (page - 1) * limit;
 
-  console.log(req.query);
+  // console.log(req.query);
 
   const cacheKey = `cards-page-${page}-limit-${limit}`;
   const cachedData = getCache(cacheKey);
@@ -39,6 +39,37 @@ const allCards = async (req, res) => {
     setCache(cacheKey, response, 120000);
 
     res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const currentCard = async (req, res) => {
+  try {
+    const cardName = req.query.name;
+    const page = Number(req.query.page);
+    const limit = Number(req.query.limit);
+    const skip = (page - 1) * limit;
+    console.log(req.query);
+
+    const cards = await RandomDeck.find({
+      name: { $regex: new RegExp(cardName, "i") },
+    })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await RandomDeck.countDocuments({
+      name: { $regex: new RegExp(cardName, "i") },
+    });
+
+    if (cards) {
+      const pages = Math.ceil(total / limit);
+
+      const response = { cards, total, page, pages };
+      res.status(200).json(response);
+    } else {
+      res.status(200).json({ cards: [] });
+    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -63,5 +94,6 @@ const deteleDeck = async (req, res) => {
 module.exports = {
   allCards,
   createNewDeck,
+  currentCard,
   deteleDeck,
 };

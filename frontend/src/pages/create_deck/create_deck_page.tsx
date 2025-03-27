@@ -114,33 +114,56 @@ const BtnContainer = styled.div`
 
 type TCards = {
   cards: ICard[];
-  page: string;
-  pages: string;
-  total: string;
+  page?: string;
+  pages?: string;
+  total?: string;
 };
 
 export const CreateDeckPage = () => {
   const [cardsData, setCardsData] = useState<TCards>() || [];
   const [page, setPage] = useState(1);
   const [newDeck, setNewDeck] = useState<ICard[]>([]) || [];
+  const [inputCardFind, setInputCardFind] = useState("");
+  const [debounceInput, setDebounceInput] = useState("");
+
 
   const totalPages = Number(cardsData?.pages);
 
   useEffect(() => {
+    const handleInput = setTimeout(() => setDebounceInput(inputCardFind),1500)
+
+    return () => clearTimeout(handleInput)
+  }, [inputCardFind])
+  
+  useEffect(() => {
+    if(debounceInput) console.log(debounceInput)
+  }, [debounceInput])
+
+  useEffect(() => {
     const fetchCards = async () => {
       try {
-        const data = await fetchApi({
-          API_URI: `/api/create-new-deck/v1/all-cards?page=${page}&limit=2`,
-        });
-        setCardsData(data);
+        let data;
+
+        if(debounceInput) {
+          data = await fetchApi({
+            API_URI: `/api/create-new-deck/v1/cards?name=${debounceInput}&page=${page}&limit=2`,
+          });
+          console.log(data)
+        } else {
+          data = await fetchApi({
+            API_URI: `/api/create-new-deck/v1/all-cards?page=${page}&limit=2`,
+          });
+          console.log(data)
+        
+      }
+      setCardsData(data);
       } catch (error) {
         console.error("Ошибка при получении карт:", error);
       }
     };
 
     fetchCards();
-  }, [page, setCardsData]);
-  // console.log(cardsData);
+  }, [page, setCardsData, debounceInput]);
 
   //===========LeftSide_start============>//
   function mappingFn(arr: number[] | string[]): JSX.Element[] {
@@ -213,11 +236,15 @@ export const CreateDeckPage = () => {
   const decrementPage = () => setPage(prev => prev - 1);
   
   //>===========Button_inc&dec============//
-
   return (
     <ComponentStyle>
       <LeftSideStyle>
-        <InputStyle type="text" placeholder="Введите название карты" />
+        <InputStyle 
+          type="text"
+          placeholder="Введите название карты" 
+          value={inputCardFind}
+          onChange={(e:any) => setInputCardFind(e.target.value)}
+        />
 
         <OptionsStyle>
           <OptionsList value={optionsCoins} text="сортировать по стоймости" />

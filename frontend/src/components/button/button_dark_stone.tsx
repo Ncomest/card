@@ -1,7 +1,9 @@
 import { StyledButton } from "../../style/global.style";
 import styled from "styled-components";
 
-const Button = styled(StyledButton)``;
+const Button = styled(StyledButton)`
+cursor: pointer;
+`;
 
 
 interface SelectDeckProps {
