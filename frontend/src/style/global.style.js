@@ -2,8 +2,6 @@ import { createGlobalStyle } from "styled-components";
 import styled from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
-
   body {
     font-family: 'Cinzel', serif;
     margin: 0;
@@ -16,8 +14,6 @@ export const GlobalStyles = createGlobalStyle`
     --secondary-color: #303030;
   }
 `;
-
-// export const GlobalThemeStyles
 
 
 export const StyledButton = styled.button`
