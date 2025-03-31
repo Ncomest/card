@@ -1,10 +1,5 @@
 import styled from "styled-components";
 
-type TProps = {
-  value: JSX.Element[]| any;
-  text: string;
-};
-
 const SortContainer = styled.div`
   display: flex;
   gap: 10px;
@@ -19,11 +14,44 @@ const SelectStyle = styled.select`
   border-radius: 5px;
 `;
 
-const OptionsList = ({ value, text }: TProps) => {
+type TProps = {
+  name: string;
+  text: string;
+  arr: string[] | number[];
+  dropdownFilter: string;
+  onChange: (n: string, v: string) => void;
+};
+
+const OptionsList = ({
+  name,
+  text,
+  arr,
+  dropdownFilter,
+  onChange,
+}: TProps) => {
+
+  function mappingFn(arr: number[] | string[]): JSX.Element[] {
+    //возвращает jsx разметку из массива
+    return arr.map((el, i) => (      
+      <option key={el} value={el}>
+        {el}
+      </option>
+    ));
+  }
+
+  const options = mappingFn(arr);
+
   return (
     <SortContainer>
       <p>{text}</p>
-      <SelectStyle>{value}</SelectStyle>
+      <SelectStyle
+        value={dropdownFilter}
+        name={name}
+        onChange={(e) => onChange(name, e.target.value)}
+      >
+        <option value="">Выберите</option>
+        {options}
+      </SelectStyle>
     </SortContainer>
   );
 };

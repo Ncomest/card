@@ -126,6 +126,12 @@ export const CreateDeckPage = () => {
   const [inputCardFind, setInputCardFind] = useState("");
   const [debounceInput, setDebounceInput] = useState("");
 
+  const [ dropdownFilter, setDropdownFilter] = useState({
+    cardCoins: "",
+    cardType: "",
+    cardElement: ""
+  })
+
 
   const totalPages = Number(cardsData?.pages);
 
@@ -133,57 +139,49 @@ export const CreateDeckPage = () => {
     const handleInput = setTimeout(() => setDebounceInput(inputCardFind),1500)
 
     return () => clearTimeout(handleInput)
-  }, [inputCardFind])
-  
-  useEffect(() => {
-    if(debounceInput) console.log(debounceInput)
-  }, [debounceInput])
+  }, [inputCardFind]);
 
   useEffect(() => {
+    console.log(dropdownFilter,'dropd')
+
     const fetchCards = async () => {
       try {
         let data;
 
-        if(debounceInput) {
-          data = await fetchApi({
-            API_URI: `/api/create-new-deck/v1/cards?name=${debounceInput}&page=${page}&limit=2`,
-          });
-          console.log(data)
-        } else {
-          data = await fetchApi({
-            API_URI: `/api/create-new-deck/v1/all-cards?page=${page}&limit=2`,
-          });
-          console.log(data)
+        const query = new URLSearchParams({
+          ...dropdownFilter,
+          cardName: debounceInput || "",
+          page: page.toString(),
+          limit: '2'
+        })
+
+        data = await fetchApi({
+          API_URI: `/api/create-new-deck/v1/cards?${query}`,
+        });
         
-      }
-      setCardsData(data);
+        setCardsData(data);
       } catch (error) {
         console.error("Ошибка при получении карт:", error);
       }
     };
 
     fetchCards();
-  }, [page, setCardsData, debounceInput]);
+  }, [page, setCardsData, debounceInput, dropdownFilter]);
 
   //===========LeftSide_start============>//
-  function mappingFn(arr: number[] | string[]): JSX.Element[] {
-    //возвращает jsx разметку из массива
-    return arr.map((el, i) => (
-      <option key={el} value={el}>
-        {el}
-      </option>
-    ));
-  }
+
 
   //==============Массивы сортировочного списка==========>//
   const coins = Array.from({ length: 10 }, (_, i) => i + 1); // список монеток от 1-10
-  const optionsCoins = mappingFn(coins);
 
   const cardType = ["golden", "silver"]; // тип монеток
-  const optionsType = mappingFn(cardType);
 
   const cardElement = ["steppe", "neutral", "shadow", "swamp", "mountain"]; // тип елемента
-  const optionsElement = mappingFn(cardElement);
+
+  const handleDropdownFilter = (name: string, value: string) => {
+    setDropdownFilter((prev:any) => ({...prev, [name]: value}));
+  }
+  
   //>==============Массивы сортировочного списка==============//
 
   // Добавить карту в колоду
@@ -247,9 +245,24 @@ export const CreateDeckPage = () => {
         />
 
         <OptionsStyle>
-          <OptionsList value={optionsCoins} text="сортировать по стоймости" />
-          <OptionsList value={optionsType} text="сортировать по типу" />
-          <OptionsList value={optionsElement} text="сортировать по елементу" />
+          <OptionsList 
+            arr={coins}
+            onChange={handleDropdownFilter}
+            name="cardCoins"
+            dropdownFilter={dropdownFilter.cardCoins} 
+            text="сортировать по стоймости" />
+          <OptionsList 
+            arr={cardType}
+            onChange={handleDropdownFilter}
+            name="cardType"
+            dropdownFilter={dropdownFilter.cardType} 
+            text="сортировать по типу" />
+          <OptionsList 
+            arr={cardElement}
+            onChange={handleDropdownFilter}
+            name="cardElement"
+            dropdownFilter={dropdownFilter.cardElement} 
+            text="сортировать по елементу" />
         </OptionsStyle>
 
         <GridStyle>{deck}</GridStyle>

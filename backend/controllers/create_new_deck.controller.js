@@ -17,7 +17,7 @@ function getCache(key) {
   return cached.data;
 }
 
-const allCards = async (req, res) => {
+const allCards = async (req, res) => { // не используется
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
   const skip = (page - 1) * limit;
@@ -46,23 +46,49 @@ const allCards = async (req, res) => {
 
 const currentCard = async (req, res) => {
   try {
-    const cardName = req.query.name;
-    const page = Number(req.query.page);
-    const limit = Number(req.query.limit);
-    const skip = (page - 1) * limit;
+    // const cardName = req.query.name;
+    // const page = Number(req.query.page);
+    // const limit = Number(req.query.limit);
     console.log(req.query);
 
-    const cards = await RandomDeck.find({
-      name: { $regex: new RegExp(cardName, "i") },
-    })
-      .skip(skip)
-      .limit(limit);
+    const {
+      page = 1,
+      limit = 10,
+      cardName,
+      cardCoins,
+      cardType,
+      cardElement,
+    } = req.query;
+    const skip = (Number(page) - 1) * Number(limit);
 
-    const total = await RandomDeck.countDocuments({
-      name: { $regex: new RegExp(cardName, "i") },
-    });
+    // const cardCoins = req.query.cardCoins;
+    // const cardType = req.query.cardType;
+    // const cardElement = req.query.cardElement;
 
-    if (cards) {
+    const filter = {};
+
+    if (cardName && cardName.trim() !== "") {
+      filter.name = { $regex: new RegExp(cardName, "i") };
+    }
+
+    if (cardCoins) {
+      filter.coin = cardCoins.toString();
+    }
+
+    if (cardType) {
+      filter.type = cardType;
+    }
+
+    if (cardElement) {
+      filter.element = cardElement;
+    }
+
+    const cards = await RandomDeck.find(filter).skip(skip).limit(Number(limit));
+
+    const total = await RandomDeck.countDocuments(filter);
+    console.log(filter);
+
+    if (cards.length > 0) {
       const pages = Math.ceil(total / limit);
 
       const response = { cards, total, page, pages };
