@@ -11,7 +11,7 @@ const {
 
 router.get("/all-cards", allCards); // получить список всех карт
 router.get("/cards", currentCard); // получить отфильтрованный список
-router.post("/create-new-deck", createNewDeck); // создание новой колоды
+router.post("/create", createNewDeck); // создание новой колоды
 router.delete("/delete-deck", deteleDeck); // удалить колоду
 
 module.exports = router;

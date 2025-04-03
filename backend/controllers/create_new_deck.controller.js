@@ -17,12 +17,11 @@ function getCache(key) {
   return cached.data;
 }
 
-const allCards = async (req, res) => { // не используется
+const allCards = async (req, res) => {
+  // не используется
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
   const skip = (page - 1) * limit;
-
-  // console.log(req.query);
 
   const cacheKey = `cards-page-${page}-limit-${limit}`;
   const cachedData = getCache(cacheKey);
@@ -46,11 +45,6 @@ const allCards = async (req, res) => { // не используется
 
 const currentCard = async (req, res) => {
   try {
-    // const cardName = req.query.name;
-    // const page = Number(req.query.page);
-    // const limit = Number(req.query.limit);
-    console.log(req.query);
-
     const {
       page = 1,
       limit = 10,
@@ -60,10 +54,6 @@ const currentCard = async (req, res) => {
       cardElement,
     } = req.query;
     const skip = (Number(page) - 1) * Number(limit);
-
-    // const cardCoins = req.query.cardCoins;
-    // const cardType = req.query.cardType;
-    // const cardElement = req.query.cardElement;
 
     const filter = {};
 
@@ -86,7 +76,6 @@ const currentCard = async (req, res) => {
     const cards = await RandomDeck.find(filter).skip(skip).limit(Number(limit));
 
     const total = await RandomDeck.countDocuments(filter);
-    console.log(filter);
 
     if (cards.length > 0) {
       const pages = Math.ceil(total / limit);
@@ -102,6 +91,9 @@ const currentCard = async (req, res) => {
 };
 
 const createNewDeck = async (req, res) => {
+  // console.log(req.body);
+  const { deckName, deckArr } = req.body;
+
   try {
     res.status(200).json({ message: "success" });
   } catch (error) {

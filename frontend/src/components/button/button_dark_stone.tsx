@@ -11,7 +11,7 @@ interface SelectDeckProps {
  text: string;
 }
 
-const ButtonDarkStone: React.FC<SelectDeckProps> = ({ onClick, text }) => {
+const ButtonDarkStone: React.FC<SelectDeckProps> = ({ onClick, text}) => {
  return (
   <Button onClick={onClick}>
    <span>{text}</span>

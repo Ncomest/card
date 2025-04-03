@@ -17,6 +17,7 @@ const SelectStyle = styled.select`
 type TProps = {
   name: string;
   text: string;
+  local?: string[] | undefined;
   arr: string[] | number[];
   dropdownFilter: string;
   onChange: (n: string, v: string) => void;
@@ -27,19 +28,21 @@ const OptionsList = ({
   text,
   arr,
   dropdownFilter,
+  local,
   onChange,
 }: TProps) => {
 
-  function mappingFn(arr: number[] | string[]): JSX.Element[] {
+  function mappingFn(arr: TProps['arr'], arr2: TProps['local']): JSX.Element[] {
     //возвращает jsx разметку из массива
-    return arr.map((el, i) => (      
+    return arr.map((el, i) => (
       <option key={el} value={el}>
-        {el}
+        {arr2? arr2[i]: el}
       </option>
     ));
   }
 
-  const options = mappingFn(arr);
+  const options = mappingFn(arr, local);
+
 
   return (
     <SortContainer>
@@ -51,6 +54,9 @@ const OptionsList = ({
       >
         <option value="">Выберите</option>
         {options}
+        {/* {name === 'cardElement' && locals}
+        {name === 'cardType' && locals}
+        {name === 'cardCoins' && options} */}
       </SelectStyle>
     </SortContainer>
   );

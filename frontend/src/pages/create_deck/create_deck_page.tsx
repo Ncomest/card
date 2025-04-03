@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import OptionsList from "../../components/options_list/options_list";
 import { fetchApi } from "../../helper/fetchApi";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ICard } from "../home/home";
 import CardInCreateDeck from "../../components/card_in_create_deck/card_in_create_deck";
 import CardListInCreateDeck from "../../components/card_list_in_create_deck/card_list_in_create_deck";
 import ButtonDarkStone from "../../components/button/button_dark_stone";
+import { StyledButton } from "../../style/global.style";
 
 const ComponentStyle = styled.div`
   background: var(--primary-color);
@@ -112,6 +113,15 @@ const BtnContainer = styled.div`
   padding: 15px 20px;
 `;
 
+const BtnSaveDeckStyle = styled(StyledButton)<{ $isDisabled: boolean}>`
+  pointer-events: ${(props) => (props.$isDisabled? "none" : 'auto')};
+  opacity: ${(props) => (props.$isDisabled ? "0.5" : '1')};
+
+  &:hover {
+    scale: ${(props) => (props.$isDisabled && '1')};
+  };
+`;
+
 type TCards = {
   cards: ICard[];
   page?: string;
@@ -125,6 +135,7 @@ export const CreateDeckPage = () => {
   const [newDeck, setNewDeck] = useState<ICard[]>([]) || [];
   const [inputCardFind, setInputCardFind] = useState("");
   const [debounceInput, setDebounceInput] = useState("");
+  const [deckName, setDeckName] = useState('')
 
   const [ dropdownFilter, setDropdownFilter] = useState({
     cardCoins: "",
@@ -132,6 +143,7 @@ export const CreateDeckPage = () => {
     cardElement: ""
   })
 
+  const deckRef = useRef<HTMLDivElement>(null);
 
   const totalPages = Number(cardsData?.pages);
 
@@ -142,7 +154,6 @@ export const CreateDeckPage = () => {
   }, [inputCardFind]);
 
   useEffect(() => {
-    console.log(dropdownFilter,'dropd')
 
     const fetchCards = async () => {
       try {
@@ -175,10 +186,13 @@ export const CreateDeckPage = () => {
   const coins = Array.from({ length: 10 }, (_, i) => i + 1); // список монеток от 1-10
 
   const cardType = ["golden", "silver"]; // тип монеток
+  const cardTypeRu = ["золотые", "серебрянные"]; // тип монеток
 
   const cardElement = ["steppe", "neutral", "shadow", "swamp", "mountain"]; // тип елемента
+  const cardElementRu = ["степные", "нейтральные", "темные", "болотные", "горные"]; // тип елемента
 
   const handleDropdownFilter = (name: string, value: string) => {
+    setPage(1);
     setDropdownFilter((prev:any) => ({...prev, [name]: value}));
   }
   
@@ -202,6 +216,13 @@ export const CreateDeckPage = () => {
       console.log('Количество карт в колоде не может превышать 30 карт') // TODO вывести на экран
     }
   };
+
+  useEffect(() => {
+    if(deckRef.current) {
+      deckRef.current.scrollTop = deckRef.current.scrollHeight;
+    }
+  }, [newDeck])
+  
 
   // удаление карты из набранной колоды
   const delCard = (i: number) => {
@@ -232,8 +253,32 @@ export const CreateDeckPage = () => {
   };
 
   const decrementPage = () => setPage(prev => prev - 1);
-  
   //>===========Button_inc&dec============//
+
+  //===========Button_Save&Reset_Deck============>//
+
+  const fetchSaveNewDeck = async () => {
+    try {
+      if(deckName.length <= 3 || newDeck.length <= 3) {
+        const data = await fetchApi({
+          API_URI: "/api/create-new-deck/v1/create", 
+          method: "POST", 
+          body: {
+          deckName: deckName,
+          deckArr :newDeck   
+        }})
+        console.log('создана новая колода', data);
+      }
+    } catch (error) {
+      console.error("Error",error)
+    }
+  }
+
+  const handleResetDeck = () => setNewDeck([])
+  //>==========Button_Save&Reset_Deck============//
+
+
+
   return (
     <ComponentStyle>
       <LeftSideStyle>
@@ -241,8 +286,11 @@ export const CreateDeckPage = () => {
           type="text"
           placeholder="Введите название карты" 
           value={inputCardFind}
-          onChange={(e:any) => setInputCardFind(e.target.value)}
-        />
+          onChange={(e:any) => {
+            setPage(1);
+            setInputCardFind(e.target.value)
+          }}
+          />
 
         <OptionsStyle>
           <OptionsList 
@@ -250,19 +298,21 @@ export const CreateDeckPage = () => {
             onChange={handleDropdownFilter}
             name="cardCoins"
             dropdownFilter={dropdownFilter.cardCoins} 
-            text="сортировать по стоймости" />
+            text="сортировать по стоимости" />
           <OptionsList 
             arr={cardType}
             onChange={handleDropdownFilter}
             name="cardType"
+            local={cardTypeRu}
             dropdownFilter={dropdownFilter.cardType} 
             text="сортировать по типу" />
           <OptionsList 
             arr={cardElement}
             onChange={handleDropdownFilter}
             name="cardElement"
+            local={cardElementRu}
             dropdownFilter={dropdownFilter.cardElement} 
-            text="сортировать по елементу" />
+            text="сортировать по элементу" />
         </OptionsStyle>
 
         <GridStyle>{deck}</GridStyle>
@@ -275,12 +325,21 @@ export const CreateDeckPage = () => {
       </LeftSideStyle>
 
       <RightSideStyle>
-        <CardBarContainerStyle>{rightCardListMap}</CardBarContainerStyle>
+        <CardBarContainerStyle ref={deckRef}>{rightCardListMap}</CardBarContainerStyle>
 
         <BtnContainer>
-          <InputStyle type="text" placeholder="Введите название колоды" />
-          <ButtonDarkStone text={"сохранить"} />
-          <ButtonDarkStone text={"сброс"} />
+          <InputStyle 
+            type="text" 
+            placeholder="Введите название колоды" 
+            onChange={(e: any) => setDeckName(e.target.value)}
+            value={deckName}
+            />
+          <BtnSaveDeckStyle 
+            $isDisabled={newDeck.length < 3 || deckName.length < 3}
+            onClick={fetchSaveNewDeck}>
+            <span>сохранить</span>
+          </BtnSaveDeckStyle>
+          <ButtonDarkStone text={"сброс"} onClick={handleResetDeck}/>
         </BtnContainer>
       </RightSideStyle>
     </ComponentStyle>
