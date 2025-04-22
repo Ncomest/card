@@ -14,10 +14,10 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/auth" element={<Login />} />
-        <Route path="/create_deck" element={<CreateDeckPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route element={<AuthCheck />}>
           <Route path="/" element={<Home />} />
+          <Route path="/create_deck" element={<CreateDeckPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

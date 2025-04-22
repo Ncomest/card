@@ -3,10 +3,13 @@ import styled from "styled-components";
 import { StyledButton } from "../../style/global.style";
 import { fetchApi } from "../../helper/fetchApi";
 import { ICard } from "../../pages/home/home";
+import { Link } from "react-router-dom";
+import ChoiceDeck from "../choice_deck/choice_deck";
 
 const ComponentStyle = styled.div`
-  background: #0b0b0b;
+  background: var(--primary-color);
   overflow: hidden;
+  padding: 10px 5px;
 `;
 
 const HandStyle = styled.div`
@@ -21,7 +24,16 @@ const HandStyle = styled.div`
   background: rgba(0, 0, 0, 0.434);
 `;
 
-const ButtonStyle = styled(StyledButton)``;
+const NewDeckContainerStyle = styled.div`
+  padding: 20px 10px;
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+`;
+
+const ButtonStyle = styled(StyledButton)`
+  margin-right: 20px;
+  margin-bottom: 20px;
+`;
 
 export interface IDrag {
   e?: any;
@@ -56,11 +68,25 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
 }) => {
   //POST select deck
   const handleSelectDeck = async () => {
-    const data:ICard[]= await fetchApi({
+    const data: ICard[] = await fetchApi({
       API_URI: "/api/hand/random",
       method: "POST",
       body: {
         user: sessionStorage.getItem("player"),
+      },
+    });
+    setHand(data);
+    console.log(data, "hand");
+  };
+
+  //POST select current deck
+  const handleSelectCurrentDeck = async () => {
+    const data: ICard[] = await fetchApi({
+      API_URI: "/api/hand/current-deck",
+      method: "POST",
+      body: {
+        user: sessionStorage.getItem("player"),
+        deckName: localStorage.getItem("deckName"),
       },
     });
     setHand(data);
@@ -84,39 +110,50 @@ const SelectDeck: React.FC<SelectDeckProps> = ({
           <span>{deck}</span>
         </ButtonStyle>
       ))} */}
-      <ButtonStyle onClick={handleSelectDeck}>
-        <span>Random</span>
-      </ButtonStyle>
-      <ButtonStyle className="btn btn-primary" onClick={handleUpdateDeck}>
-        <span>Удалить карты из руки</span>
-      </ButtonStyle>
-      <HandStyle>
-        {hand.map((card, index) => (
-          <div
-            key={card._id}
-            draggable={true}
-            onDragStart={(e) =>
-              handleDragStart({
-                e,
-                cardId: card._id,
-                placePickCard: "hand",
-                casePickTableId: -1,
-                cardIndex: index,
-              })
-            }
-            onDragOver={handleDragOver}
-            onDrop={(e) =>
-              handleDrop({
-                e,
-                placePutCard: "hand",
-                casePutTableId: -1,
-              })
-            }
-          >
-            <HandCard card={card} index={index} />
-          </div>
-        ))}
-      </HandStyle>
+      <NewDeckContainerStyle>
+        <ButtonStyle onClick={handleSelectDeck}>
+          <span>Random</span>
+        </ButtonStyle>
+        <ButtonStyle className="btn btn-primary" onClick={handleUpdateDeck}>
+          <span>Удалить карты из руки</span>
+        </ButtonStyle>
+        <Link to={"/create_deck"}>
+          <ButtonStyle>
+            <span>+ Собрать колоду</span>
+          </ButtonStyle>
+        </Link>
+        <ChoiceDeck onClick={handleSelectCurrentDeck} />
+      </NewDeckContainerStyle>
+      {hand.length !== 0 && 
+        <HandStyle>
+      {hand.map((card, index) => (
+        <div
+          key={card._id}
+          draggable={true}
+          onDragStart={(e) =>
+            handleDragStart({
+              e,
+              cardId: card._id,
+              placePickCard: "hand",
+              casePickTableId: -1,
+              cardIndex: index,
+            })
+          }
+          onDragOver={handleDragOver}
+          onDrop={(e) =>
+            handleDrop({
+              e,
+              placePutCard: "hand",
+              casePutTableId: -1,
+            })
+          }
+        >
+          <HandCard card={card} index={index} />
+        </div>
+      ))}
+        </HandStyle>
+      }
+      
     </ComponentStyle>
   );
 };

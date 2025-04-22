@@ -228,12 +228,12 @@ const Login = () => {
           <ButtonStyle>
             <span>Войти</span>
           </ButtonStyle>
-          <div style={{ display: "flex", gap: "10px", color: "#bebebe" }}>
+          {/* <div style={{ display: "flex", gap: "10px", color: "#bebebe" }}>
             <div>Логин:</div>
             <div>Viewer</div>
             <div>Пароль:</div>
             <div>viewer</div>
-          </div>
+          </div> */}
         </FormStyle>
       </FormWrapperStyle>
     </ComponentStyle>

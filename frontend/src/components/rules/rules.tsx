@@ -8,7 +8,10 @@ import {
 } from "react-icons/md";
 import React, { useState } from "react";
 
-const ContainerStyle = styled.div``;
+const ContainerStyle = styled.div`
+  background-color: var(--primary-color);
+  padding: 10px 5px;
+`;
 
 const ComponentStyle = styled.div`
   background-color: #0b0b0b;
@@ -20,11 +23,15 @@ const ComponentStyle = styled.div`
   display: inline-flex;
   gap: 15px;
   flex-direction: column;
+  border-radius: 20px;
+  margin: 10px 0;
 `;
 
 const HeaderStyle = styled.div`
   text-align: center;
-  background-color: #0b0b0b;
+  background-color: var(--secondary-color);
+  border-radius: 5px;
+  padding: 10px 0;
 `;
 
 const H2Style = styled.h2`

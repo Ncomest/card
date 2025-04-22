@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+const { randomDeckSchema } = require("../models/random-deck.model.js");
 const RandomDeck = require("../models/random-deck.model.js");
 
 const cache = new Map();
@@ -17,8 +19,8 @@ function getCache(key) {
   return cached.data;
 }
 
+// не используется
 const allCards = async (req, res) => {
-  // не используется
   const page = Number(req.query.page);
   const limit = Number(req.query.limit);
   const skip = (page - 1) * limit;
@@ -90,12 +92,47 @@ const currentCard = async (req, res) => {
   }
 };
 
+//надо протестировать
 const createNewDeck = async (req, res) => {
-  // console.log(req.body);
+  console.log(req.body.deckName);
   const { deckName, deckArr } = req.body;
 
   try {
-    res.status(200).json({ message: "success" });
+    const collections = await mongoose.connection.db
+      .listCollections()
+      .toArray();
+  
+      // console.log(collections)
+      
+      const collectionsExists = collections.some((col) => col.name === deckName);
+      // console.log(collectionsExists)
+
+    if (collectionsExists) {
+      return res.status(400).json({ message: "Такое название уже существует" });
+    }
+
+    const dynamicModel = mongoose.model(
+      deckName, 
+      new mongoose.Schema({
+      // _id: {type: String, required: true},
+      part: {type: String, required: true},
+      name: {type: String,required: true},
+      uri: {type: String,required: true},
+      coin: {type: String,required: true},
+      type: {type: String,required: true},
+      element: {type: String,required: true} 
+     }));
+     
+    //  console.log('first')
+     //  console.log(deckArr)
+     const cleanedId = deckArr.map(({ _id, ...rest }) => rest)
+     await dynamicModel.insertMany(cleanedId);
+    //  console.log(cleanedId)
+    //  console.log('second')
+
+    // const newDeck = await RandomDeck.find({})
+
+    res.status(200).json({message: 'Колода успешно создана'});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

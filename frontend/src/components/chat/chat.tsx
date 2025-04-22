@@ -16,11 +16,10 @@ const ComponentStyle = styled.div`
   padding: 10px;
   border-radius: 5px;
   border: 3px solid #bebebe;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--secondary-color);
   overflow-y: scroll;
   scrollbar-color: #bebebe #000;
   scrollbar-width: thin;
-  /* display: ${({ hidden }) => (hidden ? "none" : "block")}; */
 
   @media (max-width: 1024px) {
     height: 200px;

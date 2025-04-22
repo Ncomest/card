@@ -21,6 +21,7 @@ const Component = styled.div<{ $isZoom: boolean }>`
   transform: ${(prop) => prop.$isZoom && "scale(0.5)"};
   transition: transform 0.4s ease-in-out;
   gap: 5px;
+  z-index: 1;
 `;
 
 function SideStatus({ item, isZoom }: any) {

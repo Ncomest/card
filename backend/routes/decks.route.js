@@ -1,9 +1,8 @@
 const express = require("express");
 const router = express.Router();
 
-const {getAllDecks} = require('../controllers/decks.controller')
+const { getAllDecks } = require("../controllers/decks.controller");
 
-router.get('/', getAllDecks)
+router.get("/all-deck", getAllDecks);
 
-
-module.exports = router
+module.exports = router;

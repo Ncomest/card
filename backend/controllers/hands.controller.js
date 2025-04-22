@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const RandomDeck = require("../models/random-deck.model");
 
 let handArrP1 = [];
@@ -70,6 +71,47 @@ const randomCards = async () => {
   return cardsArray;
 };
 
+// Перетасовывает массив - испл в currentDeck
+function shuffleArray(arr) {
+  const newArr = [...arr];
+
+  for (let i = newArr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArr[i], newArr[j]] = [newArr[j], newArr[i]]
+  }
+
+  return newArr.slice(0, 16);
+}
+
+const currentDeck = async (req, res) => {
+  const { deckName, user } = req.body;
+  console.log(deckName);
+  console.log(deckName === "elves");
+
+  try {
+    const data = await mongoose.connection.db
+      .collection(deckName)
+      .find({})
+      .toArray();
+
+    if (user === "player1") {
+      const shuffledArr = shuffleArray(data)
+      handArrP1 = [];
+      handArrP1.push(...shuffledArr);
+      return res.status(200).json(handArrP1);
+    } else if (user === "player2") {
+      const shuffledArr = shuffleArray(data)
+      handArrP2 = [];
+      handArrP2.push(...shuffledArr);
+      return res.status(200).json(handArrP2);
+    } else if (!user || user.length <= 1) {
+      return res.status(400).json({ message: "Игрок не выбран" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const updateHandsCard = async (req, res) => {
   try {
     const data = req.body;
@@ -125,6 +167,7 @@ module.exports = {
   getHandsCard,
   randomHandsCard,
   //  addHandsCard,
+  currentDeck,
   updateHandsCard,
   refreshHandsCard,
   filterHandsCard,

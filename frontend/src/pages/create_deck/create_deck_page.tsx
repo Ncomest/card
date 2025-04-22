@@ -7,6 +7,7 @@ import CardInCreateDeck from "../../components/card_in_create_deck/card_in_creat
 import CardListInCreateDeck from "../../components/card_list_in_create_deck/card_list_in_create_deck";
 import ButtonDarkStone from "../../components/button/button_dark_stone";
 import { StyledButton } from "../../style/global.style";
+import { Link } from "react-router-dom";
 
 const ComponentStyle = styled.div`
   background: var(--primary-color);
@@ -163,7 +164,7 @@ export const CreateDeckPage = () => {
           ...dropdownFilter,
           cardName: debounceInput || "",
           page: page.toString(),
-          limit: '2'
+          limit: '20'
         })
 
         data = await fetchApi({
@@ -259,22 +260,23 @@ export const CreateDeckPage = () => {
 
   const fetchSaveNewDeck = async () => {
     try {
-      if(deckName.length <= 3 || newDeck.length <= 3) {
+      // if(deckName.length <= 3 || newDeck.length <= 3) {
         const data = await fetchApi({
           API_URI: "/api/create-new-deck/v1/create", 
           method: "POST", 
           body: {
           deckName: deckName,
-          deckArr :newDeck   
-        }})
+          deckArr : newDeck,
+        }
+      })
         console.log('создана новая колода', data);
-      }
+      // }
     } catch (error) {
-      console.error("Error",error)
+      console.error("Error",error);
     }
-  }
+  };
 
-  const handleResetDeck = () => setNewDeck([])
+  const handleResetDeck = () => setNewDeck([]);
   //>==========Button_Save&Reset_Deck============//
 
 
@@ -282,6 +284,9 @@ export const CreateDeckPage = () => {
   return (
     <ComponentStyle>
       <LeftSideStyle>
+        <Link to="/">
+          <StyledButton><span>← назад</span></StyledButton>
+        </Link>
         <InputStyle 
           type="text"
           placeholder="Введите название карты" 
