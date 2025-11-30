@@ -19,6 +19,7 @@ const decksRoute = require("./routes/decks.route.js");
 const authRoute = require("./routes/auth.route.js");
 const createNewDeckRoute = require("./routes/create_new_deck.route.js");
 
+
 const app = express();
 const cors = require("cors");
 
@@ -41,7 +42,7 @@ const corsOptions = {
 };
 
 // Modules
-app.use(cors("http://localhost:3000")); // убать и раскоментировать ниженюю строку
+app.use(cors("http://localhost:5173")); // убать и раскоментировать ниженюю строку
 // app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -64,6 +65,7 @@ app.use("/api/dice", diceRoute);
 app.use("/api/auth/v1", authRoute);
 app.use("/api/create-new-deck/v1", createNewDeckRoute)
 
+
 // Health route
 app.get("/", (req, res) => {
   res.send("Hi my dear baby");
@@ -76,6 +78,7 @@ mongoose
   )
   .then(() => {
     console.log("connent to database");
+
     app.listen(PORT, () => {
       console.log(`server on port ${PORT}`);
     });
