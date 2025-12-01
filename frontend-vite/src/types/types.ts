@@ -28,6 +28,13 @@ export interface ICardTable {
   card_state?: ICardState | null;
 }
 
+export interface ICardsTotal {
+  cards: ICard[];
+  page?: string;
+  pages?: string;
+  total?: string;
+};
+
 export interface IDrag {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   e?: any;

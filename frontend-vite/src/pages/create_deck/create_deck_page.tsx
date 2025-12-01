@@ -2,7 +2,7 @@ import styled from "styled-components";
 import OptionsList from "../../components/options_list/options_list";
 import { fetchApi } from "../../helper/fetchApi";
 import { useEffect, useRef, useState } from "react";
-import type { ICard } from "@/types/types";
+import type { ICard, ICardsTotal } from "@/types/types";
 import CardInCreateDeck from "../../components/card_in_create_deck/card_in_create_deck";
 import CardListInCreateDeck from "../../components/card_list_in_create_deck/card_list_in_create_deck";
 import ButtonDarkStone from "../../components/button/button_dark_stone";
@@ -123,15 +123,8 @@ const BtnSaveDeckStyle = styled(StyledButton)<{ $isDisabled: boolean}>`
   };
 `;
 
-type TCards = {
-  cards: ICard[];
-  page?: string;
-  pages?: string;
-  total?: string;
-};
-
 export const CreateDeckPage = () => {
-  const [cardsData, setCardsData] = useState<TCards>() || [];
+  const [cardsData, setCardsData] = useState<ICardsTotal>() || [];
   const [page, setPage] = useState(1);
   const [newDeck, setNewDeck] = useState<ICard[]>([]) || [];
   const [inputCardFind, setInputCardFind] = useState("");
@@ -157,9 +150,8 @@ export const CreateDeckPage = () => {
   useEffect(() => {
 
     const fetchCards = async () => {
+      
       try {
-        let data;
-
         const query = new URLSearchParams({
           ...dropdownFilter,
           cardName: debounceInput || "",
@@ -167,7 +159,7 @@ export const CreateDeckPage = () => {
           limit: '20'
         })
 
-        data = await fetchApi({
+        const data = await fetchApi({
           API_URI: `/api/create-new-deck/v1/cards?${query}`,
         });
         
