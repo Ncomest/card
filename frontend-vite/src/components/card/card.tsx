@@ -8,7 +8,7 @@ import { FaCross } from "react-icons/fa";
 import { GiBatteredAxe } from "react-icons/gi";
 import { GiCardBurn } from "react-icons/gi";
 import { cardSize } from "../../style/global.style";
-import type { ICardTable } from "@/types/types";
+import type { ICardProps } from "@/types/types";
 
 const Component = styled(cardSize)<{
   $empty?: boolean;
@@ -123,10 +123,7 @@ const Cross = styled(Dragon).attrs({ as: FaCross })``;
 const Banish = styled(Dragon).attrs({ as: GiBatteredAxe })``;
 const Deck = styled(Dragon).attrs({ as: GiCardBurn })``;
 
-interface ICardProps {
-  item: ICardTable;
-  index: number;
-}
+
 
 const Card: React.FC<ICardProps> = ({ item, index }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -217,7 +214,7 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
                 $step_over={item.card_state?.step_over}
                 loading="lazy"
               />
-              <SideStatus item={item} isZoom={isZoom} />
+              <SideStatus item={item.card_state} isZoom={isZoom} />
             </>
           ) : (
             <Image src="/image/t_shirt.jpg" alt="Closed card" />

@@ -13,7 +13,10 @@ const AuthCheck: React.FC = () => {
           API_URI: "/api/auth/v1/check",
           bearer: true,
         });
-        data ? setAuth(true) : setAuth(false);
+
+        if (data) setAuth(true);
+        else setAuth(false);
+        
       } catch (error) {
         console.error("Ошибка авторизации", error);
         setAuth(false);

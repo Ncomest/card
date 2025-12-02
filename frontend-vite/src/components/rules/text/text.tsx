@@ -25,13 +25,11 @@ const IconStyle = styled.img`
   width: 20px;
 `;
 
-interface IProps {
-  icons?: any;
-  title?: string;
-  text?: string;
-}
-
-const Text = ({ title, text, icons }: IProps) => {
+const Text = ({ title, text, icons }: {
+  title?: string,
+  text?: string,
+  icons?: string
+}) => {
   return (
     <ComponentStyle>
       <ContainerStyle>

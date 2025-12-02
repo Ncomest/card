@@ -1,62 +1,64 @@
-import { useState, useEffect, useCallback } from "react";
+// TODO: походу нигде не используется
 
-interface IFetchState<T> {
-  data: T | null;
-  error: string | null;
-  loading: boolean;
-}
+// import { useState, useEffect, useCallback } from "react";
 
-export function useFetch<T>(
-  url: string,
-  method?: string,
-  body?: any
-  // options?: RequestInit
-) {
-  const [state, setState] = useState<IFetchState<T>>({
-    data: null,
-    error: null,
-    loading: true,
-  });
+// interface IFetchState<T> {
+//   data: T | null;
+//   error: string | null;
+//   loading: boolean;
+// }
 
-  const fetchData = useCallback(async () => {
-    setState({
-      data: null,
-      error: null,
-      loading: true,
-    });
+// export function useFetch<T>(
+//   url: string,
+//   method?: string,
+//   body?: any
+//   // options?: RequestInit
+// ) {
+//   const [state, setState] = useState<IFetchState<T>>({
+//     data: null,
+//     error: null,
+//     loading: true,
+//   });
 
-    const token = localStorage.getItem("accessToken") || null;
+//   const fetchData = useCallback(async () => {
+//     setState({
+//       data: null,
+//       error: null,
+//       loading: true,
+//     });
 
-    const options = {
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorizaion": `Bearer ${token}`,
-      },
-      body: body,
-    };
+//     const token = localStorage.getItem("accessToken") || null;
 
-    try {
-      const response = await fetch(url, options);
+//     const options = {
+//       method: method,
+//       headers: {
+//         "Content-Type": "application/json",
+//         "Authorizaion": `Bearer ${token}`,
+//       },
+//       body: body,
+//     };
 
-      if (!response.ok)
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
+//     try {
+//       const response = await fetch(url, options);
 
-      const data = (await response.json()) as T;
+//       if (!response.ok)
+//         throw new Error(`Error: ${response.status} ${response.statusText}`);
 
-      setState({ data, error: null, loading: false });
-    } catch (error) {
-      setState({
-        data: null,
-        error: error instanceof Error ? error.message : "Unknown error",
-        loading: false,
-      });
-    }
-  }, [url, method, body]);
+//       const data = (await response.json()) as T;
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+//       setState({ data, error: null, loading: false });
+//     } catch (error) {
+//       setState({
+//         data: null,
+//         error: error instanceof Error ? error.message : "Unknown error",
+//         loading: false,
+//       });
+//     }
+//   }, [url, method, body]);
 
-  return { ...state, refetch: fetchData };
-}
+//   useEffect(() => {
+//     fetchData();
+//   }, [fetchData]);
+
+//   return { ...state, refetch: fetchData };
+// }

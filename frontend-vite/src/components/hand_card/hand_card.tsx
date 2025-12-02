@@ -55,12 +55,7 @@ const Image = styled.img`
   height: 100%;
 `;
 
-interface IHandCard {
-  card: ICard;
-  index: number;
-}
-
-const HandCard: React.FC<IHandCard> = ({ card, index }) => {
+const HandCard = ({ card, index }: { card: ICard; index: number }) => {
   const [isZoom, setIsZoom] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);

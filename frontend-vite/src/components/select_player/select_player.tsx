@@ -24,7 +24,7 @@ function SelectPlayer() {
     sessionStorage.getItem("player")
   );
 
-  const [isPlayer, setIsPlayer] = useState<any>({
+  const [isPlayer, setIsPlayer] = useState<Record<string, boolean>>({
     player1: false,
     player2: false,
   });

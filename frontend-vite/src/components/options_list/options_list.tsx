@@ -32,7 +32,7 @@ const OptionsList = ({
   onChange,
 }: TProps) => {
 
-  function mappingFn(arr: TProps['arr'], arr2: TProps['local']): JSX.Element[] {
+  function mappingFn(arr: TProps['arr'], arr2: TProps['local']) {
     //возвращает jsx разметку из массива
     return arr.map((el, i) => (
       <option key={el} value={el}>

@@ -53,13 +53,13 @@ const SpinnerStyle = styled(FaDiceD20)`
   animation: ${spinStyle} 2s linear infinite;
 `;
 
-interface IRoll {
+type TRoll = {
   diceWhite: number;
   diceBlack: number;
 }
 
-const DiceRoll: React.FC = () => {
-  const [roll, setRoll] = useState<IRoll | null>(null);
+const DiceRoll = () => {
+  const [roll, setRoll] = useState<TRoll | null>(null);
   const [isRolling, setIsRolling] = useState<boolean>(false);
 
   useEffect(() => {

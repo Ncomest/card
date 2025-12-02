@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import HeaderRules from "./header_rules.component";
+// import HeaderRules from "./header_rules.component";
 
 const P = styled.p`
   color: #b3b3b3;
@@ -27,10 +27,10 @@ const Li = styled.li`
   list-style-position: inside;
 `;
 
-const Position = ({ isOpen }: any) => {
+const Position = ({ componentName }: { componentName: string }) => {
   return (
     <div>
-      <div style={{ display: isOpen ? "block" : "none" }}>
+      <div style={{ display: componentName ? "block" : "none" }}>
         <Image src="/image/rules/start_position.png" alt="Стартовая позиция" />
         <Image src="/image/rules/attack_type.png" alt="Тип атаки" />
         <H4>Примеры расчёта дальности для дальних атак</H4>

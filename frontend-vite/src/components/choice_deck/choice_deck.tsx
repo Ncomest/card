@@ -30,11 +30,7 @@ const OptionStyle = styled.option`
 
 const ButtonStyle = styled(StyledButton)``;
 
-interface IProp {
-  onClick: () => void;
-}
-
-const ChoiceDeck = ({ onClick }: IProp) => {
+const ChoiceDeck = ({ onClick }: { onClick: () => void }) => {
   const [deck, setDeck] = useState<string[]>([]);
   const [localDeckName, setLocalDeckName] = useState("");
 

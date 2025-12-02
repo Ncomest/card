@@ -6,7 +6,7 @@ import {
   MdKeyboardDoubleArrowDown,
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const ContainerStyle = styled.div`
   background-color: var(--primary-color);
@@ -49,7 +49,7 @@ const SpanStyle = styled.span`
 
 const ButtonStyle = styled(StyledButton)``;
 
-const Rules: React.FC = () => {
+const Rules= () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {

@@ -53,3 +53,9 @@ export interface IFetch {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: any;
 }
+
+export interface ICardProps {
+  item: ICardTable;
+  index: number;
+}
+

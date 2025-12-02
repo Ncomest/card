@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import HeaderRules from "./header_rules.component";
+// import HeaderRules from "./header_rules.component";
 // import { cardSize } from "../../style/global.style";
 import { cardSize } from "../../../style/global.style";
 
@@ -55,10 +55,10 @@ const Li = styled.li`
   list-style-position: inside;
 `;
 
-const BattlesDice = ({ isOpen }: any) => {
+const BattlesDice = ({ componentName }: { componentName: string }) => {
   return (
     <div>
-      <Component style={{ display: isOpen ? "block" : "none" }}>
+      <Component style={{ display: componentName ? "block" : "none" }}>
         <ImgContainer>
           <Image
             src="/image/rules/battle_dice_roll.png"

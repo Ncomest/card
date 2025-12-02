@@ -3,12 +3,6 @@ import type { ICard } from "@/types/types";
 import { URL } from "@/constants/consts";
 import { useState } from "react";
 
-interface IProps {
-  index: number;
-  deckList: ICard;
-  onClick: (index: number) => void;
-}
-
 const ContainerStyle = styled.div`
   position: relative;
   height: 44px;
@@ -36,7 +30,7 @@ const ImageStyle = styled.img`
   object-position: 0 -9px;
   margin: auto;
   filter: brightness(90%);
-  
+
   &:hover {
     filter: brightness(110%);
   }
@@ -65,12 +59,22 @@ const ButtonStyle = styled.button`
   }
 `;
 
-const CardListInCreateDeck = ({ deckList, index, onClick }: IProps) => {
-
+const CardListInCreateDeck = ({
+  deckList,
+  index,
+  onClick,
+}: {
+  index: number;
+  deckList: ICard;
+  onClick: (index: number) => void;
+}) => {
   const [isHover, setIsHover] = useState(false);
 
   return (
-    <ContainerStyle onMouseEnter={() => setIsHover(true)} onMouseLeave={() => setIsHover(false)}>
+    <ContainerStyle
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+    >
       <PStyle>{index + 1}</PStyle>
       <ImageStyle src={URL + deckList.uri} alt={deckList.name} />
       {isHover && <ButtonStyle onClick={() => onClick(index)}>X</ButtonStyle>}

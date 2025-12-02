@@ -6,6 +6,7 @@ import { GiPoisonBottle } from "react-icons/gi";
 import { GiChestArmor } from "react-icons/gi";
 import { BsLightningChargeFill } from "react-icons/bs";
 import { BsFire } from "react-icons/bs";
+import type { ICardState } from "@/types/types";
 
 const Component = styled.div<{ $isZoom: boolean }>`
   padding: 2px;
@@ -24,39 +25,17 @@ const Component = styled.div<{ $isZoom: boolean }>`
   z-index: 1;
 `;
 
-function SideStatus({ item, isZoom }: any) {
+function SideStatus({ item, isZoom }: { item: ICardState; isZoom: boolean }) {
+  const { have_damaged, blood, poison, armor, stack, fire } = item;
+
   return (
     <Component $isZoom={isZoom}>
-      {item?.card_state?.have_damaged ? (
-        <SideStatusState
-          icon={<MdHeartBroken />}
-          text={item?.card_state?.have_damaged}
-        />
-      ) : null}
-      {item?.card_state?.blood ? (
-        <SideStatusState icon={<GiBlood />} text={item?.card_state?.blood} />
-      ) : null}
-      {item?.card_state?.poison ? (
-        <SideStatusState
-          icon={<GiPoisonBottle />}
-          text={item?.card_state?.poison}
-        />
-      ) : null}
-      {item?.card_state?.armor ? (
-        <SideStatusState
-          icon={<GiChestArmor />}
-          text={item?.card_state?.armor}
-        />
-      ) : null}
-      {item?.card_state?.stack ? (
-        <SideStatusState
-          icon={<BsLightningChargeFill />}
-          text={item?.card_state?.stack}
-        />
-      ) : null}
-      {item?.card_state?.fire ? (
-        <SideStatusState icon={<BsFire />} text={item?.card_state?.fire} />
-      ) : null}
+      {have_damaged ?<SideStatusState icon={<MdHeartBroken />} text={have_damaged} /> : null}
+      {blood ? <SideStatusState icon={<GiBlood />} text={blood} /> : null}
+      {poison ? <SideStatusState icon={<GiPoisonBottle />} text={poison} /> : null}
+      {armor ? <SideStatusState icon={<GiChestArmor />} text={armor} /> : null}
+      {stack ? <SideStatusState icon={<BsLightningChargeFill />} text={stack} /> : null}
+      {fire ? <SideStatusState icon={<BsFire />} text={fire} /> : null}
     </Component>
   );
 }

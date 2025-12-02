@@ -35,7 +35,7 @@ const ButtonStyle = styled(StyledButton)`
   margin-bottom: 20px;
 `;
 
-export interface IDrag {
+type TDrag = {
   e?: React.DragEvent<HTMLDivElement>;
   casePickTableId?: number;
   casePutTableId?: number;
@@ -45,21 +45,21 @@ export interface IDrag {
   cardIndex?: number;
 }
 
-interface SelectDeckProps {
+type TSelectDeckProps = {
   handleDragStart: ({
     e,
     casePickTableId,
     cardId,
     placePickCard,
     cardIndex,
-  }: IDrag) => void;
+  }: TDrag) => void;
   handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
-  handleDrop: ({ e, casePutTableId }: IDrag) => void;
+  handleDrop: ({ e, casePutTableId }: TDrag) => void;
   hand: ICard[];
   setHand: React.Dispatch<React.SetStateAction<ICard[]>>;
 }
 
-const SelectDeck: React.FC<SelectDeckProps> = ({
+const SelectDeck: React.FC<TSelectDeckProps> = ({
   hand,
   setHand,
   handleDragStart,

@@ -23,17 +23,15 @@ const TitleStyle = styled.div`
   padding: 0 5px;
 `;
 
-interface IHeader {
-  title?: string;
-  isOpen: string | null | boolean;
-  onClick?: any;
-}
-
-const HeaderRules = ({ title, isOpen, onClick }: IHeader) => {
+const HeaderRules = ({ title, componentName, onClick }: {
+  componentName: string | null,
+  onClick?: () => void,
+  title?: string
+}) => {
   return (
     <HeaderStyle onClick={onClick}>
       <TitleStyle>{title}</TitleStyle>
-      {!isOpen ? (
+      {!componentName ? (
         <MdKeyboardDoubleArrowDown color="#ce8d00" />
       ) : (
         <MdKeyboardDoubleArrowUp color="#ce8d00" />

@@ -30,18 +30,22 @@ const components = [
 ];
 
 const DropRules = () => {
-  const [isOpen, setIsOpen] = useState(null);
+  const [componentName, setComponentName] = useState<string | null>(null);
 
-  const handleToggle = (componentName: any) => {
-    setIsOpen((prev) => (prev === componentName ? null : componentName));
+  const handleToggle = (componentName: string | null) => {
+    setComponentName((prev) => (prev === componentName ? null : componentName));
   };
 
   return (
     <ComnponentStyle>
       {components.map(({ name, Component, title }) => (
-        <DropItemStyle key={name} >
-          <HeaderRules title={title} isOpen={isOpen} onClick={() => handleToggle(name)}/>
-          <Component isOpen={isOpen === name} title={title} />
+        <DropItemStyle key={name}>
+          <HeaderRules
+            title={title}
+            componentName={componentName}
+            onClick={() => handleToggle(name)}
+          />
+          <Component componentName={componentName === name} title={title} />
         </DropItemStyle>
       ))}
     </ComnponentStyle>

@@ -1,7 +1,5 @@
 import styled from "styled-components";
-import HeaderRules from "./header_rules.component";
-
-
+// import HeaderRules from "./header_rules.component";
 
 const Image = styled.img`
   width: 100%;
@@ -18,10 +16,10 @@ const P = styled.p`
 `;
 
 
-const Coins = ({ isOpen }: any) => {
+const Coins = ({ componentName }: {componentName: string}) => {
   return (
     <div>
-      <div style={{ display: isOpen ? "block" : "none" }}>
+      <div style={{ display: componentName ? "block" : "none" }}>
         <Image src="/image/rules/card_cost_table.png" alt="" />
         <H4>Влияние стихий на набор отряда</H4>
         <P>

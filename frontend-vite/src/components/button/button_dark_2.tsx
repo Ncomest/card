@@ -5,11 +5,7 @@ const Button = styled(StyledButton)`
   margin: 0;
 `;
 
-interface SelectDeckProps {
-  text: string;
-}
-
-const ButtonDark2: React.FC<SelectDeckProps> = ({ text }) => {
+const ButtonDark2 = ({ text }: { text: string }) => {
   return (
     <Button>
       <span>{text}</span>

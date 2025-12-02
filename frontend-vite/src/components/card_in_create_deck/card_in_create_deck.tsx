@@ -46,12 +46,13 @@ const ButtonAddStyle = styled.button`
   }
 `;
 
-interface IProp {
+const CardInCreateDeck = ({
+  card,
+  addCard,
+}: {
   card: ICard;
   addCard: (card: ICard) => void;
-}
-
-const CardInCreateDeck = ({ card, addCard }: IProp) => {
+}) => {
   return (
     <ContainerStyle>
       <ImageStyle src={card.uri} alt={card.name} />

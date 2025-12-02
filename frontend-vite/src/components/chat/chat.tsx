@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import DiceRoll from "../dice_roll/dice_roll";
-import { site } from "../../site_state";
+import { URL } from "@/constants/consts";
 
 const ContainerStyle = styled.div`
   flex: 0;
@@ -63,7 +63,7 @@ const MessageStyle = styled.div`
   margin: 5px 0;
 `;
 
-interface IMessage {
+type TMessage = {
   event: string;
   message: string;
   username: string;
@@ -71,7 +71,7 @@ interface IMessage {
 }
 
 const Chat = () => {
-  const [messages, setMessages] = useState<IMessage[]>([]);
+  const [messages, setMessages] = useState<TMessage[]>([]);
   const [value, setValue] = useState("");
   const socket = useRef<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
@@ -79,7 +79,7 @@ const Chat = () => {
 
   const connect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    socket.current = new WebSocket(site + "/websocket/");
+    socket.current = new WebSocket(URL + "/websocket/");
 
     socket.current.onopen = () => {
       setConnected(true);
@@ -89,7 +89,7 @@ const Chat = () => {
     };
 
     socket.current.onmessage = (event: MessageEvent) => {
-      const message: IMessage = JSON.parse(event.data);
+      const message: TMessage = JSON.parse(event.data);
       setMessages((prev) => [message, ...prev]);
     };
 
