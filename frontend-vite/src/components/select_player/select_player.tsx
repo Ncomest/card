@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { StyledButton } from "../../style/global.style";
 import { fetchApi } from "../../helper/fetchApi";
+import Button from "../UI/button/Button";
 
 const ComponentStyle = styled.div`
   text-align: center;
@@ -81,9 +82,10 @@ function SelectPlayer() {
         {isPlayer.player2 ? <p>Игорь уже выбран</p> : <p>Игорь свободен</p>}
 
         {!isSelectPlayer && !isPlayer.player1 && (
-          <ButtonStyle onClick={handleSelectPlayer} value={"player1"}>
-            <span>Стас</span>
-          </ButtonStyle>
+          // <ButtonStyle onClick={handleSelectPlayer} value={"player1"}>
+          //   <span>Стас</span>
+          // </ButtonStyle>
+          <Button type="game">Стас</Button>
         )}
 
         {!isSelectPlayer && !isPlayer.player2 && (

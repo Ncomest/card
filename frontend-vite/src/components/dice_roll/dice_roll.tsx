@@ -56,7 +56,7 @@ const SpinnerStyle = styled(FaDiceD20)`
 type TRoll = {
   diceWhite: number;
   diceBlack: number;
-}
+};
 
 const DiceRoll = () => {
   const [roll, setRoll] = useState<TRoll | null>(null);
@@ -65,7 +65,6 @@ const DiceRoll = () => {
   useEffect(() => {
     const pullDiceRoll = async () => {
       await fetchApi({ API_URI: "/api/dice/wait" })
-        // await fetch(apiUrl + "/api/dice/wait")
         .then((data) => {
           if (data.rolling) {
             setIsRolling(true);
@@ -77,8 +76,8 @@ const DiceRoll = () => {
           setRoll(data);
           pullDiceRoll();
         })
-        .catch((err) => {
-          console.error("Error in pulling", err);
+        .catch((error) => {
+          console.error("Error in pulling", error);
           setTimeout(pullDiceRoll, 1000);
         });
     };
