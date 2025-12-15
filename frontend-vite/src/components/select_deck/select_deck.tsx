@@ -1,10 +1,10 @@
 import HandCard from "../hand_card/hand_card";
 import styled from "styled-components";
-import { StyledButton } from "../../style/global.style";
 import { fetchApi } from "../../helper/fetchApi";
 import type { ICard } from "@/types/types";
 import { Link } from "react-router-dom";
 import ChoiceDeck from "../choice_deck/choice_deck";
+import Button from "../UI/button/Button";
 
 const ComponentStyle = styled.div`
   background: var(--primary-color);
@@ -25,14 +25,17 @@ const HandStyle = styled.div`
 `;
 
 const NewDeckContainerStyle = styled.div`
-  padding: 20px 10px;
+  padding: 20px;
   background-color: var(--secondary-color);
   border-radius: 5px;
 `;
 
-const ButtonStyle = styled(StyledButton)`
-  margin-right: 20px;
-  margin-bottom: 20px;
+const NavStyled = styled.nav`
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  column-gap: 20px;
+  margin-bottom: 10px;
 `;
 
 type TDrag = {
@@ -111,17 +114,14 @@ const SelectDeck: React.FC<TSelectDeckProps> = ({
         </ButtonStyle>
       ))} */}
       <NewDeckContainerStyle>
-        <ButtonStyle onClick={handleSelectDeck}>
-          <span>Random</span>
-        </ButtonStyle>
-        <ButtonStyle className="btn btn-primary" onClick={handleUpdateDeck}>
-          <span>Удалить карты из руки</span>
-        </ButtonStyle>
-        <Link to={"/create_deck"}>
-          <ButtonStyle>
-            <span>+ Собрать колоду</span>
-          </ButtonStyle>
-        </Link>
+        <NavStyled>
+          <Button type="game" size="l" onClick={handleSelectDeck}>Случайно</Button>
+          <Button type="game" size="l" onClick={handleUpdateDeck}>Удалить карты из руки</Button>
+          <Link to={"/create_deck"}>
+            <Button type="game" size="l">+ Собрать колоду</Button>
+          </Link>
+        </NavStyled>
+
         <ChoiceDeck onClick={handleSelectCurrentDeck} />
       </NewDeckContainerStyle>
       {hand.length !== 0 && 

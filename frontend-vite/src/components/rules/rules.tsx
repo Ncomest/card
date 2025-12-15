@@ -7,6 +7,7 @@ import {
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
 import { useState } from "react";
+import Button from "../UI/button/Button";
 
 const ContainerStyle = styled.div`
   background-color: var(--primary-color);
@@ -41,15 +42,15 @@ const H2Style = styled.h2`
   font-weight: 600;
 `;
 
-const SpanStyle = styled.span`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
+// const SpanStyle = styled.span`
+//   display: flex;
+//   align-items: center;
+//   gap: 10px;
+// `;
 
-const ButtonStyle = styled(StyledButton)``;
+// const ButtonStyle = styled(StyledButton)``;
 
-const Rules= () => {
+const Rules = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
@@ -67,23 +68,26 @@ const Rules= () => {
     <ContainerStyle>
       <HeaderStyle id="header">
         <H2Style>Глоссарий</H2Style>
-        <ButtonStyle onClick={handleToggle}>
-          <SpanStyle>
-            {isOpen ? (
-              <>
-                <MdKeyboardDoubleArrowUp color="#ce8d00" />
-                Скрыть
-                <MdKeyboardDoubleArrowUp color="#ce8d00" />
-              </>
-            ) : (
-              <>
-                <MdKeyboardDoubleArrowDown color="#ce8d00" />
-                Показать
-                <MdKeyboardDoubleArrowDown color="#ce8d00" />
-              </>
-            )}
-          </SpanStyle>
-        </ButtonStyle>
+        <Button type="game" size="xl" onClick={handleToggle}>
+          {/* <SpanStyle> */}
+          {isOpen ? (
+            <>
+              <MdKeyboardDoubleArrowUp color="#ce8d00" />
+              Скрыть
+              <MdKeyboardDoubleArrowUp color="#ce8d00" />
+            </>
+          ) : (
+            <>
+              <MdKeyboardDoubleArrowDown color="#ce8d00" />
+              Показать
+              <MdKeyboardDoubleArrowDown color="#ce8d00" />
+            </>
+          )}
+          {/* </SpanStyle> */}
+        </Button>
+        {/* <ButtonStyle onClick={handleToggle}>
+          
+        </ButtonStyle> */}
       </HeaderStyle>
       {isOpen && (
         <ComponentStyle>

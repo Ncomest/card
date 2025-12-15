@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { fetchApi } from "../../helper/fetchApi";
 import { StyledButton } from "../../style/global.style";
+import Button from "../UI/button/Button";
 
 const ComponentStyle = styled.div`
   display: flex;
@@ -65,9 +66,10 @@ const ChoiceDeck = ({ onClick }: { onClick: () => void }) => {
         <OptionStyle value=" ">Не выбрано</OptionStyle>
         {deckList}
       </SelectStyle>
-      <ButtonStyle type="button" onClick={onClick}>
+      <Button type="game" size="xl" onClick={onClick}>Подтвердить</Button>
+      {/* <ButtonStyle type="button" onClick={onClick}>
         <span>Подтвердить</span>
-      </ButtonStyle>
+      </ButtonStyle> */}
     </ComponentStyle>
   );
 };

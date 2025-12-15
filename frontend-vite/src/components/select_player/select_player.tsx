@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { StyledButton } from "../../style/global.style";
 import { fetchApi } from "../../helper/fetchApi";
 import Button from "../UI/button/Button";
 
@@ -16,8 +15,11 @@ const InnerStyle = styled.div`
   border-radius: 5px;
 `;
 
-const ButtonStyle = styled(StyledButton)`
-  margin: 5px 10px;
+const NavStyled = styled.nav`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 20px;
 `;
 
 function SelectPlayer() {
@@ -45,19 +47,36 @@ function SelectPlayer() {
   }, []);
 
   //POST req to select a player
-  const handleSelectPlayer = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    const selectPlayer = (e.currentTarget as HTMLButtonElement).value;
+  // const handleSelectPlayer = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  //   const selectPlayer = (e.currentTarget as HTMLButtonElement).value;
 
+  //   try {
+  //     const data = await fetchApi({
+  //       API_URI: "/api/select-player",
+  //       method: "POST",
+  //       body: { player: selectPlayer },
+  //     });
+
+  //     setIsPlayer(data);
+  //     sessionStorage.setItem("player", selectPlayer);
+  //     setIsSelectPlayer(selectPlayer);
+  //   } catch (error) {
+  //     console.error("Ошибка при выборе игрока", error);
+  //   }
+  // };
+
+  //POST req to select a player (COPY)
+  const handleSelectPlayer = async (player: string) => {
     try {
       const data = await fetchApi({
         API_URI: "/api/select-player",
         method: "POST",
-        body: { player: selectPlayer },
+        body: { player },
       });
 
       setIsPlayer(data);
-      sessionStorage.setItem("player", selectPlayer);
-      setIsSelectPlayer(selectPlayer);
+      sessionStorage.setItem("player", player);
+      setIsSelectPlayer(player);
     } catch (error) {
       console.error("Ошибка при выборе игрока", error);
     }
@@ -81,22 +100,31 @@ function SelectPlayer() {
         {isPlayer.player1 ? <p>Стас уже выбран</p> : <p>Стас свободен</p>}
         {isPlayer.player2 ? <p>Игорь уже выбран</p> : <p>Игорь свободен</p>}
 
-        {!isSelectPlayer && !isPlayer.player1 && (
-          // <ButtonStyle onClick={handleSelectPlayer} value={"player1"}>
-          //   <span>Стас</span>
-          // </ButtonStyle>
-          <Button type="game">Стас</Button>
-        )}
+        <NavStyled>
+          {!isSelectPlayer && !isPlayer.player1 && (
+            <Button
+              type="system"
+              size="xl"
+              onClick={() => handleSelectPlayer("player1")}
+            >
+              Стас
+            </Button>
+          )}
 
-        {!isSelectPlayer && !isPlayer.player2 && (
-          <ButtonStyle onClick={handleSelectPlayer} value={"player2"}>
-            <span>Игорь</span>
-          </ButtonStyle>
-        )}
+          {!isSelectPlayer && !isPlayer.player2 && (
+            <Button
+              type="system"
+              size="xl"
+              onClick={() => handleSelectPlayer("player2")}
+            >
+              Игорь
+            </Button>
+          )}
 
-        <ButtonStyle onClick={handleRefresh}>
-          <span>Сброс</span>
-        </ButtonStyle>
+          <Button type="system" size="l" onClick={handleRefresh}>
+            Сброс
+          </Button>
+        </NavStyled>
       </InnerStyle>
     </ComponentStyle>
   );
