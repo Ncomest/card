@@ -26,7 +26,7 @@ const randomHandsCard = async (req, res) => {
       handArrP1 = [];
       const cardsArr = (await randomCards()).sort((a, b) => a.coin - b.coin);
       handArrP1.push(...cardsArr);
-      console.log("hand1", handArrP1);
+      // console.log("hand1", handArrP1);
       return res.status(200).json(handArrP1);
     } else {
       handArrP2 = [];
@@ -67,7 +67,7 @@ const randomCards = async () => {
     cardsArray.push(...selectCard);
   }
 
-  console.log(cardsArray);
+  // console.log(cardsArray);
   return cardsArray;
 };
 
@@ -85,8 +85,8 @@ function shuffleArray(arr) {
 
 const currentDeck = async (req, res) => {
   const { deckName, user } = req.body;
-  console.log(deckName);
-  console.log(deckName === "elves");
+  // console.log(deckName);
+  // console.log(deckName === "elves");
 
   try {
     const data = await mongoose.connection.db

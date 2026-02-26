@@ -1,5 +1,5 @@
 import { URL } from "@/constants/consts";
-import type { ICardTable, IFetch } from "@/types/types";
+import type { IFetch } from "@/types/types";
 
 export const fetchApi = async ({
   API_URI,
@@ -32,27 +32,6 @@ export const fetchApi = async ({
     throw error;
   }
 };
-export const getDataTableLongPolling = async (): Promise<ICardTable[]> => {
-  try {
-    const response = await fetch(`${URL}/api/table/update`);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
-      throw new Error(
-        `Запрос выполнился неудачно: ${response.status} ${errorText}`
-      );
-    }
-
-    const data = await response.json();
-    console.log("api: getDataTableLongPolling: ", data);
-    return data;
-  } catch (error) {
-    console.error("Произошла ошибка в теле запроса", error);
-    throw error;
-  }
-};
-
 export const getDataTable = async () => {
   try {
     const response = await fetch(`${URL}/api/table`);

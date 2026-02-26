@@ -38,26 +38,33 @@ const NavStyled = styled.nav`
   margin-bottom: 10px;
 `;
 
-type TDrag = {
-  e?: React.DragEvent<HTMLDivElement>;
+type TDragStartParams = {
+  e: React.DragEvent;
   casePickTableId?: number;
-  casePutTableId?: number;
   cardId?: string | null;
   placePickCard?: string;
-  placePutCard?: string;
   cardIndex?: number;
-}
+};
+
+type TDragDropParams = {
+  e: React.DragEvent;
+  casePutTableId?: number;
+  placePutCard?: string;
+};
+
+type TTouchStart = {
+  casePickTableId?: number;
+  cardId?: string | null;
+  placePickCard?: string;
+  cardIndex?: number;
+};
 
 type TSelectDeckProps = {
-  handleDragStart: ({
-    e,
-    casePickTableId,
-    cardId,
-    placePickCard,
-    cardIndex,
-  }: TDrag) => void;
-  handleDragOver: (e: React.DragEvent<HTMLDivElement>) => void;
-  handleDrop: ({ e, casePutTableId }: TDrag) => void;
+  handleDragStart: (params: TDragStartParams) => void;
+  handleDragOver: (e: React.DragEvent) => void;
+  handleDrop: (params: TDragDropParams) => void;
+  handleTouchStart: (params: TTouchStart) => void;
+  handleTouchEnd: (e: React.TouchEvent, casePutTableId: number, placePutCard: string) => void;
   hand: ICard[];
   setHand: React.Dispatch<React.SetStateAction<ICard[]>>;
 }
@@ -68,6 +75,8 @@ const SelectDeck: React.FC<TSelectDeckProps> = ({
   handleDragStart,
   handleDragOver,
   handleDrop,
+  handleTouchStart,
+  handleTouchEnd,
 }) => {
   //POST select deck
   const handleSelectDeck = async () => {
@@ -79,7 +88,7 @@ const SelectDeck: React.FC<TSelectDeckProps> = ({
       },
     });
     setHand(data);
-    console.log(data, "hand");
+    // console.log(data, "hand");
   };
 
   //POST select current deck
@@ -93,7 +102,7 @@ const SelectDeck: React.FC<TSelectDeckProps> = ({
       },
     });
     setHand(data);
-    console.log(data, "hand");
+    // console.log(data, "hand");
   };
 
   //PUT clear hand
@@ -124,33 +133,44 @@ const SelectDeck: React.FC<TSelectDeckProps> = ({
 
         <ChoiceDeck onClick={handleSelectCurrentDeck} />
       </NewDeckContainerStyle>
-      {hand.length !== 0 && 
+      {hand.length !== 0 &&
         <HandStyle>
-      {hand.map((card, index) => (
-        <div
-          key={card._id}
-          draggable={true}
-          onDragStart={(e) =>
-            handleDragStart({
-              e,
-              cardId: card._id,
-              placePickCard: "hand",
-              casePickTableId: -1,
-              cardIndex: index,
-            })
-          }
-          onDragOver={handleDragOver}
-          onDrop={(e) =>
-            handleDrop({
-              e,
-              placePutCard: "hand",
-              casePutTableId: -1,
-            })
-          }
-        >
-          <HandCard card={card} index={index} />
-        </div>
-      ))}
+          {hand.map((card, index) => (
+            <div
+              key={card._id}
+              draggable={true}
+              data-drop-id={-1}
+              data-drop-place="hand"
+              onDragStart={(e) =>
+                handleDragStart({
+                  e,
+                  cardId: card._id,
+                  placePickCard: "hand",
+                  casePickTableId: -1,
+                  cardIndex: index,
+                })
+              }
+              onDragOver={handleDragOver}
+              onDrop={(e) =>
+                handleDrop({
+                  e,
+                  placePutCard: "hand",
+                  casePutTableId: -1,
+                })
+              }
+              onTouchStart={() =>
+                handleTouchStart({
+                  cardId: card._id,
+                  placePickCard: "hand",
+                  casePickTableId: -1,
+                  cardIndex: index,
+                })
+              }
+              onTouchEnd={(e) => handleTouchEnd(e, -1, "hand")}
+            >
+              <HandCard card={card} index={index} />
+            </div>
+          ))}
         </HandStyle>
       }
       

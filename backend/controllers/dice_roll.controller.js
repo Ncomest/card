@@ -1,9 +1,9 @@
+const { broadcastEvent } = require("../websocket");
+
 let diceRoll = {
  diceWhite: 6,
  diceBlack: 6,
 };
-
-const listeners = [];
 
 const getDiceRoll = async (req, res) => {
  try {
@@ -15,18 +15,18 @@ const getDiceRoll = async (req, res) => {
 
 const updateDiceRoll = async (req, res) => {
  try {
-  
-  if (req.body.user === "player1") {
+  const user = req.body.user;
+
+  if (user === "player1") {
    diceRoll.diceWhite = Math.floor(Math.random() * 6) + 1;
-  } else if (req.body.user === "player2") {
+  } else if (user === "player2") {
    diceRoll.diceBlack = Math.floor(Math.random() * 6) + 1;
   }
 
-  listeners.forEach((listener) => listener.json({ rolling: true }));
+  broadcastEvent("dice:rolling", { user });
 
   setTimeout(() => {
-   listeners.forEach((listener) => listener.json(diceRoll));
-   listeners.length = 0;
+   broadcastEvent("dice:update", { user, diceRoll });
   }, 3000);
 
   res.status(200).json({ rolling: true });
@@ -43,15 +43,8 @@ const refreshDiceRoll = async (req, res) => {
  }
 };
 
-const diceWait = (req, res) => {
- listeners.push(res);
-
- req.on("close", () => listeners.splice(listeners.indexOf(res), 1));
-};
-
 module.exports = {
  getDiceRoll,
  updateDiceRoll,
  refreshDiceRoll,
- diceWait,
 };

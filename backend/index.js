@@ -1,11 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const http = require("http");
 const PORT = process.env.PORT || 4000;
 const addMoreDeck = require("./data/add_deck/add_deck.js");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 const { verifyAccessToken } = require("./constance/token.js");
+const { initWebSocket } = require("./websocket");
 
 // Routes import
 // const humanRoutes = require("./routes/humans.route.js");
@@ -79,7 +81,11 @@ mongoose
   .then(() => {
     console.log("connent to database");
 
-    app.listen(PORT, () => {
+    const server = http.createServer(app);
+
+    initWebSocket(server);
+
+    server.listen(PORT, () => {
       console.log(`server on port ${PORT}`);
     });
   })

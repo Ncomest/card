@@ -78,6 +78,7 @@ const ButtonStyledSystem = styled(ButtonStyled)`
 `;
 
 function Button({ type, children, size = "m", onClick }: IButton) {
+  
   const buttonComponents = {
     system: ButtonStyledSystem,
     game: ButtonStyledGame,

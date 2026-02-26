@@ -1,7 +1,7 @@
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import DiceRoll from "../dice_roll/dice_roll";
-import { URL } from "@/constants/consts";
+import { subscribeWs, sendWs } from "@/api/wsClient";
 
 const ContainerStyle = styled.div`
   flex: 0;
@@ -73,45 +73,48 @@ type TMessage = {
 const Chat = () => {
   const [messages, setMessages] = useState<TMessage[]>([]);
   const [value, setValue] = useState("");
-  const socket = useRef<WebSocket | null>(null);
   const [connected, setConnected] = useState(false);
   const [username, setUsername] = useState("");
 
+  useEffect(() => {
+    const unsubscribeMessage = subscribeWs<TMessage>("message", (message) => {
+      setMessages((prev) => [message, ...prev]);
+    });
+
+    const unsubscribeConnection = subscribeWs<TMessage>(
+      "connection",
+      (message) => {
+        setMessages((prev) => [message, ...prev]);
+      }
+    );
+
+    return () => {
+      unsubscribeMessage();
+      unsubscribeConnection();
+    };
+  }, []);
+
   const connect = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    socket.current = new WebSocket(URL + "/websocket/");
-
-    socket.current.onopen = () => {
-      setConnected(true);
-      const message = { event: "connection", username, id: Date.now() };
-      socket.current?.send(JSON.stringify(message));
-      console.log("Подключение установлено");
+    setConnected(true);
+    const message: TMessage = {
+      event: "connection",
+      username,
+      id: Date.now(),
+      message: "",
     };
-
-    socket.current.onmessage = (event: MessageEvent) => {
-      const message: TMessage = JSON.parse(event.data);
-      setMessages((prev) => [message, ...prev]);
-    };
-
-    socket.current.onclose = () => {
-      console.log("socket closed");
-      setConnected(false);
-    };
-
-    socket.current.onerror = () => {
-      console.log("Socket closed due to an error");
-    };
+    sendWs(message);
   };
 
   const sendMessage = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const message = {
+    const message: TMessage = {
       event: "message",
       message: value,
       username,
       id: Date.now(),
     };
-    socket.current?.send(JSON.stringify(message));
+    sendWs(message);
     setValue("");
   };
 

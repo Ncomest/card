@@ -94,7 +94,7 @@ const currentCard = async (req, res) => {
 
 //надо протестировать
 const createNewDeck = async (req, res) => {
-  console.log(req.body.deckName);
+  // console.log(req.body.deckName);
   const { deckName, deckArr } = req.body;
 
   try {

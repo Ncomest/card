@@ -1,18 +1,5 @@
 const Table = require("../models/table.model.js");
-
-const clients = [];
-
-const longPullingUpdate = (req, res) => {
- clients.push(res);
- req.on("close", () => clients.splice(clients.indexOf(res), 1));
-};
-
-const notifyClients = (data) => {
- setTimeout(() => {
-  clients.forEach((client) => client.status(200).json(data));
-  clients.length = 0;
- }, 1000);
-};
+const { broadcastEvent } = require("../websocket");
 
 const getTableBoxes = async (req, res) => {
  try {
@@ -79,7 +66,7 @@ const updateTableBox = async (req, res) => {
     }
 
     const updatedTable = await Table.find({});
-    notifyClients(updatedTable);
+    broadcastEvent("table:update", { table: updatedTable });
     return res.status(200).json(updatedTable);
    } else if (data.placePutCard === "hand") {
     const updateCaseTable = await Table.findByIdAndUpdate(
@@ -97,7 +84,7 @@ const updateTableBox = async (req, res) => {
      return res.status(400).json({ message: error.message });
     }
     const updatedTable = await Table.find({});
-    notifyClients(updatedTable);
+    broadcastEvent("table:update", { table: updatedTable });
     return res.status(200).json(updatedTable);
     // return notifyClients();
    }
@@ -129,7 +116,7 @@ const updateTableBox = async (req, res) => {
     }
 
     const updatedTable = await Table.find({});
-    notifyClients(updatedTable);
+    broadcastEvent("table:update", { table: updatedTable });
     return res.status(200).json(updatedTable);
     // return notifyClients();
    }
@@ -150,7 +137,7 @@ const updateTableBox = async (req, res) => {
    });
 
    const currData = await Table.find({});
-   notifyClients(currData);
+   broadcastEvent("table:update", { table: currData });
    return res.status(200).json(currData);
    //  return notifyClients();
   }
@@ -168,7 +155,7 @@ const updateTableBox = async (req, res) => {
     );
     const updatedCard = await Table.findById(id);
     const updTable = await Table.find({});
-    notifyClients(updTable);
+    broadcastEvent("table:update", { table: updTable });
     return res.status(200).json(updatedCard);
    }
   }
@@ -185,7 +172,7 @@ const updateTableBox = async (req, res) => {
    );
    const updatedCard = await Table.findById(id);
    const updTable = await Table.find({});
-   notifyClients(updTable);
+   broadcastEvent("table:update", { table: updTable });
    return res.status(200).json(updatedCard);
   }
   //>======конец-хода======//
@@ -221,8 +208,8 @@ const updateAllTableBox = async (req, res) => {
    updatedTableData.map((card) => Table.updateOne({ _id: card._id }, card))
   );
 
-  const updTable = await Table.find({})
-  notifyClients(updTable)
+  const updTable = await Table.find({});
+  broadcastEvent("table:update", { table: updTable });
   res.status(200).json(updatedTableData);
  } catch (error) {
   res.status(500).json({ message: `invalid request ${error.message}` });
@@ -247,5 +234,4 @@ module.exports = {
  updateTableBox,
  updateAllTableBox,
  deleteTableBox,
- longPullingUpdate,
 };

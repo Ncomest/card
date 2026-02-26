@@ -20,8 +20,9 @@ import {
   BsDice6Fill,
 } from "react-icons/bs";
 
-import { StyledButton } from "../../style/global.style.js";
+import { StyledButton } from "@/style/global.style";
 import { fetchApi } from "../../helper/fetchApi";
+import { subscribeWs } from "@/api/wsClient";
 
 const ComponentStyle = styled.div`
   display: inline-flex;
@@ -60,51 +61,41 @@ type TRoll = {
 
 const DiceRoll = () => {
   const [roll, setRoll] = useState<TRoll | null>(null);
-  const [isRolling, setIsRolling] = useState<boolean>(false);
+  const [rollingPlayer, setRollingPlayer] = useState<string | null>(null);
 
   useEffect(() => {
-    const pullDiceRoll = async () => {
-      await fetchApi({ API_URI: "/api/dice/wait" })
-        .then((data) => {
-          if (data.rolling) {
-            setIsRolling(true);
-            setTimeout(() => {
-              setIsRolling(false);
-            }, 3000);
-          }
+    const unsubscribeRolling = subscribeWs<{ user: string }>(
+      "dice:rolling",
+      ({ user }) => {
+        setRollingPlayer(user);
+      }
+    );
 
-          setRoll(data);
-          pullDiceRoll();
-        })
-        .catch((error) => {
-          console.error("Error in pulling", error);
-          setTimeout(pullDiceRoll, 1000);
-        });
+    const unsubscribeUpdate = subscribeWs<{ user: string; diceRoll: TRoll }>(
+      "dice:update",
+      ({ diceRoll }) => {
+        setRoll(diceRoll);
+        setRollingPlayer(null);
+      }
+    );
+
+    return () => {
+      unsubscribeRolling();
+      unsubscribeUpdate();
     };
-
-    pullDiceRoll();
   }, []);
 
-  const handleDiceRoll = async () => {
-    setIsRolling(true);
-    await fetchApi({
+  const isRollingWhite = rollingPlayer === "player1";
+  const isRollingBlack = rollingPlayer === "player2";
+
+  const handleDiceRoll = () => {
+    fetchApi({
       API_URI: "/api/dice",
       method: "PUT",
       body: { user: sessionStorage.getItem("player") },
-    })
-      .then((res) => {
-        // if (res.rolling) {
-        // setIsRolling(true);
-        // setTimeout(() => {
-        //   setIsRolling(false);
-        // }, 3000);
-        // }
-        setRoll(res);
-      })
-      .catch((err) => {
-        console.log(err);
-        // setIsRolling(false);
-      });
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   const handleRefreshStep = async () => {
@@ -143,7 +134,7 @@ const DiceRoll = () => {
 
       <PStyle>
         Стас:
-        {isRolling ? (
+        {isRollingWhite ? (
           <SpinnerStyle />
         ) : (
           <>
@@ -158,7 +149,7 @@ const DiceRoll = () => {
       </PStyle>
       <PStyle>
         Игорь:
-        {isRolling ? (
+        {isRollingBlack ? (
           <SpinnerStyle />
         ) : (
           <>

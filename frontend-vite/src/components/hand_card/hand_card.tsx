@@ -5,8 +5,6 @@ import styled from "styled-components";
 import type { ICard } from "@/types/types";
 import { cardSize } from "@/style/global.style";
 
-import { URL } from "@/constants/consts";
-
 const Component = styled(cardSize)<{
   $isZoom: boolean;
   $index: number;
@@ -72,7 +70,7 @@ const HandCard = ({ card, index }: { card: ICard; index: number }) => {
   };
 
   const handleDragEnd = () => {
-    setIsDragging(true);
+    setIsDragging(false);
   };
 
   useEffect(() => {
@@ -104,7 +102,7 @@ const HandCard = ({ card, index }: { card: ICard; index: number }) => {
       onDragEnd={handleDragEnd}
       ref={cardRef}
     >
-      <Image src={URL + card.uri} alt={card.name} loading="lazy" />
+      <Image src={card.uri} alt={card.name} loading="lazy" />
     </Component>
   );
 };
