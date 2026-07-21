@@ -2,8 +2,8 @@
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import type { ICard } from "@/types/types";
-import { cardSize } from "@/style/global.style";
+import type { ICard } from "@/shared/lib/types/types";
+import { cardSize } from "@/app/assets/style/global.style";
 
 const Component = styled(cardSize)<{
   $isZoom: boolean;

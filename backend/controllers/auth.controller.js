@@ -35,19 +35,19 @@ const login = async (req, res) => {
     if (username === user.username && hashedPassword) {
       const token = generateToken({ user: user.username, role: user.role });
 
-      // res.cookie("accessToken", tokens.accessToken, {
-      //   httpOnly: true,
-      //   secure: false,
-      //   sameSite: "None",
-      //   maxAge: 7 * 24 * 60 * 60 * 1000,
-      // });
+      res.cookie("accessToken", tokens.accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
 
-      // res.cookie("refreshToken", tokens.refreshToken, {
-      //   httpOnly: true,
-      //   secure: false,
-      //   sameSite: "None",
-      //   maxAge: 7 * 24 * 60 * 60 * 1000,
-      // });
+      res.cookie("refreshToken", tokens.refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
 
       return res.json({ accessToken: token.accessToken });
     } else {

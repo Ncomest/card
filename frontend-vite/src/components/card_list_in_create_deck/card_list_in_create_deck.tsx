@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import type { ICard } from "@/types/types";
-import { URL } from "@/constants/consts";
+import type { ICard } from "@/shared/lib/types/types";
+import { URL } from "@/shared/lib/constants/consts";
 import { useState } from "react";
 
 const ContainerStyle = styled.div`

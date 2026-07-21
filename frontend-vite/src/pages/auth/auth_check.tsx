@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { fetchApi } from "../../helper/fetchApi";
-import Spinner from "../../components/spinner/spinner";
+import { fetchApi } from "../../shared/api/fetchApi";
+import Spinner from "../../shared/ui/spinner/spinner";
 
 const AuthCheck: React.FC = () => {
   const [auth, setAuth] = useState<boolean | null>(null);
@@ -16,7 +16,6 @@ const AuthCheck: React.FC = () => {
 
         if (data) setAuth(true);
         else setAuth(false);
-        
       } catch (error) {
         console.error("Ошибка авторизации", error);
         setAuth(false);

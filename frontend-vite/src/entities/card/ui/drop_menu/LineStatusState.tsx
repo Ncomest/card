@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { SideStatusState } from "../side_status_state/SideStatusState";
 import { RiRefreshLine } from "react-icons/ri";
-import { fetchApi } from "../../../../helper/fetchApi";
+import { fetchApi } from "../../../../shared/api/fetchApi";
 import type { ICardTable } from "../../model/types";
 
 const StateLineStyle = styled.div`
@@ -29,8 +29,14 @@ interface ILineStatusStateProps {
   text: string;
 }
 
-export const LineStatusState = ({ item, icon, text }: ILineStatusStateProps) => {
-  const handleFetchCardState = async (e: React.FocusEvent<HTMLInputElement>) => {
+export const LineStatusState = ({
+  item,
+  icon,
+  text,
+}: ILineStatusStateProps) => {
+  const handleFetchCardState = async (
+    e: React.FocusEvent<HTMLInputElement>,
+  ) => {
     await fetchApi({
       API_URI: `/api/table/${item._id}`,
       method: "PUT",

@@ -19,5 +19,18 @@ export default defineConfig([
       ecmaVersion: 2020,
       globals: globals.browser,
     },
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@/shared/api/*', '@/shared/api/**/*'],
+              message: 'Используйте "@/shared/api" для импорта',
+            },
+          ],
+        },
+      ],
+    },
   },
 ])

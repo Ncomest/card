@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { fetchApi } from "../../helper/fetchApi";
-import { StyledButton } from "../../style/global.style";
-import Button from "../UI/button/Button";
+import { fetchApi } from "../../shared/api/fetchApi";
+import { StyledButton } from "../../app/assets/style/global.style";
+import { Button } from "@/shared/ui/button";
 
 const ComponentStyle = styled.div`
   display: flex;
@@ -29,7 +29,7 @@ const OptionStyle = styled.option`
   text-transform: capitalize;
 `;
 
-const ButtonStyle = styled(StyledButton)``;
+// const ButtonStyle = styled(StyledButton)``;
 
 const ChoiceDeck = ({ onClick }: { onClick: () => void }) => {
   const [deck, setDeck] = useState<string[]>([]);
@@ -66,7 +66,9 @@ const ChoiceDeck = ({ onClick }: { onClick: () => void }) => {
         <OptionStyle value=" ">Не выбрано</OptionStyle>
         {deckList}
       </SelectStyle>
-      <Button type="game" size="xl" onClick={onClick}>Подтвердить</Button>
+      <Button type="game" size="xl" onClick={onClick}>
+        Подтвердить
+      </Button>
       {/* <ButtonStyle type="button" onClick={onClick}>
         <span>Подтвердить</span>
       </ButtonStyle> */}

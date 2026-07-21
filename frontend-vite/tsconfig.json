@@ -5,9 +5,13 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["./src/*"],
+      "@/shared/*": ["./src/shared/*"],
+      "@/features/*": ["./src/features/*"],
+      "@/widgets/*": ["./src/widgets/*"],
     }
   }
 }

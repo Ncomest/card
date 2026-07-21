@@ -3,10 +3,15 @@ import { IoIosInformationCircle } from "react-icons/io";
 import styled from "styled-components";
 import DropMenu from "./drop_menu/DropMenu";
 import SideStatus from "./side_status/SideStatus";
-import { GiSeaDragon, GiWillowTree, GiBatteredAxe, GiCardBurn } from "react-icons/gi";
+import {
+  GiSeaDragon,
+  GiWillowTree,
+  GiBatteredAxe,
+  GiCardBurn,
+} from "react-icons/gi";
 import { FaCross } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import { cardSize } from "../../../style/global.style";
+import { cardSize } from "../../../app/assets/style/global.style";
 import type { ICardProps } from "../model/types";
 
 const Component = styled(cardSize)<{
@@ -98,7 +103,7 @@ const Cross = styled(Dragon).attrs({ as: FaCross })``;
 const Banish = styled(Dragon).attrs({ as: GiBatteredAxe })``;
 const Deck = styled(Dragon).attrs({ as: GiCardBurn })``;
 
-const Card: React.FC<ICardProps> = ({ item, index }) => {
+export const Card = ({ item, index }: ICardProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isZoom, setIsZoom] = useState(false);
   const [isDraggs, setIsDraggs] = useState(false);
@@ -185,7 +190,9 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
                 $step_over={item.card_state?.step_over}
                 loading="lazy"
               />
-              {item.card_state && <SideStatus item={item.card_state} isZoom={isZoom} />}
+              {item.card_state && (
+                <SideStatus item={item.card_state} isZoom={isZoom} />
+              )}
             </>
           ) : (
             <Image src="/image/t_shirt.jpg" alt="Closed card" />
@@ -202,7 +209,10 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
           )}
           {isOpen && <DropMenu item={item} ref={dropdownRef} isZoom={isZoom} />}
           {item.card_state?.closed && (
-            <FaEye size={22} style={{ position: "absolute", bottom: "-14px", left: "-14px" }} />
+            <FaEye
+              size={22}
+              style={{ position: "absolute", bottom: "-14px", left: "-14px" }}
+            />
           )}
         </>
       )}
@@ -220,5 +230,3 @@ const Card: React.FC<ICardProps> = ({ item, index }) => {
     </Component>
   );
 };
-
-export default Card;

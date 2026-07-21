@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import type { ICard } from "@/types/types";
+import type { ICard } from "@/shared/lib/types/types";
 
 const ContainerStyle = styled.div`
   position: relative;
@@ -23,9 +23,12 @@ const ButtonAddStyle = styled.button`
 
   background-color: #c2fbd7;
   border-radius: 5px;
-  box-shadow: rgba(44, 187, 99, 0.2) 0 -25px 18px -14px inset,
-    rgba(44, 187, 99, 0.15) 0 1px 2px, rgba(44, 187, 99, 0.15) 0 2px 4px,
-    rgba(44, 187, 99, 0.15) 0 4px 8px, rgba(44, 187, 99, 0.15) 0 8px 16px,
+  box-shadow:
+    rgba(44, 187, 99, 0.2) 0 -25px 18px -14px inset,
+    rgba(44, 187, 99, 0.15) 0 1px 2px,
+    rgba(44, 187, 99, 0.15) 0 2px 4px,
+    rgba(44, 187, 99, 0.15) 0 4px 8px,
+    rgba(44, 187, 99, 0.15) 0 8px 16px,
     rgba(44, 187, 99, 0.15) 0 16px 32px;
   color: green;
   cursor: pointer;
@@ -39,9 +42,12 @@ const ButtonAddStyle = styled.button`
   touch-action: manipulation;
 
   &:hover {
-    box-shadow: rgba(44, 187, 99, 0.35) 0 -25px 18px -14px inset,
-      rgba(44, 187, 99, 0.25) 0 1px 2px, rgba(44, 187, 99, 0.25) 0 2px 4px,
-      rgba(44, 187, 99, 0.25) 0 4px 8px, rgba(44, 187, 99, 0.25) 0 8px 16px,
+    box-shadow:
+      rgba(44, 187, 99, 0.35) 0 -25px 18px -14px inset,
+      rgba(44, 187, 99, 0.25) 0 1px 2px,
+      rgba(44, 187, 99, 0.25) 0 2px 4px,
+      rgba(44, 187, 99, 0.25) 0 4px 8px,
+      rgba(44, 187, 99, 0.25) 0 8px 16px,
       rgba(44, 187, 99, 0.25) 0 16px 32px;
   }
 `;

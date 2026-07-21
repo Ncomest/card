@@ -7,7 +7,7 @@ import { FaEye } from "react-icons/fa";
 import { LineStatusState } from "./LineStatusState";
 import { forwardRef } from "react";
 import type { ICardTable } from "../../model/types";
-import { fetchApi } from "../../../../helper/fetchApi";
+import { fetchApi } from "../../../../shared/api/fetchApi";
 
 const Component = styled.div<{ $isZoom: boolean }>`
   background-color: white;
@@ -30,13 +30,17 @@ const InlineBtn = styled.button`
   border: none;
   border-radius: 5px;
   background-color: transparent;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+  box-shadow:
+    rgba(0, 0, 0, 0.16) 0px 3px 6px,
+    rgba(0, 0, 0, 0.23) 0px 3px 6px;
   &:hover {
-    box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
+    box-shadow:
+      rgba(9, 30, 66, 0.25) 0px 4px 8px -2px,
       rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
   }
   &:active {
-    box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+    box-shadow:
+      rgb(204, 219, 232) 3px 3px 6px 0px inset,
       rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset;
   }
 `;
@@ -84,12 +88,24 @@ const DropMenu = forwardRef<HTMLDivElement, IDropMenuProps>(
         ref={ref}
         $isZoom={isZoom}
       >
-        <LineStatusState item={item} icon={<MdHeartBroken />} text={"have_damaged"} />
+        <LineStatusState
+          item={item}
+          icon={<MdHeartBroken />}
+          text={"have_damaged"}
+        />
         <LineStatusState item={item} icon={<GiChestArmor />} text={"armor"} />
         <LineStatusState item={item} icon={<GiBlood />} text={"blood"} />
-        <LineStatusState item={item} icon={<GiPoisonBottle />} text={"poison"} />
+        <LineStatusState
+          item={item}
+          icon={<GiPoisonBottle />}
+          text={"poison"}
+        />
         <LineStatusState item={item} icon={<BsFire />} text={"fire"} />
-        <LineStatusState item={item} icon={<BsLightningChargeFill />} text={"stack"} />
+        <LineStatusState
+          item={item}
+          icon={<BsLightningChargeFill />}
+          text={"stack"}
+        />
         <LineItems>
           {item.user === sessionStorage.getItem("player") &&
             item.card_state?.closed && (
@@ -103,7 +119,7 @@ const DropMenu = forwardRef<HTMLDivElement, IDropMenuProps>(
         </LineItems>
       </Component>
     );
-  }
+  },
 );
 
 export default DropMenu;

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 // import HeaderRules from "./header_rules.component";
 // import { cardSize } from "../../style/global.style";
-import { cardSize } from "../../../style/global.style";
+import { cardSize } from "../../../app/assets/style/global.style";
 
 const Component = styled.div`
   text-align: center;

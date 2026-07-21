@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
-import SelectPlayer from "../../components/select_player/select_player";
-import SelectDeck from "../../components/select_deck/select_deck";
+import SelectPlayer from "../../features/select_player/select_player";
+import SelectDeck from "../../widgets/player_hand/player_hand";
 import { Card } from "@/entities/card";
-import Chat from "../../components/chat/chat";
+import Chat from "../../widgets/chat/chat";
 import Rules from "../../components/rules/rules";
 import DropRules from "../../components/rules/drop_rules/drop_rules";
-import { getDataTable } from "@/api/tableApi";
-import { getHand } from "@/api/handApi";
-import { useDragAndDrop } from "@/hooks/useDragAndDrop";
-import type { ICard, ICardTable } from "@/types/types";
-import { subscribeWs } from "@/api/wsClient";
+import { getDataTable } from "@/shared/api";
+import { getHand, subscribeWs } from "@/shared/api";
+import { useDragAndDrop } from "@/shared/lib/hooks/useDragAndDrop";
+import type { ICard, ICardTable } from "@/shared/lib/types/types";
 
 const BackgroundStyle = styled.div`
   padding: 10px;
@@ -129,7 +128,7 @@ const Home: React.FC = () => {
         if (Array.isArray(nextTable)) {
           setTable(nextTable);
         }
-      }
+      },
     );
 
     return () => {
@@ -178,9 +177,7 @@ const Home: React.FC = () => {
                       placePickCard: "table",
                     })
                   }
-                  onTouchEnd={(e) =>
-                    handleTouchEnd(e, item._id, "table")
-                  }
+                  onTouchEnd={(e) => handleTouchEnd(e, item._id, "table")}
                 >
                   <Card item={item} index={index} />
                 </CardContainerStyle>

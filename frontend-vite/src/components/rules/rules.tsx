@@ -1,13 +1,12 @@
 import styled from "styled-components";
 import Text from "./text/text";
 import { glossary } from "../../data/glossary/glossary";
-import { StyledButton } from "../../style/global.style";
 import {
   MdKeyboardDoubleArrowDown,
   MdKeyboardDoubleArrowUp,
 } from "react-icons/md";
 import { useState } from "react";
-import Button from "../UI/button/Button";
+import { Button } from "@/shared/ui/button";
 
 const ContainerStyle = styled.div`
   background-color: var(--primary-color);
