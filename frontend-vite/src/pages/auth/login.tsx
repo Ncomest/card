@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { fetchApi } from "../../shared/api/fetchApi";
 import { IoMdPerson } from "react-icons/io";
 import { MdLockPerson } from "react-icons/md";
+import { Button } from "@/shared/ui/button";
 
 const ComponentStyle = styled.div`
   position: relative;
@@ -30,40 +31,88 @@ const FormWrapperStyle = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: 2px solid #bebebe;
-  border-radius: 12px;
+  border: 2px solid #b8860b;
+  border-radius: 16px;
+  animation: glowPulse 3s ease-in-out infinite;
 
   &::before {
     content: "";
     position: absolute;
-    border-radius: 12px;
+    border-radius: 16px;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: linear-gradient(
+      135deg,
+      #b8860b,
+      #8b6914,
+      #4a3c0a,
+      #6b4e0a,
+      #b8860b
+    );
+    background-size: 300% 300%;
+    animation: wornGoldBorder 5s ease infinite;
+    z-index: -1;
+    filter: blur(1.5px);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    border-radius: 16px;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    backdrop-filter: blur(10px);
-    background-color: rgba(87, 86, 86, 0.3);
+    backdrop-filter: blur(12px);
+    background-color: rgba(15, 15, 18, 0.88);
+    border: 1px solid rgba(184, 134, 11, 0.25);
     z-index: -1;
+  }
+
+  @keyframes wornGoldBorder {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  @keyframes glowPulse {
+    0%,
+    100% {
+      box-shadow:
+        0 0 8px rgba(184, 134, 11, 0.3),
+        0 0 20px rgba(80, 60, 10, 0.2),
+        inset 0 0 8px rgba(184, 134, 11, 0.1);
+    }
+    50% {
+      box-shadow:
+        0 0 18px rgba(184, 134, 11, 0.6),
+        0 0 35px rgba(80, 60, 10, 0.4),
+        inset 0 0 18px rgba(184, 134, 11, 0.25);
+    }
   }
 `;
 
 const FormStyle = styled.form`
-  position: relative;
-  border-radius: 12px;
-  padding: 100px 50px;
-  max-width: 400px;
-  width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  z-index: 1;
+  gap: 30px;
+  padding: 100px;
+  min-width: 250px;
 `;
 
 const LabelStyle = styled.label`
   display: flex;
   flex-direction: column;
   color: #bebebe;
-  font-size: 20px;
+  font-size: 30px;
 `;
 
 const InputContainerStyle = styled.div`
@@ -73,6 +122,7 @@ const InputContainerStyle = styled.div`
 
 const InputStyle = styled.input`
   background-color: #eaeaea;
+  color: black;
   border-radius: 5px;
   padding: 5px 5px 5px 40px;
   font-size: 18px;
@@ -94,63 +144,6 @@ const PStyle = styled.p`
   text-align: center;
   background-color: red;
   padding: 5px;
-`;
-
-const ButtonStyle = styled.button`
-  align-items: center;
-  appearance: none;
-  background-color: #fcfcfd;
-  border-radius: 4px;
-  border-width: 0;
-  box-shadow:
-    rgba(45, 35, 66, 0.4) 0 2px 4px,
-    rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
-    #d6d6e7 0 -3px 0 inset;
-  box-sizing: border-box;
-  color: #36395a;
-  cursor: pointer;
-  display: inline-flex;
-  font-family: "JetBrains Mono", monospace;
-  height: 48px;
-  justify-content: center;
-  line-height: 1;
-  list-style: none;
-  overflow: hidden;
-  padding-left: 16px;
-  padding-right: 16px;
-  position: relative;
-  text-align: left;
-  text-decoration: none;
-  transition:
-    box-shadow 0.15s,
-    transform 0.15s;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  white-space: nowrap;
-  will-change: box-shadow, transform;
-  font-size: 18px;
-
-  &:focus {
-    box-shadow:
-      #d6d6e7 0 0 0 1.5px inset,
-      rgba(45, 35, 66, 0.4) 0 2px 4px,
-      rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
-      #d6d6e7 0 -3px 0 inset;
-  }
-
-  &:hover {
-    box-shadow:
-      rgba(45, 35, 66, 0.4) 0 4px 8px,
-      rgba(45, 35, 66, 0.3) 0 7px 13px -3px,
-      #d6d6e7 0 -3px 0 inset;
-    transform: translateY(-2px);
-  }
-
-  &:active {
-    box-shadow: #d6d6e7 0 3px 7px inset;
-    transform: translateY(2px);
-  }
 `;
 
 const Login = () => {
@@ -201,6 +194,7 @@ const Login = () => {
                   color: "#7a7a7a",
                   borderRight: "1px solid #000",
                   position: "absolute",
+                  padding: "2px",
                 }}
                 size={32}
               />
@@ -219,6 +213,7 @@ const Login = () => {
                   color: "#7a7a7a",
                   borderRight: "1px solid #000",
                   position: "absolute",
+                  padding: "2px",
                 }}
                 size={32}
               />
@@ -229,15 +224,9 @@ const Login = () => {
               />
             </InputContainerStyle>
           </LabelStyle>
-          <ButtonStyle>
-            <span>Войти</span>
-          </ButtonStyle>
-          <div style={{ display: "flex", gap: "10px", color: "#bebebe" }}>
-            <div>Логин:</div>
-            <div>Viewer</div>
-            <div>Пароль:</div>
-            <div>viewer</div>
-          </div>
+          <Button type="system" size="xxl">
+            Войти
+          </Button>
         </FormStyle>
       </FormWrapperStyle>
     </ComponentStyle>
