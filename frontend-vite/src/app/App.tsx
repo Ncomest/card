@@ -3,10 +3,12 @@ import Login from "../pages/auth/login";
 import AuthCheck from "../pages/auth/auth_check";
 import Home from "../pages/home/home";
 import { CreateDeckPage } from "../pages/create_deck/create_deck_page";
+import { CssBaseline } from "@mui/material";
 
 function App() {
   return (
     <>
+      <CssBaseline />
       <Routes>
         <Route path="/auth" element={<Login />} />
         <Route path="*" element={<Navigate to="/" replace />} />
@@ -20,3 +22,4 @@ function App() {
 }
 
 export default App;
+
