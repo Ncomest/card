@@ -10,9 +10,10 @@ function App() {
       <Routes>
         <Route path="/auth" element={<Login />} />
         <Route path="*" element={<Navigate to="/" replace />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/create_deck" element={<CreateDeckPage />} />
-        <Route element={<AuthCheck />}></Route>
+        <Route element={<AuthCheck />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/create_deck" element={<CreateDeckPage />} />
+        </Route>
       </Routes>
     </>
   );

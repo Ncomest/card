@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'Berserk';
 // только если будет куки
 // const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 
@@ -61,11 +61,10 @@ const verifyAccessToken = (req, res, next) => {
       // req.user = decoded;
       // return next();
       // });
+    } else {
+      req.user = user;
+      next();
     }
-    // else {
-    req.user = user;
-    next();
-    // }
   });
 };
 

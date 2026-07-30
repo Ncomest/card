@@ -1,21 +1,24 @@
 const { generateToken } = require("../constance/token");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 
 // Временно пока нет данные в БД
 const users = [
   {
     username: "Igor",
-    password: "$2b$05$98KZk.ApcIvh8euJC488ieo3NbKiEkCsd77w.rCiXyHN2xqxd0ahW", // admin
+    password: "admin",
+    // password: "$2b$05$98KZk.ApcIvh8euJC488ieo3NbKiEkCsd77w.rCiXyHN2xqxd0ahW", // admin
     role: "admin",
   },
   {
     username: "Stas",
-    password: "$2b$05$Ba2JZLubTAKSH906YUHsyeW862NxkQUO4iO4ZjmbFsiOba2sXyuF.", // berserk2024
+    password: "berserk2024",
+    // password: "$2b$05$Ba2JZLubTAKSH906YUHsyeW862NxkQUO4iO4ZjmbFsiOba2sXyuF.", // berserk2024
     role: "gamer",
   },
   {
     username: "Viewer",
-    password: "$2b$05$BU/gL5/DLRFVQ8YKwjJcneMXqcsh6M5L0iXRWQ.QW1BymkhYUupm6", // viewer
+    password: "viewer",
+    // password: "$2b$05$BU/gL5/DLRFVQ8YKwjJcneMXqcsh6M5L0iXRWQ.QW1BymkhYUupm6", // viewer
     role: "viewer",
   },
 ];
@@ -27,27 +30,28 @@ const login = async (req, res) => {
   try {
     if (!user)
       return res.status(401).json({ message: "net takogo polzovately" });
-    const hashPassword = await bcrypt.hash(password, 5);
-    const hashedPassword = await bcrypt.compare(password, user.password);
+    // const hashPassword = await bcrypt.hash(password, 5);
+    // const hashedPassword = await bcrypt.compare(password, user.password);
     // console.log(hashPassword);
     // console.log(hashedPassword);
 
-    if (username === user.username && hashedPassword) {
+    if (username === user.username && password === user.password) {
       const token = generateToken({ user: user.username, role: user.role });
+      // console.log(token)
 
-      res.cookie("accessToken", tokens.accessToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+      // res.cookie("accessToken", tokens.accessToken, {
+      //   httpOnly: true,
+      //   secure: false,
+      //   sameSite: "None",
+      //   maxAge: 7 * 24 * 60 * 60 * 1000,
+      // });
 
-      res.cookie("refreshToken", tokens.refreshToken, {
-        httpOnly: true,
-        secure: false,
-        sameSite: "None",
-        maxAge: 7 * 24 * 60 * 60 * 1000,
-      });
+      // res.cookie("refreshToken", tokens.refreshToken, {
+      //   httpOnly: true,
+      //   secure: false,
+      //   sameSite: "None",
+      //   maxAge: 7 * 24 * 60 * 60 * 1000,
+      // });
 
       return res.json({ accessToken: token.accessToken });
     } else {
