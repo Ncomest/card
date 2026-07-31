@@ -224,7 +224,7 @@ const Login = () => {
               />
             </InputContainerStyle>
           </LabelStyle>
-          <Button type="system" size="xxl" onClick={(e) => handleSubmit(e)}>
+          <Button type="system" size="xxl">
             Войти
           </Button>
         </FormStyle>

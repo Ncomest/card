@@ -1,13 +1,13 @@
 {
- "scripts": {
-  "start": "concurrently \"npm start --prefix backend\" \"npm start --prefix websocket\""
- },
- "devDependencies": {
-  "concurrently": "^9.0.1"
- },
- "dependencies": {
-  "axios": "^1.7.7",
-  "pm2": "^5.4.3",
-  "react": "^18.3.1"
- }
+  "scripts": {
+    "start": "concurrently -n backend,websocket,frontend -c blue,magenta,green \"npm start --prefix backend\" \"npm start --prefix websocket\" \"npm run dev --prefix frontend-vite\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "pm2": "^5.4.3",
+    "react": "^18.3.1"
+  }
 }
