@@ -1,0 +1,42 @@
+---
+description: SOLID и DRY при написании и рефакторинге кода
+globs: "{frontend-vite/**/*.{ts,tsx},backend/**/*.js,websocket/**/*.js}"
+alwaysApply: false
+---
+
+# SOLID и DRY
+
+## Single Responsibility
+
+- UI-компонент не содержит fetch/WebSocket — выносить в `model/` hook или `api/`.
+- API-модуль только HTTP/WS; маппинг данных — отдельные функции.
+- Страница (`pages/`) — композиция widgets/features, минимум логики.
+
+## Open/Closed
+
+- Новое поведение — новый hook, компонент или слайс; не раздувать существующие god-components (`home.tsx`, `components/rules/`).
+- Варианты UI — props/variants, не copy-paste.
+
+## Dependency Inversion
+
+- Компоненты зависят от абстракций (hooks, api-функции), не от `axios`/`wsClient` напрямую.
+- Общий транспорт — `@/shared/api` (`fetchApi`, `wsClient`).
+
+## DRY
+
+```tsx
+// ❌ типы Card в shared/lib/types и entities/card/model
+// ✅ один источник — entities/card/model/types.ts
+
+// ❌ повтор fetch в каждом компоненте
+// ✅ shared/api + feature/entity api-слой
+```
+
+Перед добавлением кода — проверить `shared/`, `entities/`, существующие hooks.
+
+## Рефакторинг легаси
+
+1. Выделить типы → `entities/<entity>/model`
+2. Выделить API → `features/<feature>/api` или `shared/api`
+3. UI → `widgets/` или `features/<feature>/ui`
+4. Удалить старый файл после переноса всех импортов
