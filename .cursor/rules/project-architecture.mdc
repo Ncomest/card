@@ -1,0 +1,31 @@
+---
+description: Общие архитектурные принципы проекта Card (FSD, SOLID, DRY)
+alwaysApply: true
+---
+
+# Архитектура проекта Card
+
+Монорепозиторий: `frontend-vite/` (React + TS), `backend/` (Express), `websocket/`.
+
+## Принципы
+
+- **FSD v2 (pages-first)**: новый код — только в слоях FSD. Легаси (`components/`, `data/`) не расширять, постепенно мигрировать.
+- **SOLID**: один модуль — одна ответственность; расширять через новые слайсы/сегменты, не править чужие internals.
+- **DRY**: дублирование → `shared/`. Типы сущностей — в `entities/<name>/model`, не в `shared/lib/types`.
+
+## Правила для агента
+
+1. Минимальный diff — не рефакторить несвязанный код без запроса.
+2. Следовать существующим паттернам в целевом слое (см. `features/dice_roll`, `entities/card`).
+3. Public API — только через `index.ts` слайса.
+4. Импорты: `@/` alias; слой импортирует только из нижележащих слоёв.
+5. Backend/websocket — controller → service → model; не дублировать логику между route и controller.
+
+## Легаси (не добавлять новый код)
+
+| Папка | Куда мигрировать |
+|-------|------------------|
+| `src/components/` | `widgets/`, `features/`, `entities/`, `pages/` |
+| `src/data/` | `shared/` или `entities/` |
+
+Подробности: `AGENTS.md`.

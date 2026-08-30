@@ -1,0 +1,55 @@
+---
+description: FSD v2 для frontend-vite — слои, сегменты, импорты
+globs: frontend-vite/**/*.{ts,tsx}
+alwaysApply: false
+---
+
+# Frontend: Feature-Sliced Design v2
+
+## Слои (сверху вниз)
+
+`app` → `pages` → `widgets` → `features` → `entities` → `shared`
+
+- **app**: роутинг, провайдеры, глобальные стили (`App.tsx`, `main.tsx`)
+- **pages**: страницы; page-specific код держать здесь (pages-first)
+- **widgets**: крупные UI-блоки (`w-dice_roll`, `chat`)
+- **features**: пользовательские сценарии (`dice_roll`, `select_player`)
+- **entities**: бизнес-сущности (`card`)
+- **shared**: ui-kit, api-клиент, hooks, utils
+
+## Структура слайса
+
+```
+features/dice_roll/
+  api/       # запросы, mappers
+  model/     # hooks, store, types, бизнес-логика
+  ui/        # компоненты (если нужны)
+  index.ts   # public API
+```
+
+## Импорты
+
+```tsx
+// ✅ через public API
+import { Card } from "@/entities/card";
+import { useDiceRoll } from "@/features/dice_roll";
+
+// ❌ deep import
+import { Card } from "@/entities/card/ui/Card";
+
+// ❌ feature → feature (без @x cross-import)
+import { useDiceRoll } from "@/features/dice_roll/model/useDiceRoll";
+```
+
+Правило слоёв: `pages` может импортировать `widgets/features/entities/shared`, но не наоборот.
+
+## Именование
+
+- Слайсы: `kebab-case` (`dice-roll`, не `dice_roll`)
+- Сегменты: `ui`, `api`, `model`, `lib`, `config`
+- Компоненты: `PascalCase`; hooks: `useCamelCase`
+- Эталоны: `entities/card`, `features/dice_roll`, `shared/ui/button`
+
+## Pages-first (FSD 2.1)
+
+Код, используемый на одной странице, — в слайсе этой страницы. Выносить в `widgets/features/entities` только при реальном переиспользовании.
