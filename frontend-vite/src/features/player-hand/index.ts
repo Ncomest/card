@@ -1,1 +1,9 @@
-export { selectCurrentDeck, getRandomDeck, clearPlayerHand } from "./api/api";
+export {
+  selectCurrentDeck,
+  getRandomDeck,
+  clearPlayerHand,
+  getHand,
+  addCardToHand,
+  removeCardFromHand,
+} from "./api/api";
+

@@ -11,7 +11,7 @@ import {
 } from "react-icons/gi";
 import { FaCross } from "react-icons/fa";
 import { FaEye } from "react-icons/fa";
-import { cardSize } from "../../../app/assets/style/global.style";
+import { cardSize } from "@/shared/lib/styles";
 import type { ICardProps } from "../model/types";
 
 const Component = styled(cardSize)<{

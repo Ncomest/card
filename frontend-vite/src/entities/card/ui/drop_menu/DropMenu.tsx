@@ -7,7 +7,7 @@ import { FaEye } from "react-icons/fa";
 import { LineStatusState } from "./LineStatusState";
 import { forwardRef } from "react";
 import type { ICardTable } from "../../model/types";
-import { fetchApi } from "../../../../shared/api/fetchApi";
+import { fetchApi } from "@/shared/api";
 
 const Component = styled.div<{ $isZoom: boolean }>`
   background-color: white;

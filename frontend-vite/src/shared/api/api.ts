@@ -1,5 +1,12 @@
 import { URL } from "@/shared/lib/constants/consts";
-import type { IFetch } from "@/shared/lib/types/types";
+
+interface IFetch {
+  API_URI: string;
+  method?: string;
+  bearer?: boolean;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  body?: any;
+}
 
 export const fetchApi = async ({
   API_URI,
@@ -31,25 +38,6 @@ export const fetchApi = async ({
     }
   } catch (error) {
     console.error(error, "Ошибка");
-    throw error;
-  }
-};
-export const getDataTable = async () => {
-  try {
-    const response = await fetch(`${URL}/api/table`);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-
-      throw new Error(
-        `Запрос выполнился неудачно: ${response.status} ${errorText}`,
-      );
-    }
-
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Произошла ошибка в теле запроса", error);
     throw error;
   }
 };

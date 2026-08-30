@@ -16,7 +16,7 @@ const override: CSSProperties = {
   borderColor: "red",
 };
 
-function Spinner() {
+export const Spinner = () => {
   return (
     <Component>
       <ClipLoader
@@ -27,6 +27,4 @@ function Spinner() {
       />
     </Component>
   );
-}
-
-export default Spinner;
+};

@@ -32,3 +32,10 @@ export interface ICardProps {
   item: ICardTable;
   index: number;
 }
+
+export interface ICardsTotal {
+  cards: ICard[];
+  page?: string;
+  pages?: string;
+  total?: string;
+}

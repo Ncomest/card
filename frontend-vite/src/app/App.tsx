@@ -1,8 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Login from "../pages/auth/login";
-import AuthCheck from "../pages/auth/auth_check";
-import Home from "../pages/home/home";
-import { CreateDeckPage } from "../pages/create_deck/create_deck_page";
+import { Login, AuthCheck } from "@/pages/auth";
+import { Home } from "@/pages/home";
+import { CreateDeckPage } from "@/pages/create-deck";
 
 function App() {
   return (

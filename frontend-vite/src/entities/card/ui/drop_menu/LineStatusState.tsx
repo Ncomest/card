@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { SideStatusState } from "../side_status_state/SideStatusState";
 import { RiRefreshLine } from "react-icons/ri";
-import { fetchApi } from "../../../../shared/api/fetchApi";
+import { fetchApi } from "@/shared/api";
 import type { ICardTable } from "../../model/types";
 
 const StateLineStyle = styled.div`
